@@ -1,6 +1,5 @@
 var	express = require('express'),
 	http = require('http'),
-	server = http.createServer(app),
 	gzip = require('connect-gzip'),
 	FileStore = require('FileStore'),	// session
 	child_process = require('child_process'),
@@ -8,7 +7,7 @@ var	express = require('express'),
 	fs = require('fs'),
 	backend = require('./backend'),
 	ansi_color = require('ansi-color').set,
-
+	color = require('colors'),
 	app = express(),
 	base_dir = __dirname,
 	database_dir = base_dir + '/non/existant',
@@ -119,6 +118,7 @@ app.get('/board', backend.board)
 app.get('/bods/:bodid', backend.show_bod)
 app.get('/ourselves', backend.ourselves)
 
+function initSocketIo(server) {
 var io = socketIo.listen(server)
 io.set('log level', 0)
 
@@ -153,6 +153,9 @@ io.sockets.on('connection', function (socket) {
   });
 });
 
+}
+
 port = 8001;
-server.listen(port);
+var server = app.listen(port);
+initSocketIo(server);
 console.log("\n\n\n\nExpress server listening on port %d in %s mode\n", port, app.settings.env);

@@ -3,14 +3,44 @@
   , "description": "OpenBusiness Ordering System"
   , "version": "0.0.1"
   , "private": true
-  , "dependencies": {
-      "express": ""
-    , "connect": ""
-    , "connect-gzip": ""
-    , "mailer": ""
-    , "request": ""
-    , "socket.io": ""
-    , "vows": ""
-    , "ansi-color": ""
+  , "scripts": {
+    "predeploy": "node_modules/.bin/coffee -c -o lib src;npm run-script assets",
+    "postdeploy": "",
+    "start": "lib/index.js",
+    "assets": "rm -rf public/assets/* && voila -p http://assets.modeista.com/assets",
+    "test": "NODE_ENV=test node_modules/.bin/mocha -R spec test/*.coffee",
+    "test-xunit": "NODE_ENV=test node_modules/.bin/mocha --timeout 10000 -C -R xunit test/*.coffee",
+    "server-watch": "node_modules/.bin/coffee -c -w  -o lib src",
+    "client-watch": "node_modules/.bin/coffee -c -w  -o public/js public_src/js",
+    "template-watch": "bin/watch",
+    "stylus": "node_modules/.bin/stylus --watch public_src/css --out public/css",
+    "dev-debug": "NODE_ENV=development nodemon --debug lib/index.js",
+    "dev": "NODE_ENV=development nodemon server.js",
+    "dev-norestart": "NODE_ENV=development node lib/index.js",
+    "inspect": "node-inspector &"
+  }, "engines": {
+    "node": "0.8.x"
+  }
+    , "dependencies": {
+      "express": "3.0.3"
+    , "connect": "2.7.0"
+    , "connect-gzip": "0.1.6"
+    , "underscore": "1.4.2"
+    , "async": "0.1.22"
+    , "colors": "0.6.0-1"
+    , "pkginfo": "0.2.3"
+    , "nconf": "0.6.5"
+    , "corser": "1.1.2"
+    , "mailer": "0.6.7"
+    , "request": "2.12.0"
+    , "socket.io": "0.9.11"
+    , "ansi-color": "0.2.1"
+  }
+  , "bundledDependencies": []
+  , "devDependencies": {
+    "coffee-script": "1.4.0",
+    "should": "1.2.1",
+    "vows": "",
+    "mocha": "1.6.0"
   }
 }
