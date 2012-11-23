@@ -1,4 +1,4 @@
-var utils = require('utils'); utils.init(Object)
+var utils = require('./lib/modules/utils'); utils.init(Object)
 var oagis = require('./oagis')
 
 exports.party = oagis.SupplierPartyType.extend({

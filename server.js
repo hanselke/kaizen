@@ -1,7 +1,7 @@
 var	express = require('express'),
 	http = require('http'),
 	gzip = require('connect-gzip'),
-	FileStore = require('FileStore'),	// session
+	FileStore = require('./lib/modules/FileStore'),	// session
 	child_process = require('child_process'),
 	socketIo = require('socket.io'),
 	fs = require('fs'),

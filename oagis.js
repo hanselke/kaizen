@@ -1,4 +1,4 @@
-require('utils').init(Object)
+require('./lib/modules/utils').init(Object)
 var BOD = exports.BOD = {
 	ApplicationArea: {Sender: null, Receiver: null, CreationDateTime: null, BODID: null},
 	DataArea: null

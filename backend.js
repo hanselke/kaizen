@@ -1,4 +1,4 @@
-var utils = require('utils'); utils.init(Object)
+var utils = require('./lib/modules/utils'); utils.init(Object)
 var matcher = require('./matcher'); matcher.init(Object)
 var oagis = require('./oagis')
 var request = require('request')
