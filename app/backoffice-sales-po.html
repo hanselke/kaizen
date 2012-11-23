@@ -1,0 +1,130 @@
+<ng:switch on="currentUser">
+	<div ng:switch-when="undefined"></div>
+	<div ng:switch-when="null" class="page">You need to sign in to create a PO.</div>
+	<div ng:switch-default class="fullheight">
+<table class="page fullsize">
+	<tr class="fullwidth" style="height: 10px">
+		<td colspan="2" style="font-size: 25px; text-align: center; font-weight:bold; padding-bottom: 5px">
+			New Purchase Order
+		</td>
+	</tr>
+	<tr class="fullsize">
+		<td class="leftcolumn">
+<div class="createrfq">
+	<div class="header">Create Purchase Order</div>
+	<div class="content">
+		<table border="1" class="fullwidth">
+			<tr>
+				<td>PO#</td>
+				<td colspan="3"><input name="po.PurchaseOrderHeader.DocumentID.ID" size="10"/></td>
+			</tr>
+			<tr>
+				<td>Company&nbsp;name:</td>
+				<td colspan="3" class="fullwidth" style="padding-right:10px"><input name="po.PurchaseOrderHeader.CustomerParty.Name" class="fullwidth"/></td>
+			</tr>
+			<tr>
+				<td style="border-bottom: 0">Address:</td>
+				<td colspan="3" class="fullwidth" style="padding-right:10px"><input name="po.PurchaseOrderHeader.CustomerParty.Location.Address.AddressLine[0]" class="fullwidth"/></td>
+			</tr>
+			<tr>
+				<td style="border-top: 0"></td>
+				<td colspan="3" class="fullwidth" style="padding-right:10px"><input name="po.PurchaseOrderHeader.CustomerParty.Location.Address.AddressLine[1]" class="fullwidth"/></td>
+			</tr>
+			<tr>
+				<td>Country code:</td>
+				<td colspan="3" style="padding-left: 1px">
+					<input name="po.PurchaseOrderHeader.CustomerParty.Location.Address.CountryCode"
+						size="3" maxsize="2" ng:format="countrycode"/>
+					{{COUNTRY_CODES[po.PurchaseOrderHeader.CustomerParty.Location.Address.CountryCode]}}</td>
+			</tr>
+			<tr>
+				<td>Postal code:</td>
+				<td colspan="3" style="padding-left: 1px">
+					<input name="po.PurchaseOrderHeader.CustomerParty.Location.Address.PostalCode" size="10"/></td>
+			</tr>
+			<tr>
+				<td>Phone:</td>
+				<td style="padding-right:10px"><input name="po.PurchaseOrderHeader.CustomerParty.Contact.Communication.UserArea.Phone" class="fullwidth"/></td>
+				<td align="right">Fax:</td>
+				<td align="right" style="padding-right:10px"><input name="po.PurchaseOrderHeader.CustomerParty.Contact.Communication.UserArea.Fax" class="fullwidth"/></td>
+			</tr>
+			<tr>
+				<td>Email:</td>
+				<td colspan="3" class="fullwidth" style="padding-right:10px"><input name="po.PurchaseOrderHeader.CustomerParty.Contact.Communication.UserArea.Email" class="fullwidth"/></td>
+			</tr>
+			<tr>
+				<td>Payment&nbsp;terms:</td>
+				<td>
+					<select name="po.PurchaseOrderHeader.CustomerParty.Contact.Communication.UserArea.PaymentTerms">
+						<option>30 day credit</option>
+						<option>COD</option>
+						<option>50% TT / 50% COD</option>
+					</select>
+				</td>
+				<td class="right">Delivery&nbsp;time:</td>
+				<td style="padding-left: 1px"><input size="3" name="po.PurchaseOrderHeader.CustomerParty.Contact.Communication.UserArea.DeliveryTime" value="10"/> days</td>
+			</tr>
+		</table>
+		<table border="1" class="fullwidth" style="margin-top: 10px">
+			<tr class="enter-items-header">
+				<th>Item</th>
+				<th>Qty</th>
+				<th>Particulars</th>
+				<th></th>
+			</tr>
+			<tr ng:repeat="item in po.PurchaseOrderLine">
+				<td>{{$index + 1}}</td>
+				<td>
+					<form ng:submit="$window.$(this.$element).find('input').last().focus()">
+						<input name="item.Quantity" value="1" size="3" ng:validate="integer"/>
+					</form>
+				</td>
+				<td class="fullwidth" style="padding-right:10px">
+					<form ng:submit="addItem()" class="fullwidth">
+						<input name="item.Description" class="fullwidth"/>
+					</form>
+				</td>
+				<td><a ng:click="deleteItem($index)" href>Delete</a></td>
+			</tr>
+		</table>
+		<div class="right" style="margin-top: 10px">
+			<button id="skip" ng:click="skip()" disabled>Defer</button>
+			<button id="done" ng:click="send()">Done</button>
+		</div>
+	</div>
+</div>
+		</td>
+		<td class="rightcolumn">
+			<div id="inventory" class="fullsize" ng:show="bod.image">
+				<table class="fullsize">
+					<tr>
+						<td><div class="header">Fax
+							<input ng:click="magnify_plus()" type="button" value="+"/>
+							<input ng:click="magnify_minus()" type="button" value="-"/>
+							<input ng:click="upside_down()" type="button" value="upside down"/>
+						</div></td>
+					</tr><tr>
+						<td class="content fullheight">
+							<div class="fullsize" style="overflow: auto">
+								<img ng:src="/{{bod.image}}.jpg" style="-webkit-transform: rotate({{rotate}}deg);-moz-transform: rotate({{rotate}}deg);" width="{{image_width}}px"/>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="fullsize" ng:hide="bod.image">
+				<table class="fullsize">
+					<tr>
+						<td><div class="header">Notes</div></td>
+					</tr><tr class="fullsize">
+						<td class="content fullsize" style="padding-right: 13px !important">
+							<textarea class="fullsize" style="font-size: 1.0em"></textarea>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</td>
+	</tr>
+</table>
+	</div>
+</ng:switch>

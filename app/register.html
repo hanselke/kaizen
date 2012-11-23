@@ -1,0 +1,21 @@
+<div class="register">
+	<h2>Registration form</h2>
+	<table>
+		<tr>
+			<td>Email:</td><td><input name="email" ng:required size="40"></td>
+		</tr>
+		<tr>
+			<td>Password:</td><td><input name="password" type="password" ng:required></td>
+		</tr>
+		<tr>
+			<td>Re-enter password:</td><td><input name="password2" type="password" ng:required></td>
+		</tr>
+		<tr>
+			<td>Company name:</td><td><input name="company_name" ng:required size="40"></td>
+		</tr>
+	</table>
+	<input type="checkbox" name="agree">I agree to the Terms &amp; Conditions</input>
+	<br>
+	<button id="register" ng:click="submit()">Register</button>
+	<button id="cancel" ng:click="cancel()">Cancel</button>
+</div>

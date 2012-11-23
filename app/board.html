@@ -1,0 +1,15 @@
+<table id="board">
+	<tr>
+		<th ng:repeat="lane in lanes">{{lane_headings[lane]}}</th>
+	</tr>
+	<tr>
+		<td ng:repeat="lane in lanes">
+			<div ng:repeat="card in cards[lane]" class="card">
+				<span class="id">{{card.id}}</span>
+				<span class="desc">{{card.desc | html}}</span>
+				<span ng:show="card.ready">✓</span>
+			</div>
+		</td>
+	</tr>
+<table>
+<button ng:click="refresh()">refresh</button>

@@ -1,0 +1,35 @@
+.preview { width: 800px; margin: 0 auto;}
+table { border-collapse: collapse; }
+td { vertical-align: top; }
+.title, .header, .details, .summary { width: 100%; }
+
+.sender, .title { text-align: center; margin-bottom: 1em; }
+.sender .details { font-size: 0.8em; }
+.sender .name, .title { font-size: 1.6em; font-weight: bold; }
+
+.title { width: 100%; background-color: black; color: white; }
+.title td { padding: 0.3em 1em 0.2em 1em; }
+
+.header { margin-bottom: 1em; font-weight: bold; }
+.header td { width: 50%; }
+.header td+td { padding-left: 3em; }
+label { font-style: italic; font-weight: normal; }
+
+.details th {
+	font-size: 0.8em; padding: 0.4em;
+	border-bottom: 1px solid black;
+	background-color: silver; }
+.details th+th, .details td+td { border-left: 1px solid black; }
+.details td { padding: 0.2em 0.5em 0.8em 0.5em; border-bottom: 1px gray dashed;}
+td.item-no, td.quantity, td.unit-price, td.total-price { text-align: right; }
+.item-no { width: 5%; }
+.quantity { width: 10%; }
+.particulars { width: 55%; }
+.unit-price { width: 15%; }
+.total-price { width: 15%; }
+
+.summary { margin-top: 1em; font-size: 1.2em; font-weight: bold; text-align: right; }
+.summary td { width: 85%; padding: 0.2em 1em 0.8em 0; }
+.summary td+td { width: 15%; border-bottom: 2px solid black; }
+
+.footer { margin-top: 3em; }

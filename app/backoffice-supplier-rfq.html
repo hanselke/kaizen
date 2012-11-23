@@ -1,0 +1,143 @@
+<ng:switch on="currentUser" class="fullheight" style="display:block">
+	<div ng:switch-when="undefined"></div>
+	<div ng:switch-when="null" class="page">Only signed in users can view this page.</div>
+	<div ng:switch-default class="fullheight">
+		<ng:switch on="hasRole('backoffice')" class="fullheight" style="display:block">
+			<div ng:switch-when="false" class="page">You don't have permission to view this page.</div>
+			<div ng:switch-default class="fullheight">
+<table class="page fullsize">
+	<tr class="fullwidth noPrint">
+		<td colspan="2" style="font-size: 25px; text-align: center; font-weight:bold; padding-bottom: 5px">
+			Process Outgoing RFQ
+		</td>
+	</tr>
+	<tr class="fullsize">
+		<td class="leftcolumn">
+			<div id="rfq" ng:repeat="doc in docs" style="padding-bottom: 10px">
+				<ng:switch on="doc.type">
+					<div ng:switch-when="sent">
+						<div class="header">Quote</div>
+						<div class="content">
+							{{doc.sent}}
+						</div>
+					</div>
+					<div ng:switch-default>
+						<div class="header">RFQ</div>
+						<div class="content">
+							<table border="1" class="fullwidth">
+								<tr><td class="label">Company&nbsp;name</td><td colspan="3">{{doc.rfq.RFQHeader.SupplierParty.Name}}</td></tr>
+								<tr><td class="label">Address</td><td colspan="3">{{doc.rfq.RFQHeader.SupplierParty.Location.Address.AddressLine[0]}}
+									<br/>{{doc.rfq.RFQHeader.SupplierParty.Location.Address.AddressLine[1]}}</td></tr>
+								<tr><td class="label">Country</td><td colspan="3">{{COUNTRY_CODES[doc.rfq.RFQHeader.SupplierParty.Location.Address.CountryCode]}}</td></tr>
+								<tr><td class="label">Postal&nbsp;code</td><td colspan="3">{{doc.rfq.RFQHeader.SupplierParty.Location.Address.PostalCode}}</td></tr>
+								<tr>
+									<td class="label">Phone</td>
+									<td class="halfwidth">
+										<ng:switch on="doc.type=='rfq' && !doc.rfq.RFQHeader.SupplierParty.Contact.Communication.UserArea.Phone">
+											<input ng:switch-when="true" name="doc.rfq.RFQHeader.SupplierParty.Contact.Communication.UserArea.Phone" class="fullwidth"/>
+											<span ng:switch-default class="fullwidth">{{doc.rfq.RFQHeader.SupplierParty.Contact.Communication.UserArea.Phone}}</span>
+										</ng:switch>
+									</td>
+									<td>Fax</td>
+									<td class="halfwidth">
+										<ng:switch on="doc.type=='rfq' && !doc.rfq.RFQHeader.SupplierParty.Contact.Communication.UserArea.Fax">
+											<input ng:switch-when="true" name="doc.rfq.RFQHeader.SupplierParty.Contact.Communication.UserArea.Fax" class="fullwidth"/>
+											<span ng:switch-default class="fullwidth">{{doc.rfq.RFQHeader.SupplierParty.Contact.Communication.UserArea.Fax}}</span>
+										</ng:switch>
+									</td>
+								</tr>
+								<tr>
+									<td class="label">Email</td>
+									<td colspan="3" class="fullwidth">
+										<ng:switch on="doc.type=='rfq' && !doc.rfq.RFQHeader.SupplierParty.Contact.Communication.UserArea.Email">
+											<input ng:switch-when="true" name="doc.rfq.RFQHeader.SupplierParty.Contact.Communication.UserArea.Email" class="fullwidth"/>
+											<span ng:switch-default class="fullwidth">{{doc.rfq.RFQHeader.SupplierParty.Contact.Communication.UserArea.Email}}</span>
+										</ng:switch>
+									</td>
+								</tr>
+							</table>
+							<table border="1" class="rfqitems fullwidth" style="margin-top:10px">
+								<tr>
+									<th>Qty</th>
+									<th>Particulars</th>
+								</tr>
+								<tr ng:repeat="item in doc.rfq.RFQLine" class="rfqitem">
+									<td class="center">{{item.Quantity}}</td>
+									<td>{{item.Description | ml}}</td>
+								</tr>
+							</table>
+							<br>
+							<div class="right noPrint">
+								<ng:switch on="doc.type">
+									<button ng:switch-when="rfq" ng:click="phone(doc)">Phone</button>
+									<button ng:switch-default disabled>Phone</button>
+								</ng:switch>
+								<button disabled>Fax</button>
+								<button ng:click="printPreview()">Print</button>
+								<button disabled>Email</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</td>
+		<td class="rightcolumn">
+			<div id="rfq" ng:repeat="doc in docs" style="padding-bottom: 10px">
+				<ng:switch on="doc.type">
+					<div ng:switch-when="quote">
+						<div class="header">Quote</div>
+						<div class="content">
+							<table border="1" class="fullwidth">
+								<tr>
+									<td>Validity</td>
+									<td colspan="3"><input size="2" value="30" style="border:0 solid;background-color: white;" name="doc.quote.QuoteHeader.CustomerParty.Contact.Communication.UserArea.Validity"/> days</td>
+								</tr>
+								<tr>
+									<td>Payment&nbsp;terms</td>
+									<td>
+										<select name="doc.quote.QuoteHeader.CustomerParty.Contact.Communication.UserArea.PaymentTerms">
+											<option>30 day credit</option>
+											<option>COD</option>
+											<option>50% TT / 50% COD</option>
+										</select>
+									</td>
+									<td>Delivery&nbsp;time</td>
+									<td><input size="3" value="10" name="doc.quote.QuoteHeader.CustomerParty.Contact.Communication.UserArea.DeliveryTime"/> days</td>
+								</tr>
+							</table>
+							<table border="1" class="rfqitems fullwidth" style="margin-top:10px">
+								<tr>
+									<th>Qty</th><th>Particulars</th><th>Price</th><th>&nbsp;&nbsp;&nbsp;Total&nbsp;&nbsp;&nbsp;</th>
+								</tr>
+								<tr ng:repeat="item in doc.quote.QuoteLine" class="rfqitem">
+									<td class="center"><input name="item.Quantity" size="3"></td>
+									<td>{{item.Description | ml}}</td>
+									<td><nobr>$<input name="item.UnitPrice.Amount" class="price" size="7"
+											title="Original price: {{item.map.price | currency}}"/></nobr></td>
+									<td class="right">{{item.Quantity * item.UnitPrice.Amount | currency}}</td>
+								</tr>
+							</table>
+							<table style="width: 100%" cellpadding="0" cellspacing="0">
+								<colgroup>
+										<col>
+										<col style="width: 10px">
+								</colgroup>
+								<tr style="font-size: 1.1em">
+									<td class="right"><b>Total&nbsp;price:</b></td>
+									<td class="right"><b>{{doc.quote.QuoteLine.$sum('Quantity * UnitPrice.Amount') | currency}}</b></td>
+								</tr>
+							</table>
+							<div class="right">
+								<button ng:click="done(doc)">Done</button>
+							</div>
+						</div>
+					</div>
+				</ng:switch>
+			</div>
+		</td>
+	</tr>
+</table>
+			</div>
+		</ng:switch>
+	</div>
+</ng:switch>

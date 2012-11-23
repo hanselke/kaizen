@@ -1,0 +1,34 @@
+@page {
+	margin: 0.5em
+}
+html, body { font-size: 1.0em; padding: 0; margin: 0 }
+.noPrint { display:none }
+
+.print table { border-collapse: collapse; margin: 10px; display: inline-block }
+.print table th, .print table td { padding: 0.3em 0.4em }
+
+.print { border: 1px solid black; text-align: center }
+.print > div { text-align: center }
+
+.party table td { padding: 0 }
+.party .name { text-transform: uppercase }
+
+.title { font-size: 2em; font-family: Arial; text-align: center }
+
+.fields .label { font-weight: bold; padding-right: 0 }
+
+table.items { border-bottom: 1px solid black }
+.items th { border: 1px solid black }
+.items .item td { border-left: 1px solid black; border-right: 1px solid black }
+.items .description { text-align: left }
+.items .price, .items .item_total { text-align: right }
+.items_totals { display: inline-block }
+.totals { text-align: right }
+.total { font-size: 1.1em; font-weight: bold }
+
+button { width: 110px; font-size: 15px }
+.buttons { text-align: right }
+@media print {
+	body > table { width: 100% }
+	.buttons { display: none }
+}

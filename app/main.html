@@ -1,0 +1,159 @@
+<table class="page">
+	<tr><!-- row for kanban board -->
+		<td style="vertical-align: top" colspan="2">
+			<table id="board">
+				<colgroup>
+					<col width="14.28%">
+					<col width="14.28%">
+					<col width="14.28%">
+					<col width="14.28%">
+					<col width="14.28%">
+					<col width="14.28%">
+					<col width="14.28%">
+				</colgroup>
+				<tr>
+					<th ng:repeat="lane in lanes">{{lane_headings[lane]}}</th>
+				</tr>
+				<tr>
+					<td ng:repeat="lane in lanes">
+						<div ng:repeat="card in cards[lane]" class="card" ng:class="card[3]">
+							<span class="id">{{card.id}}</span>
+							<span class="desc">{{card.desc | html}}</span>
+							<span ng:show="card.ready">✓</span>
+						</div>
+					</td>
+				</tr>
+			</table>
+			<div class="help bubble up" style="margin-left: 400px">This is your kanban board</div>
+			<table class="cycletimes fullwidth" cellpadding=0 cellspacing=0>
+				<colgroup>
+					<col width="14.28%">
+					<col width="14.28%">
+					<col width="14.28%">
+					<col width="14.28%">
+					<col width="14.28%">
+					<col width="14.28%">
+					<col width="14.28%">
+				</colgroup>
+				<tr>
+					<td valign="top">
+						<div class="cycle">
+						<div class="time">Time: 4 days 6 hours</div>
+						</div>
+					</td>
+					<td>
+						<div class="cycle">
+						<div class="time">Time: 19min</div>
+						<div class="cost">Cost: {{3.17 | currency}}</div>
+						</div>
+					</td>
+					<td>
+						<div class="cycle">
+						<div class="time">Time: 42min</div>
+						<div class="cost">Cost: {{7 | currency}}</div>
+						</div>
+					</td>
+					<td>
+						<div class="cycle">
+						<div class="time">Time: 15min</div>
+						<div class="cost">Cost: {{2.5 | currency}}</div>
+						</div>
+					</td>
+					<td>
+						<div class="cycle">
+						<div class="time">Time: 18min</div>
+						<div class="cost">Cost: {{3 | currency}}</div>
+						</div>
+					</td>
+					<td>
+						<div class="cycle">
+						<div class="time">Time: 11min</div>
+						<div class="cost">Cost: {{1.83 | currency}}</div>
+						</div>
+					</td>
+					<td>
+						<div class="cycle">
+						<div class="time"></div>
+						<div class="cost"></div>
+						</div>
+					</td>
+				</tr>
+			</table>
+			</td>
+		</tr>
+		<tr><!-- row for VSM -->
+			<td colspan="2">
+			<table id="vsm">
+				<colgroup>
+					<col width="13.14%">
+					<col width="1.14%">
+					<col width="9.14%">
+					<col width="5.14%">
+					<col width="10.14%">
+					<col width="4.14%">
+					<col width="9.14%">
+					<col width="5.14%">
+					<col width="9.14%">
+					<col width="5.14%">
+					<col width="9.14%">
+					<col width="5.14%">
+					<col width="9.14%">
+					<col width="5.14%">
+				</colgroup>
+				<tr>
+					<td class="no" colspan="2">
+						&#931; cycle time: 4h49m<br>
+						&#931; cycle cost: $4,391<br>
+						&#931; value added: 67m</td>
+					<td class="backoffice value">14 min</td> <td class="wait">5 min</td>
+					<td class="sales value">40 min</td> <td class="wait">2 min</td>
+					<td class="billing value">11 min</td> <td class="wait">4 min</td>
+					<td class="warehouse value">15 min</td> <td class="wait">3 min</td>
+					<td class="purchasing value">6 min</td> <td class="wait" style="border-right: none">5 min</td>
+					<td class="no" colspan="2">
+						&#916; cycle time: 1h29m<br>
+						&#916; cycle cost: $1,144<br>
+						&#916; value added: 23m
+					</td>
+				</tr>
+			</table>
+			
+		</td>
+	</tr>
+</table>
+<table class="page fullwidth" style="margin-top: 8px">
+	<tr><!-- row for chat and company stream -->
+		<td width="50%">
+			<div class="chat">
+				<div class="header">Chat</div>
+				<div class="content" style="height: 200px">
+					<div style="height: 175px; background: white; padding-left: 2px; overflow-y: auto" id="chat_window">
+						<div ng:repeat="line in chat_lines" ng:class="getClassForMsg(line)">
+							<i ng:show="line.name">{{line.name}}:</i> {{line.msg}} <span class="time">[{{line.time | date:'HH:mm'}}]</span>
+						</div>
+					</div>
+					<div class="input" style="padding-right:5px; height: 25px">
+						<form ng:submit="sendMsg()">
+							<input class="fullwidth" name="message">
+						</form>
+					</div>
+				</div>
+			</div>
+		</td>
+		<td width="50%">
+			<div class="company_stream">
+				<div class="header">Company stream</div>
+				<div class="content" style="height: 200px">
+					<div style="height: 100%;background:white; padding-left: 2px">
+						You are subscribed to the Sales Order and Sales Department stream</br>
+						<span class="time">[2 mins ago]</span> <i>Chris</i> sent out RFQs.<br>
+						<span class="time">[8 mins ago]</span> <i>Mon</i> mapped suppliers for <a href>RFQ#1234.</a><br>
+						<span class="time">[9 mins ago]</span> <i>Derrick</i> mapped inventory for <a href>RFQ#1234.</a><br>
+						<span class="time">[15 mins ago]</span> <i>Chris</i> processed an incoming fax.<br>
+					</div>
+				</div>
+			</div>
+		</td>
+	</tr>
+
+</table>

@@ -1,0 +1,23 @@
+#!/bin/sh
+
+echo 1. localhost:8001  \(default\)
+echo 2. test.openbusiness.com.sg
+echo 3. openbusiness.com.sg:8002
+read -p 'Type host:port or a number from above> '
+if [ "$REPLY" = '' ]; then host=localhost:8001; fi
+if [ "$REPLY" = '1' ]; then host=localhost:8001; fi
+if [ "$REPLY" = '2' ]; then host=test.openbusiness.com.sg; fi
+if [ "$REPLY" = '3' ]; then host=openbusiness.com.sg:8002; fi
+if [ "$host" = '' ]; then host="$REPLY"; fi
+echo
+echo Sending to $host
+echo
+echo 1. RFQ Fax \(default\)
+echo 2. Init DB \(/init_db\)
+read -p 'Select an operation from above> '
+if [ "$REPLY" = '' ] || [ "$REPLY" = '1' ]; then path=/faxes; data='{"image": "RFQ"}'; fi
+if [ "$REPLY" = '2' ]; then path=/init_db; data=''; fi
+echo
+echo POSTing "$data" to http://"$host""$path"
+read -p 'OK? '
+curl -D- -H 'Content-Type: application/json' http://"$host""$path" -d "$data"

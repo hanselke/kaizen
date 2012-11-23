@@ -1,0 +1,78 @@
+<div class="print">
+	<div class="party customer">
+		<table class="party customer">
+			<tr>
+				<td class="name">{{header.CustomerParty.Name}}</td>
+			</tr><tr>
+				<td cass="address">{{header.CustomerParty.Location.Address.AddressLine[0]}},
+					{{COUNTRY_CODES[header.CustomerParty.Location.Address.CountryCode]}}
+					{{header.CustomerParty.Location.Address.PostalCode}}</td>
+			</tr><tr>
+				<td class="phone">Tel: {{header.CustomerParty.Contact.Communication.UserArea.Phone}}&nbsp;&nbsp;
+					Fax: {{header.CustomerParty.Contact.Communication.UserArea.Fax}}</td>
+			</tr><tr>
+				<td class="email">Email: {{header.CustomerParty.Contact.Communication.UserArea.Email}}</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="title">RFQ</div>
+	
+	<div class="party supplier">
+		<table class="party supplier">
+			<tr>
+				<td class="name">{{header.SupplierParty.Name}}</td>
+			</tr><tr>
+				<td cass="address">{{header.SupplierParty.Location.Address.AddressLine[0]}},
+					{{COUNTRY_CODES[header.SupplierParty.Location.Address.CountryCode]}}
+					{{header.SupplierParty.Location.Address.PostalCode}}</td>
+			</tr><tr>
+				<td class="phone">Tel: {{header.SupplierParty.Contact.Communication.UserArea.Phone}}&nbsp;&nbsp;
+					Fax: {{header.SupplierParty.Contact.Communication.UserArea.Fax}}</td>
+			</tr><tr>
+				<td class="email">Email: {{header.SupplierParty.Contact.Communication.UserArea.Email}}</td>
+			</tr>
+		</table>
+	</div>
+	
+<!--
+ 	<div class="fields">
+		<table class="fields">
+			<tr>
+				<td class="label">Validity:</td>
+				<td>{{header.UserArea.Validity}} days</td>
+				<td class="label">Payment terms:</td>
+				<td>{{header.UserArea.PaymentTerms}}</td>
+				<td class="label">Delivery time:</td>
+				<td>{{header.UserArea.DeliveryTime}} days</td>
+			</tr>
+		</table>
+	</div>
+ -->	
+	<div class="items_totals">
+		<div class="items">
+			<table class="items">
+				<tr class="header">
+					<th>Qty</th><th>Particulars</th>
+				</tr>
+				<tr ng:repeat="item in lines" class="item">
+					<td class="quantity">{{item.Quantity}}</td>
+					<td class="description">{{item.Description | ml}}</td>
+				</tr>
+			</table>
+		</div>
+		
+		<div class="issue_date">
+			Date: {{date | date:"dd/MM/yyyy"}}
+		</div>
+	</div>
+	
+</div>
+
+<div class="buttons">
+	<div>
+		<button ng:click="$window.print()">Print</button>
+		<button ng:click="back()">Back</button>
+		<button ng:click="done()">Done</button>
+	</div>
+</div>

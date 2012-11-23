@@ -1,0 +1,16 @@
+<div class="signin">
+	<h2>Sign in form</h2>
+	<form ng:submit="submit()">
+		<table>
+			<tr>
+				<td>Email:</td><td><input name="email" ng:required size="40"></td>
+			</tr>
+			<tr>
+				<td>Password:</td><td><input name="password" type="password" ng:required></td>
+			</tr>
+		</table>
+		<br>
+		<button type="submit">Sign in</button>
+		<button type="button" ng:click="cancel()">Cancel</button>
+	</form>
+</div>

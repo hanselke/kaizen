@@ -1,0 +1,16 @@
+{
+    "name": "ordering_system"
+  , "description": "OpenBusiness Ordering System"
+  , "version": "0.0.1"
+  , "private": true
+  , "dependencies": {
+      "express": ""
+    , "connect": ""
+    , "connect-gzip": ""
+    , "mailer": ""
+    , "request": ""
+    , "socket.io": ""
+    , "vows": ""
+    , "ansi-color": ""
+  }
+}

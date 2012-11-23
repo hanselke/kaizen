@@ -1,0 +1,30 @@
+<p id="board_links">
+	<span ng:repeat="board in boards">
+		<a ng:click="set_lane_texts(board.lanes)" href>
+			{{board.name | html}}
+		</a>&nbsp;&nbsp;|
+	<span>
+</p>
+<table>
+<tr>
+<td>
+<textarea name="lane_texts" style="width: 300px;height:500px"></textarea>
+</td>
+<td>
+<table id="board">
+	<tr>
+		<th ng:repeat="lane in lanes">{{lane_headings[lane]}}</th>
+	</tr>
+	<tr>
+		<td ng:repeat="lane in lanes">
+			<div ng:repeat="card in cards[lane]" class="card">
+				<span class="id">{{card[0]}}</span>
+				<span class="desc">{{card[1] | html}}</span>
+				<span ng:show="card[2]">✓</span>
+			</div>
+		</td>
+	</tr>
+<table>
+</td>
+</tr>
+</table>

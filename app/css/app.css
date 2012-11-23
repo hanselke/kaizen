@@ -1,0 +1,151 @@
+html, body { height: 100%; padding: 0; margin: 0; border: 0px solid }
+body { background: #449dd7; color: white;
+	font-family: "lucida grande",tahoma,verdana,arial,sans-serif; font-size: 13px }
+body > table { height: 100%; width: 100%; padding: 8px; margin: 0; border: 0px solid }
+body > table > tbody > tr { vertical-align: top }
+table.item { background: #bae0ed; color: black }
+table.item:hover { background: #ECEDBA; cursor: pointer }
+td.item img { width: 80px }
+a { color: #0000EE }
+
+.register { background: white; color: black; display: inline-block;
+	padding: 0px 10px 10px 10px; margin: 0px 10px 10px 0px }
+.main { float: right; clear: right; padding: 10px; margin: 2px 0px 10px 0px;
+	background: white; color: black; display: inline-block }
+.signin { background: white; color: black; display: inline-block;
+	padding: 0px 10px 10px 10px; margin: 0px 10px 10px 0px; text-algin: center }
+.signin td { text-align: left }
+table.rfqitems tr.selected { background: #B6CDE4 }
+tr.mapped { background: #449DD7 }
+table.rfqitems tr, table.inventoryitems tr { height: 26px }
+table.sendrfq { height:100%; width: 100%; padding: 0px; margin: 0px;
+	background: white; color: black }
+
+.page { background: white; color: black; padding: 10px; border-radius: 7px }
+.header {
+	background: #ecedba; padding: 3px 10px; border-radius: 8px 8px 0 0;
+	font-size: 1.17em; font-weight: bold }
+.content { background: #B6CDE4;
+	padding: 8px !important; border-radius: 0 0 8px 8px }
+table[border="1"] { border-collapse: collapse; background: white }
+.content th {background: #ecedba }
+.h2 { font-size: 1.17em; font-weight:bold }
+.center { text-align: center }
+.fullsize { height:100%; width: 100% }
+table.fullsize { border-spacing: 0 } /* 'cellspacing' equivalent */
+table.fullsize > * > tr > td,
+table.fullsize > * > tr > th { padding: 0 } /* 'cellpadding' equivalent */
+.fullwidth { width: 100% }
+div.fullwidth { padding-left: 0; padding-right: 0 }
+td.fullwidth { padding-right: 10px }
+.halfwidth { width: 50% }
+td.halfwidth { padding-right: 10px }
+.fullheight { height: 100% }
+div.fullheight { padding-top: 0; padding-bottom: 0 }
+td.rightcolumn, td.leftcolumn {width: 50%; height: 100%; vertical-align: top }
+td.leftcolumn { padding-right: 4px !important }
+td.rightcolumn { padding-left: 4px !important }
+
+.role-selector { float: right; color: black; top-margin: 5px; padding: 3px; border: 2px solid red; }
+.role-selector span { margin: 2px;	padding: 2px; border-radius: 4px; }
+.role-selector span.on { font-weight: bold; background: black; color: white; }
+
+#board {background: #eee; color: #555; border-collapse: collapse;
+	font-family: Helvetica, Arial, sans-serif; font-size: 1em; }
+#board tr { vertical-align: top }
+#board td { border: 1px black dotted; width: 300px }
+#board_links { background: #eee; color: black}
+#board_links a { color: #555 }
+#board_links b { color: red }
+.card {background: #ddd; border: 1px solid #ccc; margin: 5px}
+.card .id { background: white; color: #666;
+	border-radius: 5px; font-size: 0.8em; font-weight: bold; padding: 1px 5px; }
+.own.card { border: 1px blue solid }
+.next.card { background: #B6CDE4; color: black }
+.next.card .id { background: #ecedba }
+
+#vsm { width: 100%; border-collapse: collapse; border: 1px transparent;
+	font-size: 0.9em; color: #555 }
+#vsm td { border: 2px solid #555; text-align: center }
+#vsm .value { border-left: none; border-bottom: none }
+#vsm .wait { border-left: none; border-top: none }
+#vsm .no { border: none; text-align: center }
+
+.right { text-align: right }
+td, th { padding-left: 0.3em; padding-right: 0.3em; padding-top: 3px; padding-bottom: 3px }
+button { width: 110px; font-size: 15px }
+input { font-size: 12px; }
+input.qty, input.price { text-align: right }
+
+.label { width: 22% }
+.left_bar td > div { color: black; padding: 10px; margin: 2px 0px 10px 0px; }
+.left_bar > tbody > tr > td, .left_bar > tbody > tr > tr { padding:0 }
+
+table.discussion { width: 100%; margin-top: 10px }
+table.discussion:first-child { margin-top: 0px }
+.discussion .process { font-weight: bold; background: #ecedba; }
+.discussion .chat { background: white; }
+.discussion .chat td + td { width: 60px }
+
+.process_history .box { background: #B6CDE4; margin-bottom: 6px; font-size: 11px }
+.process_history > div { border: 1px solid white; border-radius: 6px }
+.process_history .box .box { margin: 4px; border: 1px solid black }
+.process_history .box .box > div { border-radius: 0 }
+.process_history .box .box > .title { border-bottom: 1px solid black }
+.process_history .title { background: #ecedba; padding: 	3px; border-radius: 6px 6px 0 0 }
+.process_history .text { background: white; padding: 	3px }
+
+.cycletimes td { padding: 0; margin: 0; text-align: center }
+.cycle { display: inline-block; font-size: 0.9em; color: #555 }
+.time { color: #888; float: right }
+.my-message { background: #eee }
+
+/* http://nicolasgallagher.com/pure-css-speech-bubbles/demo/ */
+.overlay {
+	background: black;
+	opacity: 0.2;
+	width: 100%;
+	height: 100%;
+	z-index: 100000000;
+	position: absolute;
+}
+.bubble {
+	position: relative;
+	padding: 10px;
+	color: black;
+	background: white;
+	border: 3px solid #ecedba;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	z-index: 100000001;
+	position: absolute;
+}
+.bubble.up {
+	margin: 10px 0 0.5em;
+}
+.bubble.up::after {
+	content: "";
+	position: absolute;
+	top: -23px;
+	left: 50px;
+	border: 10px solid transparent;
+	border-bottom-color: #ecedba;
+	display: block;
+	width: 0;
+}
+.bubble.left {
+	margin: 20px 0 0.5em 125px;
+}
+.bubble.left::after {
+	content: "";
+	position: absolute;
+	top: 16px;
+	left: -23px;
+	border: 10px solid transparent;
+	border-right-color: #ecedba;
+	display: block;
+	width: 0;
+}
+.help { display: none }
+

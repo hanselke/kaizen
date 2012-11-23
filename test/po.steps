@@ -1,0 +1,52 @@
+; Feature "Backoffice sends a ProcessPurchaseOrder" {
+; 	As a Backoffice user
+; 	I should be able to enter a PurchaseOrder
+; 	So Sales can try to fulfull it }
+
+"a customer Quote" [
+	before-each-step do select steps "a Fax has arrived"
+	before-each-step do select steps "the Backoffice user asks for the next task"
+	before-each-step do select steps "he submits the ProcessRFQ form"
+	before-each-step do select steps "a Sales man asks for the next task"
+	before-each-step do select steps "he submits a full inventory mapping"
+	before-each-step do select steps "a Sales man asks for the next task"
+	before-each-step do select steps "he submits customer Quote"
+	before-each-step do select steps "the Backoffice user asks for the next task"
+	before-each-step do select steps "he sends out the customer Quote"
+	1
+]
+; 	Scenario "No Quote reference"
+"I prepare a PurchaseOrder" [
+	po: context [
+		name: "ProcessPurchaseOrder"
+		ApplicationArea: context [Sender: "backoffice" Receiver: "sales"]
+		DataArea: context [
+			Process: none
+			PurchaseOrder: context [
+				PurchaseOrderHeader: context [
+					DocumentID: context [ID: none]
+					DocumentReference: context [DocumentID: context [ID: none] ] ]
+				PurchaseOrderLine: reduce [
+					context [
+						LineNumber: none
+						UnitPrice: context [Amount: none]
+						Quantity: none
+						QuoteReference: context [
+							DocumentID: context [ID: none]
+							LineNumber: none ] ] ] ] ] ]
+]
+"I submit it" [post sales po]
+"I should get a confirmation" [type! R object! equal! R/status "ok"]
+; 	Scenario "Have Quote reference"
+"a Quote reference" [
+	po/DataArea/PurchaseOrder/PurchaseOrderHeader/DocumentReference/DocumentID/ID: quote/DataArea/Quote/QuoteHeader/DocumentID/ID
+]
+"the 1st line item having a Quote reference" [
+	po/DataArea/PurchaseOrder/PurchaseOrderLine/1/QuoteReference/DocumentID/ID: quote/DataArea/Quote/QuoteHeader/DocumentID/ID
+	po/DataArea/PurchaseOrder/PurchaseOrderLine/1/QuoteReference/LineNumber: 1
+]
+; 	Scenario "Fax"
+;"a reference to the incoming Fax" [none]
+; 	Scenario "Email"
+;"an Email has arrived" [none]
+;"a reference to the incoming Email" [none]

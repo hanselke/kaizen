@@ -1,0 +1,78 @@
+<ng:switch on="currentUser" class="fullheight" style="display:block">
+	<div ng:switch-when="undefined"></div>
+	<div ng:switch-when="null" class="page">Only signed in users can view this page.</div>
+	<div ng:switch-default class="fullheight">
+		<ng:switch on="hasRole('sales')" class="fullheight" style="display:block">
+			<div ng:switch-when="false" class="page">You don't have permission to view this page.</div>
+			<div ng:switch-default class="fullheight">
+<table class="page fullsize">
+	<tr class="fullwidth">
+		<td colspan="2" style="font-size: 25px; text-align: center; font-weight:bold; padding-bottom: 5px">
+			Map RFQ to inventory
+		</td>
+	</tr>
+	<tr class="fullsize">
+		<td class="leftcolumn">
+			<div id="rfq">
+				<div class="header">RFQ</div>
+				<div class="content">
+					<table border="1" class="fullwidth">
+						<tr><td class="label">Company name</td><td id="sender_name">{{sender.Name}}</td></tr>
+						<tr><td class="label">Address</td><td id="sender_address">{{sender.Location.Address.AddressLine[0]}}
+							<br/>{{sender.Location.Address.AddressLine[1]}}</td></tr>
+						<tr><td class="label">Country</td><td>{{sender_country}}</td></tr>
+					</table>
+					<table border="1" class="rfqitems fullwidth" style="margin-top: 10px">
+						<tr>
+							<th>Qty</th>
+							<th>Particulars</th>
+							<th></th>
+						</tr>
+						<tr ng:repeat="item in salesOrder.SalesOrderLine" class="rfqitem" ng:class="getItemClass(item)">
+							<td class="center">{{item.Quantity}}</td>
+							<td>{{item.Description | ml}}</td>
+							<td>
+								<input type="button" ng:click="mapItem(item)" value="Map it"/>
+							</td>
+						</tr>
+					</table>
+					<div style="margin-top: 10px" class="right">
+						<button id="done" ng:click="done()">Done</button>
+					</div>
+				</div>
+			</div>
+		</td>
+		<td class="rightcolumn">
+			<div id="inventory" class="fullsize">
+				<table class="fullsize">
+					<tr>
+						<td><div class="header">Inventory</div></td>
+					</tr><tr>
+						<td class="content fullheight">
+							<table class="fullsize">
+								<tr>
+									<td style="padding-bottom:5px">Filter inventory: <input name="inventory_filter"/></td>
+								</tr><tr>
+									<td class="fullheight">
+										<div style="height:100%;overflow-y: auto;display:inline-block;">
+											<table border="1" class="inventoryitems">
+												<tr ng:repeat="item in inventory.$filter(inventory_filter)" ng:class="getInventoryItemClass(item)" ng:click="connectItem(item)">
+													<td>{{item.description}}</td>
+													<td align="right">{{item.price | currency}}</td>
+												</tr>
+											</table>
+										</div>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</td>
+	</tr>
+</table>
+			</div>
+		</ng:switch>
+	</div>
+</ng:switch>

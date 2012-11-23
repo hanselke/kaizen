@@ -1,0 +1,85 @@
+<ng:switch on="currentUser" class="fullheight" style="display:block">
+	<div ng:switch-when="undefined"></div>
+	<div ng:switch-when="null" class="page">Only signed in users can view this page.</div>
+	<div ng:switch-default class="fullheight">
+		<ng:switch on="hasRole('purchasing')" class="fullheight" style="display:block">
+			<div ng:switch-when="false" class="page">You don't have permission to view this page.</div>
+			<div ng:switch-default class="fullheight">
+<table class="page fullsize">
+	<tr class="fullwidth">
+		<td colspan="2" style="font-size: 25px; text-align: center; font-weight:bold; padding-bottom: 5px">
+			Map Suppliers
+		</td>
+	</tr>
+	<tr class="fullsize">
+		<td class="leftcolumn">
+			<div id="rfq">
+				<div class="header">
+					<span ng:switch-when="true">RFQ</span>
+				</div>
+				<div class="content">
+				<table border="1" class="fullwidth">
+					<tr><td class="label">Company name:</td><td id="sender_name">{{sender.Name}}</td></tr>
+					<tr><td class="label">Address:</td><td id="sender_address">{{sender.Location.Address.AddressLine[0]}}
+						<br/>{{sender.Location.Address.AddressLine[1]}}</td></tr>
+					<tr><td class="label">Country:</td><td>{{sender_country}}</td></tr>
+				</table>
+				<table border="1" class="rfqitems fullwidth" style="margin-top: 10px">
+					<tr>
+						<th>Qty</th>
+						<th>Particulars</th>
+						<th></th>
+					</tr>
+					<tr ng:repeat="item in salesOrder.SalesOrderLine" ng:class="getItemClass(item)">
+						<td>{{item.Quantity}}</td>
+						<td>{{item.Description | ml}}</td>
+						<td>
+							<input ng:switch-when="true" type="button" ng:click="mapItem(item)" value="Map it"/>
+						</td>
+					</tr>
+				</table>
+				<div style="margin-top: 10px" class="right">
+					<button id="send" ng:click="send()">Send</button>
+				</div>
+				</div>
+			</div>
+		</td>
+		<td class="rightcolumn">
+			<div id="suppliers" class="fullsize">
+				<table class="fullsize">
+					<tr>
+						<td><div class="header">Suppliers</div></td>
+					</tr><tr>
+						<td class="content fullheight">
+							<table class="fullsize">
+								<tr>
+									<td style="padding-bottom:5px">
+										Filter suppliers: <input name="supplier_filter"/>
+									</td>
+								</tr><tr>
+									<td class="fullheight">
+										<div style="height:100%;overflow-y: auto;display:inline-block;">
+											<table border="1" class="suppliers">
+												<tr>
+													<th>Company name</th>
+												</tr>
+												<tr ng:repeat="supplier in objectValues(suppliers).$filter(supplier_filter).$orderBy('Name')" ng:class="getSupplierClass(supplier)"
+														ng:click="connectItem(supplier)">
+													<td>{{supplier.Name}}</td>
+												</tr>
+											</table>
+										</div>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</td>
+	</tr>
+</table>
+			</div>
+		</ng:switch>
+	</div>
+</ng:switch>

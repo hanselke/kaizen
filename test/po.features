@@ -1,0 +1,134 @@
+Feature "Receive Purchase Order" {}
+
+	before-each-scenario: does [
+		register backoffice  register customer  register sales  register purchasing
+		login backoffice  login customer  login sales  login purchasing]
+
+	Scenario "Completely based on previous Quote & each item is fully available in inventory"
+		GIVEN "a Fax has arrived"
+			& "the Backoffice user asks for the next task"
+			& "he submits the ProcessRFQ form"
+			& "a Sales man asks for the next task"
+			& "he submits a full inventory mapping"
+			& "a Sales man asks for the next task"
+			& "he submits customer Quote"
+			& "the Backoffice user asks for the next task"
+			& "he sends out the customer Quote"
+		WHEN "a Backoffice user receives a Purchase Order via phone"
+			& "he gets the list of Quotes"
+			& "he submits a PO referencing the previous customer Quote"
+		THEN "he should get a confirmation"
+		WHEN "a Sales man asks for the next task"
+		THEN "he should get 1 SyncSalesOrder"
+			& "it has the same number of line items as the Quote"
+			& "it has the same prices as the Quote"
+			
+Feature "Backoffice creates new Customer" {
+	As a Backoffice user
+	I should be able to create new Customer parties
+	So related documents can be attached to them
+	And their contact information can be centrally managed }
+
+Feature "Backoffice sends a ProcessPurchaseOrder" {
+	As a Backoffice user
+	I should be able to enter a PurchaseOrder
+	So Sales can try to fulfull it }
+
+	Scenario-Background [
+		register backoffice  register customer  register sales  register purchasing
+		login backoffice  login customer  login sales  login purchasing
+		GIVEN "I'm a Backoffice user"
+			& "a customer Quote"
+	]
+
+	Scenario "No Quote reference"
+		GIVEN "I prepare a PurchaseOrder"
+		WHEN "I submit it"
+		THEN "I should get a confirmation"
+	
+	Scenario "Have Quote reference"
+		GIVEN "I prepare a PurchaseOrder"
+			with "a Quote reference"
+			with "the 1st line item having a Quote reference"
+		WHEN "I submit it"
+		THEN "I should get a confirmation"
+
+	Scenario "Related Quote found"
+		GIVEN "I prepare a PurchaseOrder"
+			with "the 1st line item having a Quote reference"
+		WHEN "I submit it"
+		THEN "I should get a confirmation"
+
+	Scenario "Fax"
+		GIVEN "a Fax has arrived"
+			& "I prepare a PurchaseOrder"
+				with "a reference to the incoming Fax"
+		WHEN "I submit it"
+		THEN "I should get a confirmation"
+
+	Scenario "Email"
+		GIVEN "an Email has arrived"
+			& "I prepare a PurchaseOrder"
+				with "a reference to the incoming Email"
+		WHEN "I submit it"
+		THEN "I should get a confirmation"
+
+; Scenario "No corresponding customer Quote"
+
+;cPO source: {phone, fax, email, in-app}
+;if cPO source is phone
+;	call receiver role: {backoffice, sales}
+;cPO cQuote: validity
+;if cQuote is invalid: {missing, expired}
+;if cQuote is valid:
+;	past record: {sQuote, Inventory, none}
+
+
+comment {
+
+
+	Customer/Name is copied from CustomerRef/Name but should be overridden in the POSTed data
+	Customer Ref
+	Quote Ref optional; can be derived from the Customer ref
+	Date Received (today by default)
+	Validity?
+	To -- fixed to guanhuat
+	Attention to -- editable but optional
+	Comment -- optional
+	if Quote ref
+		retrieve Quote Lines and copy them unconditionally
+	else
+		free form line item entry
+	
+ProcessPO acceptance criteria:
+	- if price is present, it might be negotiated, so some contact info is mandatory
+	- if no price, then need to map to "inventory"
+		- price
+			should we confirm the price toward the customer before
+		- availability
+			- enough
+				can create a DO
+			- not enough: should ask the customer if they want partial fulfillment
+				- okay to fulfill in 2 steps
+				- okay to fulfill at once
+					- the supplier order has arrived
+					- the supply has issues
+						- fulfill partially
+						- cancel order
+			- none
+				should we order?
+				- if there is a valid supplier quote, we can issue a DO immediately
+				- if there is NO valid supplier quote, we might need to issue a supplier RFQ and wait for a supplier Quote
+	- description is mandatory directly or thru a former (both valid and invalid) customer quote
+	- PO refers to a former customer Quote
+	if PO/Head/QuoteRef
+		PO/Line/n/DocRef/ID: QuoteRef/ID/Line/n
+		partial order
+		quantity might be different
+		in these cases we need a per-line quote ref
+		or no quote ref should be fine too
+
+	can submit line item description, but no quote ref is allowed and price, qty is required
+	if no line item description, then quote ref is mandatory and price and qty is overrideable
+
+}

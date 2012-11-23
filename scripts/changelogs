@@ -1,0 +1,3 @@
+# this is how to generate daily darcs changelogs
+# run from the ci/ dir
+for d in 2011-10-11 2011-10-12; do mkdir -p $d; c="$d/changes.txt"; echo $c; darcs cha -s --matches "date $d" | tee $c; echo -e '\n\n=======================================\n\n' | tee -a $c; darcs cha -v --matches "date $d" | tee -a $c; done

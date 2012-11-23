@@ -1,0 +1,95 @@
+<!doctype html>
+<html xmlns:ng="http://angularjs.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script src="http://code.angularjs.org/0.9.19/angular-0.9.19.min.js" ng:autobind></script>
+	<link rel="stylesheet" href="css/preview.css"/>
+<script>
+AppController.$inject = ['$location', '$route', '$xhr']
+function AppController ($location, $route, $xhr) { var that = this
+	this.$xhr = $xhr
+	this.$xhr('GET', '/ourselves', function(e, res){
+		that.sender = that.ourselves = res
+	})
+	this.idx = $location.hash
+	this.$xhr('GET', '/tasks/' + this.idx, function(e, bods) {
+		var bod = that.bod = bods[0]
+		that.supplier = bod.DataArea.RFQ.RFQHeader.SupplierParty
+		that.items = bod.DataArea.RFQ.RFQLine
+	})
+}
+</script>
+</head>
+<body>
+<div class="preview" ng:controller="AppController">
+	<div class="sender">
+		<span class="name">{{sender.Name | uppercase}}</span> <br/>
+		<span class="details">
+			{{sender.Location.Address.AddressLine[0]}},
+				{{sender.Location.Address.CityName}}
+				{{sender.Location.Address.PostalCode}} <br/>
+			<label>Tel:</label> {{sender.Contact.Communication.UserArea.Phone}}&nbsp;&nbsp;
+			<label>Fax:</label> {{sender.Contact.Communication.UserArea.Fax}}&nbsp;&nbsp;
+			<label>Email:</label> {{sender.Contact.Communication.UserArea.Email}} <br/>
+			<label>GST REG NO:</label> M2-0028509-3
+		</span>
+	</div>
+
+	<table class="title">
+		<tr>
+			<td>Request for Quotation</td>
+			<td style="text-align: right">RFQ#1234 &nbsp; 2012-01-17</td>
+		</tr>
+	</table>
+	
+	<table class="header"> <tr>
+		<td>
+			<label>To:</label> {{supplier.Name}} <br/>
+			<label>Attn:</label> Sales / {{supplier.AttentionTo.Name}} <br/>
+		</td>
+		<td>
+			<label>From:</label> {{sender.Contact.Name}} <br/>
+			<label>Email:</label> {{sender.Contact.Communication.UserArea.Email}}
+		</td>
+	</tr> </table>
+
+	<p>
+	Please quote your best prices and availability as soon as possible.<br/>
+	If items are <em>unavailable</em>, please quote equvivalent products.<br/>
+	Thanks and regards.
+	</p>
+
+	<table class="details">
+		<thead>
+			<tr>
+				<th class="item-no"/>Item No</th>
+				<th class="quantity">Quantity</th>
+				<th class="particulars">Particulars</th>
+				<th class="unit-price">Unit Price<br/>S$</th>
+				<th class="total-price">Total Price<br/>S$</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr ng:repeat="i in items">
+				<td class="item-no">{{i.LineNumber}}.</td>
+				<td class="quantity">{{i.Quantity}} {{i.Quantity_unitCode || "ea"}}</td>
+				<td class="particulars">{{i.Description}}</td>
+				<td class="unit-price"></td>
+				<td class="total-price"></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<table class="summary">
+		<tr>
+			<td>Total Price:</td>
+			<td></td>
+		</tr>
+	</table>
+
+	<p class="footer">
+	This is an electronically generated legal document, hence it doesn't require signatures and company stamps.
+	</p>
+</div>
+</body>

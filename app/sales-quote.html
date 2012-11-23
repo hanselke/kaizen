@@ -1,0 +1,117 @@
+<ng:switch on="currentUser" class="fullheight" style="display:block">
+	<div ng:switch-when="undefined"></div>
+	<div ng:switch-when="null" class="page">Only signed in users can view this page.</div>
+	<div ng:switch-default class="fullheight">
+		<ng:switch on="hasRole('sales')" class="fullheight" style="display:block">
+			<div ng:switch-when="false" class="page">You don't have permission to view this page.</div>
+			<div ng:switch-default class="fullheight">
+<table class="page fullsize">
+	<tr class="fullwidth">
+		<td colspan="2" style="font-size: 25px; text-align: center; font-weight:bold; padding-bottom: 5px">
+			Process Quote
+		</td>
+	</tr>
+	<tr class="fullsize">
+		<td class="leftcolumn">
+			<div id="rfq">
+				<div class="header">Quote</div>
+				<div class="content">
+					<table border="1" style="width: 100%">
+						<tr>
+							<td class="label">Company name</td>
+							<td id="sender_name">{{header.CustomerParty.Name}}</td>
+						</tr><tr>
+							<td class="label">Address</td>
+							<td id="sender_address">{{header.CustomerParty.Location.Address.AddressLine[0]}}<br/>
+								{{header.CustomerParty.Location.Address.AddressLine[1]}}</td>
+						</tr><tr>
+							<td class="label">Country</td>
+							<td>{{COUNTRY_CODES[header.CustomerParty.Location.Address.CountryCode]}}</td>
+						</tr>
+					</table>
+					<table border="1" style="width: 100%;margin-top:10px">
+						<tr>
+							<td class="label">Validity</td>
+							<td colspan="3"><input size="2" value="30" style="border:0 solid;background-color: white;" name="header.UserArea.Validity"/> days</td>
+						</tr>
+						<tr>
+							<td class="label">Payment terms</td>
+							<td>
+								<select name="header.UserArea.PaymentTerms">
+									<option>30 day credit</option>
+									<option>COD</option>
+									<option>50% TT / 50% COD</option>
+								</select>
+							</td>
+							<td>Delivery time</td>
+							<td><input size="4" value="10" name="header.UserArea.DeliveryTime"/> days</td>
+						</tr>
+					</table>
+					<table border="1" class="rfqitems" style="width: 100%;margin-top:10px">
+						<tr>
+							<th>Qty</th><th class="fullwidth">Particulars</th><th>Cost&nbsp;price</th><th>Price</th><th>&nbsp;&nbsp;&nbsp;Total&nbsp;&nbsp;&nbsp;</th>
+						</tr>
+						<tr ng:repeat="item in lines" class="rfqitem" ng:class="getItemClass(item)">
+							<td align="center">{{item.Quantity}}</td>
+							<td>{{item.Description | ml}}</td>
+							<td class="right">{{item.UserArea.originalPrice | currency}}</td>
+							<td><nobr>$<input name="item.UnitPrice.Amount" class="price" size="6"/></nobr></td>
+							<td class="right">{{item.Quantity * item.UnitPrice.Amount | currency}}</td>
+						</tr>
+					</table>
+					<table style="width: 100%" cellpadding="0" cellspacing="0">
+						<colgroup>
+								<col>
+								<col style="width: 10px">
+						</colgroup>
+						<tr>
+							<td class="right">Shipping cost:</td>
+							<td class="right"><nobr>$<input class="right" name="header.UserArea.ShippingCost" value="0.00" size="8"/><nobr></td>
+						</tr>
+						<tr style="font-size: 1.1em">
+							<td class="right"><b>Total price:</td>
+							<td class="right"><b>{{lines.$sum('Quantity * UnitPrice.Amount') | currency}}</b></td>
+						</tr><tr>
+							<td class="right">Profit margin:</td>
+							<td class="right">{{computeProfitMargin() | percent}}</td>
+						</tr><tr>
+							<td class="right" colspan="2">
+								<button id="done" ng:click="confirm()">Confirm</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</td>
+		<td class="rightcolumn">
+			<div ng:switch-default id="quotes_history" style="height: 100%">
+				<div class="header">Buyer history</div>
+				<div class="content">
+					<table border="1" class="quote">
+						<tr>
+							<th>Date / SO#ID</th><th>Quotation<br/>Value</th><th>Profit<br/>Margin</th><th>Won</th>
+						</tr>
+						<tr ng:repeat="quote in prevQuotes">
+							<td>{{quote.created | date:'MMM dd, yyyy'}} <a href>SO#{{quote.id}}</a></td>
+							<td class="right">{{quote.quotationValue | currency}}</td>
+							<td class="right">{{quote.profitMargin | number:2}}%</td>
+							<td align="center">{{quote.won | won | html}}</td>
+						</tr>
+					</table>
+				</div>
+				<div class="header" style="margin-top:10px">Internal Discussion</div>
+				<div class="content">
+					<table class="discussion" border="1" ng:repeat="discussion in internal_discussion">
+						<tr><td class="process" colspan="2">{{discussion.process}}</td></tr>
+						<tr class="chat" ng:repeat="chat in discussion.chats"><td><em>{{chat.name}}:</em>
+							{{chat.msg}}</td><td class="right"><nobr>{{chat.time | dyndate}}</nobr></td></tr>
+					</table>
+				</div>
+			</div>
+		</td>
+	</tr>
+</table>
+			</div>
+		</ng:switch>
+	</div>
+</ng:switch>

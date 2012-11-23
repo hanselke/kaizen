@@ -1,0 +1,45 @@
+<ng:switch on="currentUser" class="fullheight" style="display:block">
+	<div ng:switch-when="undefined"></div>
+	<div ng:switch-when="null" class="page">Only signed in users can view this page.</div>
+	<div ng:switch-default class="fullheight">
+		<ng:switch on="hasRole('backoffice')" class="fullheight" style="display:block">
+			<div ng:switch-when="false" class="page">You don't have permission to view this page.</div>
+			<div ng:switch-default class="fullheight">
+<table class="page fullsize">
+	<tr class="fullwidth">
+		<td colspan="2" style="font-size: 25px; text-align: center; font-weight:bold; padding-bottom: 5px">
+			Process Incoming Quote
+		</td>
+	</tr>
+	<tr class="fullsize">
+		<td class="leftcolumn">
+			<div id="quote">
+				<div class="header">Quote</div>
+				<div class="content">
+					Sender:
+					<table border="1">
+						<tr><td>Company name:</td><td id="sender_name">{{sender.Name}}</td></tr>
+						<tr><td>Address:</td><td id="sender_address">{{sender.Location.Address.AddressLine[0]}}
+							<br/>{{sender.Location.Address.AddressLine[1]}}</td></tr>
+						<tr><td>Country:</td><td>{{sender_country}}</td></tr>
+					</table>
+					Items:
+					<table border="1" class="rfqitems">
+						<tr ng:repeat="item in quote.QuoteLine" class="rfqitem">
+							<td>{{item.Quantity}}</td>
+							<td>{{item.Description}}</td>
+							<td><input name="item.UnitPrice.Amount" size="10"/></td>
+						</tr>
+					</table>
+					<button id="done" ng:click="done()">Done</button>
+				</div>
+			</div>
+		</td>
+		<td class="rightcolumn">
+		</td>
+	</tr>
+</table>
+			</div>
+		</ng:switch>
+	</div>
+</ng:switch>

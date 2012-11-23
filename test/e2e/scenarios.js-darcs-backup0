@@ -1,0 +1,93 @@
+describe('Ordering system', function() {
+
+  beforeEach(function() {
+    browser().navigateTo('../../app/index.html');
+  });
+
+  // it('should automatically redirect to /view1 when location hash/fragment is empty', function() {
+  //   expect(browser().location().hash()).toBe("/view1");
+  // });
+
+  describe('as a buyer, i should be able to register to be able to use the system', function() {
+
+    it('i should see a "Sign in" link', function() {
+      expect(element('#signin').text()).toBe('Sign in');
+    });
+
+    it('i should see a "Register" link', function() {
+      expect(element('#register').text()).toBe('Register');
+    });
+
+  });
+
+
+  describe('Registration view', function() {
+
+    beforeEach(function() {
+      element('#register').click();
+    });
+
+    it('should see the registration page after click on the registration link', function() {
+      expect(element('ng\\:view h2').text()).toMatch(/Registration/);
+    });
+
+    it('i should see a Register button', function() {
+      expect(element('ng\\:view #register').count()).toBe(1);
+    });
+
+    it('i should see a cancel button', function() {
+      expect(element('ng\\:view #cancel').count()).toBe(1);
+    });
+
+    it('i should see the registration form with all the necessary details', function() {
+      expect(element('ng\\:view input[name="email"]').count()).toBe(1);
+      expect(element('ng\\:view input[name="password"]').count()).toBe(1);
+      expect(element('ng\\:view input[name="company_name"]').count()).toBe(1);
+    });
+
+    it('[MANUAL TEST] i should be able to fill in the details and register', function() {
+    });
+    it('[MANUAL TEST] i should be automatically signed in after registration', function() {
+    });
+    it('[MANUAL TEST] i should be redirected to the main page after registration', function() {
+    });
+    it('[MANUAL TEST] after registration, i should receive a confirmation email to the entered email address', function() {
+    });
+    it('[MANUAL TEST] the confirmation email should contain a complete registration link', function() {
+    });
+  });
+
+  describe('Sign in view', function() {
+
+    beforeEach(function() {
+      element('#signin').click();
+    });
+
+    it('should see the login page after click on the sign in link', function() {
+      expect(element('ng\\:view h2').text()).toMatch(/Signin/);
+    });
+    it('[MANUAL TEST] i should be able to sign in with a proper email and password', function() {
+    });
+    it('[MANUAL TEST] i should not be able to sign in with a wrong email or password', function() {
+    });
+  });
+
+  describe('85712 - Sales Management: Process RFQ Screen', function() {
+
+    beforeEach(function() {
+    });
+
+    it("As a Sales User, I should be able to see the RFQ side by side with an inventory window "+
+       "which allows me to map my company's own inventory with each RFQ line item.", function() {
+      expect('false').toMatch(true);
+    });
+    it("Once everything is mapped (or i click on done), the unstructured RFQ window will be "+
+       "replaced with a quote window and the inventory window will be replaced by a customer "+
+       "history window. (Customer history window will show all customer's past rfq, profit margin "+
+       "quoted, and success or fail)", function() {
+      expect('false').toMatch(true);
+    });
+  });
+
+});
+

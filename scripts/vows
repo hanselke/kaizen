@@ -1,0 +1,11 @@
+#!/bin/bash
+
+vows test/backend/tests.js 2>&1 | less -RinSFX ; echo "press enter to continue" ; read
+date=`date +%Y-%m-%d`
+time=`date +%H:%M`
+vows test/backend/tests.js --spec > ci/out.txt 2>&1
+mkdir -p ci/$date
+current=$date/$time.html
+`dirname $0`/ansi2html ci/out.txt > ci/$current
+ln -sf ../$current ci/latest/index.html
+rsync -vax ci/ onetom@openbusiness.com.sg:ci/
