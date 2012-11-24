@@ -52,7 +52,8 @@
         "date-utils": "1.2.12",
         "voila": "0.1.0",
         "some-errors" : "0.2.0",
-        "route-active" : "0.2.0"
+        "route-active" : "0.2.0",
+        "underscore-ext" : "0.2.0"
 
     },
     "bundledDependencies": [],
