@@ -54,8 +54,8 @@
         "some-errors" : "0.2.0",
         "route-active" : "0.2.0",
         "underscore-ext" : "0.2.0",
-        "mongoose-plugins-timestamp" : "0.2.0"
-
+        "mongoose-plugins-timestamp" : "0.2.0",
+        "mongoose-plugins-created-by" : "0.2.0"
     },
     "bundledDependencies": [],
     "devDependencies": {
