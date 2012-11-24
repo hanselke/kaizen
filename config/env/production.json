@@ -1,1 +1,36 @@
-{}
+{
+  "site": {
+    "title": "modeista",
+    "secret": "fgjewopvbcpobvdjkln",
+    "url": "http://hansel-ke-orderingsystem.jit.su",
+    "corser": {
+      "timeout": 600
+    }
+
+  },
+  "openGraph" : {
+  },
+
+  "stacktrace": true,
+  "cache": {
+    "maxAge": 0
+  },
+  "voila": {},
+  "clients": {
+  },
+  "services": {
+    "db": "mongodb://hansel:hansel!3!@alex.mongohq.com:10082/hansel-ke-orderingsystem",
+    "intercom": null,
+    "airbrake": null,
+    "google-analytics": null,
+    "typekit": null,
+    "mailchimp": null,
+    "pubnub" : null,
+    "braintree" : null
+  },
+  "auth": {
+    "twitter":  null,
+    "facebook": null
+  },
+  "production": true
+}

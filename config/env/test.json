@@ -1,1 +1,36 @@
-{}
+{
+  "site": {
+    "title": "modeista",
+    "secret": "fgjewopvbcpobvdjkln",
+    "url": "http://localhost:8002",
+    "corser": {
+      "timeout": 0
+    }
+
+  },
+  "openGraph" : {
+  },
+
+  "stacktrace": true,
+  "cache": {
+    "maxAge": 0
+  },
+  "voila": {},
+  "clients": {
+  },
+  "services": {
+    "db": "mongodb://localhost/hansel-ke-orderingsystem-test",
+    "intercom": null,
+    "airbrake": null,
+    "google-analytics": null,
+    "typekit": null,
+    "mailchimp": null,
+    "pubnub" : null,
+    "braintree" : null
+  },
+  "auth": {
+    "twitter":  null,
+    "facebook": null
+  },
+  "production": true
+}
