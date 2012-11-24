@@ -3,7 +3,7 @@
     "subdomain": "hansel-ke-orderingsystem",
     "domains": [],
     "description": "OpenBusiness Ordering System",
-    "version": "0.0.1-1",
+    "version": "0.0.1-5",
     "private": true,
     "scripts": {
         "start": "server.js",
@@ -29,7 +29,8 @@
         "mailer": "0.6.7",
         "request": "2.12.0",
         "socket.io": "0.9.11",
-        "ansi-color": "0.2.1"
+        "ansi-color": "0.2.1",
+        "cas": "0.0.3"
     },
     "bundledDependencies": [],
     "devDependencies": {

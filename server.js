@@ -11,7 +11,7 @@ var	express = require('express'),
 	app = express(),
 	base_dir = __dirname,
 	database_dir = base_dir + '/non/existant',
-	frontend_dir = base_dir
+	frontend_dir = base_dir + "/public"
 
 function init_db(req, res) {
 	child_process.exec('rm -rf  ' + database_dir, function(error, stdout, stderr) {
@@ -39,6 +39,10 @@ app.configure('development', function() {
 app.configure('production', function() {
 	database_dir = base_dir + '/db'
 	backend.set_db_dir(database_dir)
+
+	// MW HACK, will be removed
+	//	init_db(); // FIXME this should be sync, so session should not be initialized
+
 })
 
 app.configure(function() {
