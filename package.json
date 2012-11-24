@@ -53,7 +53,8 @@
         "voila": "0.1.0",
         "some-errors" : "0.2.0",
         "route-active" : "0.2.0",
-        "underscore-ext" : "0.2.0"
+        "underscore-ext" : "0.2.0",
+        "mongoose-plugins-timestamp" : "0.2.0"
 
     },
     "bundledDependencies": [],
