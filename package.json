@@ -30,7 +30,21 @@
         "request": "2.12.0",
         "socket.io": "0.9.11",
         "ansi-color": "0.2.1",
-        "cas": "0.0.3"
+        "cas": "0.0.3",
+        "jade": "0.27.6",
+        "stylus": "0.30.1",
+        "nib": "0.8.2",
+        "passport": "0.1.15",
+        "passport-http": "0.2.1",
+        "passport-local": "0.1.6",
+        "unicode": "0.4.3",
+        "winston": "0.6.2",
+        "mongoose": "3.4.0",
+        "nodemailer": "0.3.31",
+        "bcrypt": "0.7.2",
+        "passgen": "1.0.1",
+        "gravatar": "1.0.6",
+        "date-utils": "1.2.12"
     },
     "bundledDependencies": [],
     "devDependencies": {
