@@ -1,0 +1,74 @@
+meta(charset='utf-8')
+meta('http-equiv'="content-type", content="text/html; charset=utf-8")
+meta('http-equiv'="content-style-type", content="text/css" )
+meta("http-equiv" = "X-UA-Compatible",content = "IE=edge,chrome=1")
+
+title 
+  =title + " | hansel ke"
+
+meta(name = "author" , content=author)
+meta(name = "publisher", content= "hansel-ke.com")
+meta(name = 'description', content=description)
+meta(name = 'keywords', content= "hansel-ke," + keywords)
+
+//meta(name = 'easyWayToPassStuff', content= config.get('services:facebook'))
+
+//-if(currentUser)
+//  meta( name = "channel-id", content = currentUser.id) 
+
+//-else
+//  meta( name = "channel-id", content = "hello_world")
+
+//link(href = asset("site/icons/favicon.ico"), rel = "shortcut icon" )
+//link(href = asset("site/icons/modeista-57x57.png"), rel = "apple-touch-icon" ,precomposed=true)
+//link(href = asset("site/icons/modeista-72x72.png"), rel = "apple-touch-icon",sizes= "72x72" ,precomposed=true)
+//link(href = asset("site/icons/modeista-114x114.png"), rel = "apple-touch-icon", sizes= "114x114",precomposed=true)
+
+//meta(name = 'og:title', content=ogTitle)
+//meta(name = 'og:image', content=ogImage || config.get("openGraph:image"))
+//meta(name = 'og:site_name', content="modeista.com")
+//meta(name = 'og:description', content=ogDescription)
+//meta(name = 'og:type', content=ogType)
+//meta(name = 'og:url', content=ogUrl)
+
+
+//- OPEN SEARCH IS DISABLED FOR NOW
+//-
+  -#%link{ :rel = "search", :type="application/opensearchdescription+xml", :href="/opensearch/", :title="Lifestream Search" ) 
+  -# CSS : implied media="all"
+
+-if(config.get('services:typekit'))
+  script(src= "http://use.typekit.com/" + config.get('services:typekit')+ ".js")
+  script(type="text/javascript")
+    try{Typekit.load();}catch(e){}
+
+
+//link(href=asset('site.css'), rel='stylesheet')
+
+block stylesheets
+
+        
+//if lt IE 7 
+  meta( 'http-equiv'="imagetoolbar", content="no" )
+
+meta( 'http-equiv'="imageresize", content="no" )
+meta( 'name'="mssmarttagspreventparsing", content="true" )
+//- TODO CANONICAL URL
+
+//script(src=asset('head.js')) 
+
+//script(src='http://platform.twitter.com/anywhere.js?id=' + config.get('services:twitter') + '&v=1') 
+//script(src='http://platform.twitter.com/widgets.js') 
+
+if(csrf)
+  meta(content="authenticity_token",name="csrf-param")
+  meta(content=csrf,name="csrf-token")
+
+block headers
+
+//if lt IE 9
+  script(src='http://html5shim.googlecode.com/svn/trunk/html5.js')
+
+
+
+

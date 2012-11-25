@@ -1,0 +1,40 @@
+!!! 5
+//[if lt IE 7 ]> <html class="no-js ie6 layout-standard" lang="en" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:og="http://opengraphprotocol.org/schema/" xmlns:lt="http://publicschema.com/schema/"> <![endif]
+//[if IE 7 ]>    <html class="no-js ie7 layout-standard" lang="en" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:og="http://opengraphprotocol.org/schema/" xmlns:lt="http://publicschema.com/schema/"> <![endif]
+//[if IE 8 ]>    <html class="no-js ie8 layout-standard" lang="en" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:og="http://opengraphprotocol.org/schema/" xmlns:lt="http://publicschema.com/schema/"> <![endif]
+//[if (gte IE 9)|!(IE)]><!--> <html class="no-js layout-standard" lang="en" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:og="http://opengraphprotocol.org/schema/" xmlns:lt="http://publicschema.com/schema/"> <!--<![endif]
+html(lang='en', class="no-js layout-standard",'xmlns:fb'="http://www.facebook.com/2008/fbml")
+  head(profile= "http://a9.com/-/spec/opensearch/1.1/",
+    prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# modeista: http://ogp.me/ns/apps/modeista#")
+    include head 
+    meta( content = "width=device-width, initial-scale=1.0", name = "viewport" )
+
+  -var pageClasses = ""
+  -if(typeof controllerName != "undefined") {
+  -  pageClasses += "controller-" + controllerName + ' ' 
+  - }
+  -if(typeof pageName != "undefined") {
+  -  pageClasses += "page-" + pageName + ' ' 
+  - }
+  -if(typeof bodyCss != "undefined") {
+    -  pageClasses += " " + bodyCss + ' '   
+  -}
+    
+  body(class=pageClasses)
+    include flashes
+
+    .navbar.navbar-static-top
+      .navbar-inner
+        .container
+          a.brand(href="/")
+            Hansel Ke
+          //include ./navbar-identity
+
+    .container.main
+      block content 
+
+    include partial-layout-footer
+    #fb-root
+    
+  //include javascripts
+

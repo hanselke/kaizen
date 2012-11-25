@@ -1,0 +1,28 @@
+
+-var infoFlashData = infoFlash()
+-var warningFlashData = warningFlash()
+-var errorFlashData = errorFlash()
+
+if infoFlashData.length > 0 || warningFlashData.length > 0 || errorFlashData.length > 0
+  .section-flash
+    if infoFlashData.length > 0 
+      .block-flash.info
+        for msg in infoFlashData
+          .flash-item.info
+            !=msg
+        a.action-close-flash(href="#")
+          &times;
+    if warningFlashData.length > 0 
+      .block-flash.warning
+        for msg in warningFlashData
+          .flash-item.warning
+            !=msg
+        a.action-close-flash(href="#")
+          &times;
+    if errorFlashData.length > 0 
+      .block-flash.error
+        for msg in errorFlashData
+          .flash-item.error
+            !=msg
+        a.action-close-flash(href="#")
+          &times;

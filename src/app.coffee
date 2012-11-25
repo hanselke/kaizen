@@ -57,6 +57,7 @@ errors = require 'some-errors'
 RoutesRoot = require './routes/routes-root'
 RoutesLegacy = require './routes/routes-legacy'
 RoutesAdminUsers = require './routes/routes-admin-users'
+RoutesUsers = require './routes/routes-users'
 
 PassportBearerStrategy = require('passport-http-bearer').Strategy
 PassportLocalStrategy = require('passport-local').Strategy
@@ -100,7 +101,7 @@ checkUserNeedsSetup = (setupNewUserFn,removeRoleFn) ->
       setupNewUserFn req.user.id, (err,result) =>
         if err
           req.flash 'error', "Please refresh this page in a couple of seconds."
-        removeRoleFn req.user.id,'user-needs-setup', (err) =>
+        removeRoleFn req.user.id,['user-needs-setup'], (err) =>
           next()
     else
       next()
@@ -171,7 +172,7 @@ module.exports = class App
 
     @baseUrl = baseUrl = config.get('site:url')
 
-    # Ensures that we use only one local url for passport so that it does not loose cokies
+    # Ensures that we use only one local url for passport so that it does not lose cokies
     @app.use (req, res, next) =>
       if port && req.headers.host is '127.0.0.1:#{port}'
         res.writeHead 303, 'Location': "http://localhost:#{port}#{req.url}" 
@@ -186,7 +187,6 @@ module.exports = class App
     @app.use corser.create
       methods: ["HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"]
       requestHeaders: corser.simpleRequestHeaders.concat ['Authorization']
-      responseHeaders: corser.simpleResponseHeaders.concat ["X-Modeista"]
       maxAge : config.get('site:corser:timeout')
 
     logHandling @app
@@ -254,13 +254,18 @@ module.exports = class App
       root : new RoutesRoot settings
       legacy: new RoutesLegacy settings
       adminUsers: new RoutesAdminUsers settings
-      
+      routesUsers: new RoutesUsers settings
+
     @app.set('views', __dirname + '/../views')
     @app.set('view engine', 'jade')
 
     @app.use '/assets', voila(__dirname + '/../', config.get('voila'))
     @app.use checkNeedsInit()
-    @app.use checkUserNeedsSetup(@appApiClient?.actions?.setupNewUser,@identityStore?.users?.deleteRoles )
+
+    dummyFn = (userId,cb) ->
+      cb()
+
+    @app.use checkUserNeedsSetup(dummyFn,@identityStore?.users?.removeRoles )
     @app.use checkPerformSiteAction()
 
     route.setupLocals() for key,route of @routes

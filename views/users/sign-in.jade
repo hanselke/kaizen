@@ -1,0 +1,28 @@
+extends ../layouts/layout-standard
+
+block content
+  .section-body
+    .container
+      .row
+        .span7.offset2.form-outer
+          .content-inner
+            form(accept-charset="UTF-8",action=routesUsers.signIn,method="post")
+              input(type='hidden', name='_csrf', value=csrf)
+              .form-inner
+                //- TODO: FORM ERRORS
+                //-= render :partial = "shared/form_errors", :locals = {:resource = resource}
+                fieldset
+                  legend
+                    |Or use your username and password
+                  .control-group
+                    label.control-label.hidden(for='username') User Name or Email
+                    .controls
+                      input#username.span4(name="username",type="text",autofocus="autofocus",:autocorrect="off",placeholder="User Name or Email",required="required",size="30")
+                  .control-group.last
+                    label.control-label.hidden(for='password') Password
+                    .controls
+                      //-,value=password
+                      input#password.span4(name="password",type="password",placeholder="Password",:autocorrect="off",required="required",size="30")
+                      a(href=routesUsers.resetPassword) Forgot your password?
+              .form-actions
+                input.btn.btn-primary.btn-large.action_username(type="submit",value="Sign In")

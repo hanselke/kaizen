@@ -37,16 +37,19 @@ module.exports = (expressApp,identityStore,config,baseUrl) ->
 
 
   passport.use new PassportLocalStrategy (username, password, done) ->
-    identityStore.sessions.signInLocal username, password, (err, user) ->
-      return done(err) if err
+    identityStore.users.validateUserByUsernameOrEmail username, password, (err, user) =>
+      console.log "DID IT WORK OUT: #{err} #{JSON.stringify(user)}"
+      return done err if err
       done null, user
+
+  ###
   passport.use new PassportBearerStrategy (token, done) ->
     identityStore.tokenInfos.validate token, (err, tokenInfo) ->
       trace "Validating Token COMPLETE: #{token}"
       return done err if err
       return done null, null unless tokenInfo && tokenInfo.actor
       done null, tokenInfo.actor
-
+  ###
 
   ###
   postLoginFacebook = (req, res, next) =>
