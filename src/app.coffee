@@ -196,7 +196,6 @@ module.exports = class App
       packageVersion : exports.version
       '_' : _
       fullyQualifiedUrl : fullyQualifiedUrl
-      apiDocs : require './modules/api-docs'
 
 
     @app.use (req, res,next) =>
@@ -237,13 +236,12 @@ module.exports = class App
 
     @app.use '/assets', voila(__dirname + '/../', config.get('voila'))
     @app.use checkNeedsInit()
-    @app.use checkUserNeedsSetup(@appApiClient?.actions?.setupNewUser,@identityServiceClient?.users?.deleteRoles )
+    @app.use checkUserNeedsSetup(@appApiClient?.actions?.setupNewUser,@identityStore?.users?.deleteRoles )
     @app.use checkPerformSiteAction()
 
     route.setupLocals() for key,route of @routes
 
-    passportSetup(@app,@identityServiceClient,config,baseUrl)
-
+    passportSetup(@app,@identityStore,config,baseUrl)
 
     route.setupRoutes() for key,route of @routes
 

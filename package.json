@@ -8,9 +8,10 @@
     "scripts": {
         "start": "server.js",
         "server-watch": "node_modules/.bin/coffee -c -w  -o lib src",
-        "dev-debug": "NODE_ENV=development nodemon --debug ./lib/js/server.js",
-        "dev": "NODE_ENV=development nodemon ./lib/js/server.js",
-        "dev-norestart": "NODE_ENV=development node ./lib/js/server.js",
+        "dev-debug": "NODE_ENV=development nodemon --debug ./lib/index.js",
+        "dev": "NODE_ENV=development nodemon ./lib/index.js",
+        "dev-old": "NODE_ENV=development nodemon ./lib/js/server.js",
+        "dev-norestart": "NODE_ENV=development node ./lib/index.js",
         "inspect": "node-inspector &"
     },
     "engines": {

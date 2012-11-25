@@ -1,4 +1,5 @@
 _ = require 'underscore'
+RoutesRootPathHelper = require './routes-root-path-helper'
 
 module.exports = class RoutesOther
 
@@ -7,6 +8,13 @@ module.exports = class RoutesOther
 
     throw new Error("app parameter is required") unless @app
 
+  setupLocals: () =>
+    @routesRootPathHelper = new RoutesRootPathHelper
+    @app.use (req, res,next) =>
+      res.locals.routesRoot = @routesRootPathHelper
+      next()
+      
+  setupRoutes: () =>
     @app.get '/', @home
     @app.get '/status', @status
 
