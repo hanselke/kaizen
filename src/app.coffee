@@ -246,6 +246,7 @@ module.exports = class App
       passport : passport
       baseUrl : @baseUrl
       identityStore : @identityStore
+      backend : backend
 
     # TODO: Order might be important, and we need to check that.
     @routes =

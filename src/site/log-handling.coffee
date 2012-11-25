@@ -21,6 +21,6 @@ module.exports = (app) ->
     else if s >= 400
       color = "yellow"
     else color = "cyan"  if s >= 300
-    ansi_color s, color
+    ansiColor s, color
 
   app.use express.logger(format: ansiColor("[:short-date] (:remote-addr) [:user]", "white") + " :method :url - HTTP :color-status - :response-time msec")
