@@ -6,7 +6,7 @@
     "version": "0.0.1-5",
     "private": true,
     "scripts": {
-        "start": "server.js",
+        "start": "./lib/index.js",
         "server-watch": "node_modules/.bin/coffee -c -w  -o lib src",
         "dev-debug": "NODE_ENV=development nodemon --debug ./lib/index.js",
         "dev": "NODE_ENV=development nodemon ./lib/index.js",
@@ -62,7 +62,8 @@
         "mongoose-plugins-tags-simple" : "0.2.0",
         "mongodb-objectid-helper" : "0.2.0",
         "simple-paginator" : "0.2.0",
-        "mongoose-identity-store" : "0.2.0"
+        "mongoose-identity-store" : "0.2.0",
+        "mongodb-errors" : "0.2.0"
     },
     "bundledDependencies": [],
     "devDependencies": {

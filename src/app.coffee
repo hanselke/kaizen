@@ -17,6 +17,8 @@ identityStorePackage = require 'mongoose-identity-store'
 corser = require 'corser'
 mongoose = require 'mongoose'
 
+backend = require './js/backend'
+
 ###
 # Setup version
 ###
@@ -43,6 +45,8 @@ process.addListener 'uncaughtException', (err, stack) ->
 
 # Now we start with the normal setup flow
 errorHandling = require './site/error-handling'
+logHandling = require './site/log-handling'
+socketIOHandling = require './site/socket-io-handling'
 
 stylus = require 'stylus'
 flash = require 'connect-flash'
@@ -51,6 +55,7 @@ errors = require 'some-errors'
 
 
 RoutesRoot = require './routes/routes-root'
+RoutesLegacy = require './routes/routes-legacy'
 
 PassportBearerStrategy = require('passport-http-bearer').Strategy
 PassportLocalStrategy = require('passport-local').Strategy
@@ -146,7 +151,22 @@ module.exports = class App
     @app  = express()
     mongoose.connect config.get('services:db')
     @identityStore = identityStorePackage.store(oauthProvider : config.get('provider'))
-   # register other data store here
+   
+
+    if env isnt "production"
+      database_dir = __dirname + '/../db-test'
+      backend.set_db_dir(database_dir)
+      fs = require 'fs'
+      childProcess = require 'child_process'
+      childProcess.exec 'rm -rf ' + database_dir, (error, stdout, stderr) ->
+        fs.mkdirSync database_dir, 0o0755
+        backend.init_db()
+    else
+      database_dir = __dirname + '/../db'
+      backend.set_db_dir(database_dir)
+
+    # register other data store here
+
 
     @baseUrl = baseUrl = config.get('site:url')
 
@@ -168,7 +188,7 @@ module.exports = class App
       responseHeaders: corser.simpleResponseHeaders.concat ["X-Modeista"]
       maxAge : config.get('site:corser:timeout')
 
-    @app.use express.logger()
+    logHandling @app
     @app.use express.responseTime()
     @app.use corserMiddleware()
 
@@ -230,6 +250,7 @@ module.exports = class App
     # TODO: Order might be important, and we need to check that.
     @routes =
       root : new RoutesRoot settings
+      legacy: new RoutesLegacy settings
       
     @app.set('views', __dirname + '/../views')
     @app.set('view engine', 'jade')
@@ -251,6 +272,7 @@ module.exports = class App
 
     if port
       @server = @app.listen port
+      socketIOHandling @server
       winston.info "Express server listening on port #{port} in #{@app.settings.env} mode".cyan
 
     cb null, @ if cb
