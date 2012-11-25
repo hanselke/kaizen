@@ -58,7 +58,10 @@
         "mongoose-plugins-created-by" : "0.2.0",
         "mongoose-plugins-delete-paranoid" : "0.2.0",
         "mongoose-plugins-resource-limits" : "0.2.0",
-        "mongoose-plugins-tags-simple" : "0.2.0"
+        "mongoose-plugins-tags-simple" : "0.2.0",
+        "mongodb-objectid-helper" : "0.2.0",
+        "simple-paginator" : "0.2.0",
+        "mongoose-identity-store" : "0.2.0"
     },
     "bundledDependencies": [],
     "devDependencies": {

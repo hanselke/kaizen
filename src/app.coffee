@@ -13,6 +13,9 @@ expressMessages = require 'express-messages-bootstrap'
 trace = require './util/trace'
 passportSetup = require './site/passport-setup'
 routeActive = require 'route-active'
+identityStorePackage = require 'mongoose-identity-store'
+corser = require 'corser'
+mongoose = require 'mongoose'
 
 ###
 # Setup version
@@ -47,14 +50,11 @@ flash = require 'connect-flash'
 errors = require 'some-errors'
 
 
-#RoutesRoot = require './routes/routes-root'
+RoutesRoot = require './routes/routes-root'
 
 PassportBearerStrategy = require('passport-http-bearer').Strategy
 PassportLocalStrategy = require('passport-local').Strategy
 
-
-#trace = (msg = "") ->
-#  winston.info msg
 
 cookieDumper = (req, res, next) ->
   console.log "DUMPING SESSION"
@@ -100,6 +100,15 @@ checkUserNeedsSetup = (setupNewUserFn,removeRoleFn) ->
       next()
   fn
 
+corserMiddleware = (opts = {}) ->
+  f = (req,res,next) =>
+    if req.method is "OPTIONS"
+        res.writeHead(204)
+        res.end()
+    else
+      next()
+  return f
+
 # Cookie based redirector, useful for startup pages
 # Todo: The section with "when" redirects based on site-action
 checkPerformSiteAction = ->
@@ -135,9 +144,9 @@ module.exports = class App
     #
     ###
     @app  = express()
-    # Connect to database here
-    # register backend data store for identity here
-    # register other data store here
+    mongoose.connect config.get('services:db')
+    @identityStore = identityStorePackage.store(oauthProvider : config.get('provider'))
+   # register other data store here
 
     @baseUrl = baseUrl = config.get('site:url')
 
@@ -151,8 +160,18 @@ module.exports = class App
 
     @app.use express.favicon(__dirname + '/../public/favicon.ico', config.get('cache'))
     @app.use express.static(__dirname + '/../public', config.get('cache'))
+
+
+    @app.use corser.create
+      methods: ["HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"]
+      requestHeaders: corser.simpleRequestHeaders.concat ['Authorization']
+      responseHeaders: corser.simpleResponseHeaders.concat ["X-Modeista"]
+      maxAge : config.get('site:corser:timeout')
+
     @app.use express.logger()
     @app.use express.responseTime()
+    @app.use corserMiddleware()
+
     @app.use expressFormsFix()
     
     @app.use express.cookieParser config.get('site:secret')
@@ -207,6 +226,7 @@ module.exports = class App
       app: @app
       passport : passport
       baseUrl : @baseUrl
+      identityStore : @identityStore
 
     # TODO: Order might be important, and we need to check that.
     @routes =

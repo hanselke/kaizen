@@ -28,7 +28,17 @@
     "pubnub" : null,
     "braintree" : null
   },
-  "auth": {
+  "provider": {
+    "authorizeUrl": "/oauth/authorize",
+    "accessTokenUrl": "/oauth/token",
+    "scopes": [
+      {"name": "read", "description": "Allows read access to your data.", "developerDescription": "", "roles": ["public"]},
+      {"name": "write", "description": "Allows write access to your data.", "developerDescription": "", "roles": ["public"]},
+      {"name": "email", "description": "Allows access to your email address.", "developerDescription": "", "roles": ["public"]},
+      {"name": "admin", "description": "Allows full admin access to the platform.", "developerDescription": "", "roles": ["admin"]}
+    ]
+  },
+    "auth": {
     "twitter":  null,
     "facebook": null
   },
