@@ -56,6 +56,7 @@ errors = require 'some-errors'
 
 RoutesRoot = require './routes/routes-root'
 RoutesLegacy = require './routes/routes-legacy'
+RoutesAdminUsers = require './routes/routes-admin-users'
 
 PassportBearerStrategy = require('passport-http-bearer').Strategy
 PassportLocalStrategy = require('passport-local').Strategy
@@ -252,6 +253,7 @@ module.exports = class App
     @routes =
       root : new RoutesRoot settings
       legacy: new RoutesLegacy settings
+      adminUsers: new RoutesAdminUsers settings
       
     @app.set('views', __dirname + '/../views')
     @app.set('view engine', 'jade')
