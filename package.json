@@ -62,7 +62,7 @@
         "mongoose-plugins-tags-simple" : "0.2.0",
         "mongodb-objectid-helper" : "0.2.0",
         "simple-paginator" : "0.2.0",
-        "mongoose-identity-store" : "0.2.0",
+        "mongoose-identity-store" : "0.2.1",
         "mongodb-errors" : "0.2.0"
     },
     "bundledDependencies": [],
