@@ -36,7 +36,7 @@ function AppController($resource, $route, $location, $xhr, $defer, $window){
 
 	this.results = [];
 	// this.currentUser can have 3 possible values:
-	// - undefined: didn't receive the response for GET /current_user, so we
+	// - undefined: didn't receive the response for GET /api/session, so we
 	//      don't know if there is a signed in user or not
 	// - null: there is no signed in user
 	// - an object: the signed in user's properties
@@ -102,7 +102,7 @@ AppController.prototype = {
 		return this.currentUser && this.currentUser.email ? true : false; //need to return false explicitly
 	},
 	loadCurrentUser: function() { var that = this
-		this.$xhr('GET', '/current_user',
+		this.$xhr('GET', '/api/session',
 			function(code, res) { that.setCurrentUser(res)},
 			// avoid calling error handler if the only problem is the lack of logged in user
 			function(code, res){ that.setCurrentUser(null)

@@ -58,6 +58,7 @@ RoutesRoot = require './routes/routes-root'
 RoutesLegacy = require './routes/routes-legacy'
 RoutesAdminUsers = require './routes/routes-admin-users'
 RoutesUsers = require './routes/routes-users'
+RoutesApi = require './routes/routes-api'
 
 PassportBearerStrategy = require('passport-http-bearer').Strategy
 PassportLocalStrategy = require('passport-local').Strategy
@@ -220,7 +221,7 @@ module.exports = class App
     @app.use passport.session()
     # @app.use cookieDumper
     @app.use legacyUser()
-     
+
     @app.locals 
       config : config
       packageVersion : exports.version
@@ -264,6 +265,7 @@ module.exports = class App
       legacy: new RoutesLegacy settings
       adminUsers: new RoutesAdminUsers settings
       routesUsers: new RoutesUsers settings
+      routesApi: new RoutesApi settings
 
     @app.set('views', __dirname + '/../views')
     @app.set('view engine', 'jade')
