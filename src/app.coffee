@@ -92,6 +92,13 @@ checkNeedsInit = () ->
     next()
   fn
 
+
+legacyUser = () ->
+  fn = (req,res,next) ->
+    req.current_user = req.user
+    next()
+  fn
+
 ###
 Helper that invokes a function in case the user has not been set up yet. It does ignore errors in the setup function to avoid nasty infinite loops.
 ###
@@ -133,6 +140,7 @@ checkPerformSiteAction = ->
           winston.log "Received unhandled action cookie: #{cookie}"
     next()
   fn
+
 
 module.exports = class App
 
@@ -211,7 +219,8 @@ module.exports = class App
     @app.use passport.initialize()
     @app.use passport.session()
     # @app.use cookieDumper
- 
+    @app.use legacyUser()
+     
     @app.locals 
       config : config
       packageVersion : exports.version

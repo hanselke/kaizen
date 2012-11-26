@@ -19,7 +19,7 @@ module.exports = class RoutesLegacy
     @app.post '/users', @backend.create_user
     @app.post '/login',  @backend.login #app.session_mw,
     @app.post '/logout', @backend.logout
-    @app.get '/current_user', @backend.current_user
+    #@app.get '/current_user', @backend.current_user
     @app.post '/faxes', @backend.create_fax 
     @app.get '/board', @backend.board 
     @app.get '/bods/:bodid', @backend.show_bod 

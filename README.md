@@ -1,3 +1,6 @@
+
+
+
 1, a createrfq page kuld a szervernek egy BOD-ot, jelenleg a POST /sales -re. a verb process
 2, ezt a dokumentumot kene latnia a sales usernek a processrfq page-en
 3, ezert az rfq-bol csinal a backend egy SalesObject-et, amit belerak a queue-ba

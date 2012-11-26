@@ -1,5 +1,6 @@
 _ = require 'underscore'
 RoutesRootPathHelper = require './routes-root-path-helper'
+protectResource = require '../site/protect-resource'
 
 module.exports = class RoutesOther
 
@@ -16,7 +17,12 @@ module.exports = class RoutesOther
       
   setupRoutes: () =>
     @app.get '/', @home
+    #@app.get '/app',protectResource(), @getApp
     @app.get '/status', @status
+
+  getApp: (req,res,next) =>
+    res.render 'app/index',
+          pretty: true
 
   home: (req, res, next) =>
     res.redirect "/app"

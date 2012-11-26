@@ -26,6 +26,9 @@ module.exports = class RoutesUsers
   setupLocals: () =>
     @app.locals.routesUsers = @routesUsersPathHelper = new RoutesUsersPathHelper
 
+
+    @app.get '/current_user', @getCurrentUser
+
     #@app.use (req, res,next) =>
     #  res.locals.routesUsersActive = () -> routeActive.withRegex(req, /^\/users\/?/i)
     #  res.locals.routesUsersSignInActive = () -> routeActive.withRegex(req, /^\/users\/sign-in\/?$/i)
@@ -52,4 +55,8 @@ module.exports = class RoutesUsers
   signInPost: (req, res) =>
     @_nextRedirect req, res
 
+  getCurrentUser: (req,res) =>
+    return res.json {}, 404 unless req.user
 
+    #console.log "CURRENT USER #{JSON.stringify(req.user.toRest(@baseUrl))}"
+    res.json req.user.toRest(@baseUrl)
