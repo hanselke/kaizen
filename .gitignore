@@ -8,3 +8,4 @@ public/assets
 *.swo
 db-test
 db
+assets/components

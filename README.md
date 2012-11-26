@@ -33,9 +33,10 @@ The /config/env folder contains 3 config json files, one for each environment. T
 * You can use https://github.com/nodejitsu/forever to keep node processes running forever. It restarts them on crash.
 * Install police (npm install -g police) to ensure that your node.js app uses the latest versions.
 * Install nodemon to restart during development (npm install -g nodemon) - this is triggered in the script: npm run-script dev
-* Install  npm install -g node-inspector for debugging.
-
-
+* Install node-inspector (npm install -g node-inspector) for debugging.
+* Install bower (npm install -g bower) for client side component management
+* use the script update-components to update the client side components (./bin/update-components)
+* Use npm-install to update the node_modules. When doing that on the server, make sure your environment is set to production
 
 ===
 

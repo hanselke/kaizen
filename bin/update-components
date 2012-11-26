@@ -1,0 +1,15 @@
+#!/bin/sh
+
+BASEDIR=$(dirname $0)
+
+pushd $BASEDIR/../assets
+# We are in assets now 
+bower install angular
+bower install bootstrap
+bower install modernizr
+bower install underscore
+bower install jquery
+#bower install jquery-ui
+#bower install jquery.form
+bower install json2
+bower install moment
