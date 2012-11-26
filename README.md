@@ -1,4 +1,43 @@
+Docs:
 
+The package.json file contains a couple of scripts that can and should be used as follows:
+
+* npm start
+-> This starts the node server. Be sure that you set the environment (ENV) to production
+* npm run-script dev
+-> Starts in development mode. That means that the node process is restarted whenever a source fil e changes. See Tips section
+* npm run-script dev-norestart
+-> Starts in development mode but does not restart the process when the source changes.
+* npm run-script dev-debug
+-> Starts in development mode and activates debugging. You can launch a visual debugger (once you installed node-inspector) using the next command:
+* npm run-script inspect
+-> launches a chrome browser that allows you to debug your node.js app.
+* npm run-script server-watch
+-> This watches for changes in the coffeescript sourcecode and compiles it on the fly. It beeps on syntax errors.
+
+## Typical Dev Environment
+
+You launch 2 shells, one with
+
+npm run-script dev
+
+and one with
+
+npm run-script server-watch
+
+## Config
+
+The /config/env folder contains 3 config json files, one for each environment. Take a look at the config settings for the mongodb database, that's the crucial one. It works for dev and test, but needs to be adjusted for production
+
+## Tips
+* You can use https://github.com/nodejitsu/forever to keep node processes running forever. It restarts them on crash.
+* Install police (npm install -g police) to ensure that your node.js app uses the latest versions.
+* Install nodemon to restart during development (npm install -g nodemon) - this is triggered in the script: npm run-script dev
+* Install  npm install -g node-inspector for debugging.
+
+
+
+===
 
 
 1, a createrfq page kuld a szervernek egy BOD-ot, jelenleg a POST /sales -re. a verb process
