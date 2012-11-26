@@ -18,6 +18,7 @@ corser = require 'corser'
 mongoose = require 'mongoose'
 
 backend = require './js/backend'
+bonitaClientPackage = require './modules/bonita-client'
 
 ###
 # Setup version
@@ -162,7 +163,7 @@ module.exports = class App
     @app  = express()
     mongoose.connect config.get('services:db')
     @identityStore = identityStorePackage.store(oauthProvider : config.get('provider'))
-   
+    @bonitaClient = bonitaClientPackage.client config.get('services:bonita')
 
     if env isnt "production"
       database_dir = __dirname + '/../db-test'
@@ -258,6 +259,7 @@ module.exports = class App
       baseUrl : @baseUrl
       identityStore : @identityStore
       backend : backend
+      bonitaClient : @bonitaClient
 
     # TODO: Order might be important, and we need to check that.
     @routes =
