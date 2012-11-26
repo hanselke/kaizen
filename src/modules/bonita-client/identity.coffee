@@ -5,6 +5,6 @@ module.exports = class Identity
   constructor:(@client) ->
     throw new Error "client parameter is required" unless @client
 
-  getAllUsers: (opts = {},cb = ->) =>
-    @client.post "/API/identityAPI/getAllUsers", opts, cb
+  getAllUsers: (actAsUser,opts = {},cb = ->) =>
+    @client.post "/API/identityAPI/getAllUsers",actAsUser, opts, cb
 

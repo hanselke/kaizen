@@ -1,10 +1,14 @@
 request = require 'request'
 _ = require 'underscore'
 xmlParser = require "libxmljs-easy"
+qs = require 'querystring'
 
 ###
 Sample requests
-curl -X POST -d '' -H 'Content-Type: application/xml' -H 'Accept: application/xml' http://ec2-54-251-77-10/bonita-server-rest/API/identityAPI/getAllRoles
+curl -X POST -d '' -H 'Content-Type: application/xml' -H 'Accept: application/xml' -H 'Authorization: Basic cmVzdHVzZXI6cmVzdGJwbQ=='  http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest/API/identityAPI/getAllUsers
+
+
+curl -X POST -d 'options=user:admin' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/xml' -H 'Authorization: Basic cmVzdHVzZXI6cmVzdGJwbQ=='  http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest/API/identityAPI/getAllUsers
 
 admin:bpm
 
@@ -48,19 +52,21 @@ module.exports = class Client
   _getAuth: () =>
     new Buffer("#{@username}:#{password}").toString('base64')
 
-  _reqWithData: (method, path, data, opt, callback) =>
+  _reqWithData: (method, path, data = {}, actAsUser,opt, callback) =>
 
     headers =
-      'Content-Type': 'application/xml'
+      'Content-Type': 'application/x-www-form-urlencoded'
       'Accept' : 'application/xml'
       'authorization' : "Basic #{@_getAuth()}"
 
     _.extend headers, @options.headers
 
+    data.user = actAsUser if actAsUser
+
     request
       uri: "#{@endpoint}#{path}"
       headers: headers
-      body: if data then JSON.stringify data else null
+      body: if data then qs.stringify data else null
       method: method
       timeout: 2000
      , (err, res, body) =>
@@ -74,6 +80,7 @@ module.exports = class Client
   post: (path, data, opt = {}, callback) =>
     @_reqWithData "POST", path, data, options, callback
 
+  ###
   patch: (path, data, opt = {}, callback) =>
     @_reqWithData "PATCH", path, data, options, callback
 
@@ -82,7 +89,7 @@ module.exports = class Client
 
 
 
-  delete: (path, opt = {}, callback) =>
+  delete: (path,actAsUser, opt = {}, callback) =>
     headers =
       'Accept' : 'application/xml'
       'authorization' : "Basic #{@_getAuth()}"
@@ -100,7 +107,7 @@ module.exports = class Client
 
         @_handleResult res, body, callback
 
-  get: (path, opt = {}, callback) =>
+  get: (path,actAsUser, opt = {}, callback) =>
     if !callback && _.isFunction opt
       callback = opt
       opt = {}
@@ -120,4 +127,4 @@ module.exports = class Client
          err.status = res.statusCode
          return callback(err)
        @_handleResult res, body, callback
-
+  ###
