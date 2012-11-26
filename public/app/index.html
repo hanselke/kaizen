@@ -24,10 +24,11 @@
 					</div>
 					<div style="padding:5px 5px 1px 5px">
 						<table><tr><td>
-							<a href ng:click="signout()">
-								<img ng:src="avatars/{{currentUser.avatar}}.png" style="border-radius: 5px;width:48px" ng:show="currentUser.avatar"/>
+							<a href="/users/sign-out">
+								<img ng:src="{{currentUser.selectedUserImage}}" style="border-radius: 5px;height:50px;width:50px" ng:show="currentUser.selectedUserImage"/>
+								<img ng:src="/img/placeholders/avatar-50x50.jpg" style="border-radius: 5px;height:50px;width:50px" ng:show="!currentUser.selectedUserImage"/>
 							</a>
-						</td><td>{{currentUser.name}}</td></tr></table>
+						</td><td>{{currentUser.username}}</td></tr></table>
 					</div>
 					<div class="process_history" style="padding: 5px" ng:show="process_history">
 						<div class="box">

@@ -37,6 +37,8 @@ module.exports = class RoutesUsers
     @app.get '/users/sign-in', @signIn
     @app.post '/users/sign-in', validateSignIn, @passport.authenticate("local", failureRedirect: "/users/sign-in?error=1"),  @signInPost
 
+    @app.get '/users/sign-out', @signOutGet
+
   _nextRedirect:(req, res) =>
     res.redirect req.body.next || req.query.next || "/"
 
@@ -50,4 +52,11 @@ module.exports = class RoutesUsers
         bodyCss : 'userdialog_area has_header_menu'
 
   signInPost: (req, res) =>
+    @_nextRedirect req, res
+
+  ###
+  Sign Out - This is a get for convenience only.
+  ###
+  signOutGet: (req, res) =>
+    req.logOut()
     @_nextRedirect req, res
