@@ -29,8 +29,8 @@
     "braintree" : null,
     "bonita" : {
       "endpoint" : "http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest",
-      "username" : "u",
-      "password" : "p"
+      "username" : "restuser",
+      "password" : "restbpm"
     }
   },
   "auth": {

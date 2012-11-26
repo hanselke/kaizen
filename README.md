@@ -35,8 +35,10 @@ The /config/env folder contains 3 config json files, one for each environment. T
 * Install nodemon to restart during development (npm install -g nodemon) - this is triggered in the script: npm run-script dev
 * Install node-inspector (npm install -g node-inspector) for debugging.
 * Install bower (npm install -g bower) for client side component management
+* Install less (npm install -g less) to make bootstrap work
 * use the script update-components to update the client side components (./bin/update-components)
 * Use npm-install to update the node_modules. When doing that on the server, make sure your environment is set to production
+
 
 ===
 

@@ -13,3 +13,36 @@ bower install jquery
 #bower install jquery.form
 bower install json2
 bower install moment
+
+
+#Now copy stuff
+cp ./components/modernizr/modernizr.js ./js/external/head/modernizr.js
+cp ./components/jquery/jquery.js ./js/external/jquery/jquery.js
+cp ./components/jquery-ui/ui/jquery-ui.js ./js/external/jquery-ui/jquery-ui.js
+
+cp ./components/bootstrap/js/bootstrap-*.js ./js/external/global
+cp ./components/json2/json2.js ./js/external/global/json2.js
+cp ./components/underscore/underscore.js ./js/external/global/underscore.js
+
+# compile bootstrap
+
+BOOTSTRAP=./css/external-partials/bootstrap.css
+BOOTSTRAP_LESS=./css/_bootstrap-modeista-custom.less
+BOOTSTRAP_RESPONSIVE=./css/external-partials/bootstrap-responsive.css
+BOOTSTRAP_RESPONSIVE_LESS=./components/bootstrap/less/responsive.less
+#LESS_COMPRESSOR ?= `which lessc`
+
+#
+# BUILD SIMPLE BOOTSTRAP DIRECTORY
+# lessc & uglifyjs are required
+#
+
+lessc $BOOTSTRAP_LESS > $BOOTSTRAP
+lessc $BOOTSTRAP_RESPONSIVE_LESS > $BOOTSTRAP_RESPONSIVE
+
+
+
+# end do stuff
+popd
+
+
