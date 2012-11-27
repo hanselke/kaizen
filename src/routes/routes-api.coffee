@@ -30,6 +30,7 @@ module.exports = class RoutesApi
     res.json req.user.toRest(@baseUrl)
 
   getBoard: (req,res,next) =>
+    return res.json {},401 unless req.user
     @bonitaClient.queryDefinition.getLastProcess @servicesBonita.processName,req.user.username,null, (err,process) =>
       return next err if err
       #console.log "RESULT: #{JSON.stringify(process)}"

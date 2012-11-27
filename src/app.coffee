@@ -20,6 +20,7 @@ mongoose = require 'mongoose'
 backend = require './js/backend'
 bonitaClientPackage = require './modules/bonita-client'
 bonitaTransformer = require './modules/bonita-transformer'
+protectResource = require './site/protect-resource'
 
 ###
 # Setup version
@@ -166,6 +167,7 @@ module.exports = class App
     @identityStore = identityStorePackage.store(oauthProvider : config.get('provider'))
     @bonitaClient = bonitaClientPackage.client config.get('services:bonita')
 
+    ###
     if env isnt "production"
       database_dir = __dirname + '/../db-test'
       backend.set_db_dir(database_dir)
@@ -174,6 +176,7 @@ module.exports = class App
       childProcess.exec 'rm -rf ' + database_dir, (error, stdout, stderr) ->
         fs.mkdirSync database_dir, 0o0755
         backend.init_db()
+    ###
     #else
     #  database_dir = __dirname + '/../db'
     #  backend.set_db_dir(database_dir)
@@ -192,7 +195,6 @@ module.exports = class App
         next()
 
     @app.use express.favicon(__dirname + '/../public/favicon.ico', config.get('cache'))
-    @app.use express.static(__dirname + '/../public', config.get('cache'))
 
 
     @app.use corser.create
@@ -221,8 +223,10 @@ module.exports = class App
 
     @app.use passport.initialize()
     @app.use passport.session()
+    @app.use '/app',protectResource()
     # @app.use cookieDumper
     @app.use legacyUser()
+    @app.use express.static(__dirname + '/../public', config.get('cache'))
 
     @app.locals 
       config : config
