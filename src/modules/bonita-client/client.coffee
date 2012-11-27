@@ -52,7 +52,7 @@ module.exports = class Client
     if xml and xml.length > 0
       try
         asyncParser xml, (err,body) =>
-          console.log "PARSED: #{JSON.stringify(err)} RES: #{JSON.stringify(body)}"
+          #console.log "PARSED: #{JSON.stringify(err)} RES: #{JSON.stringify(body)}"
           return cb err if err # Parsing error
           cb null, body
       catch e

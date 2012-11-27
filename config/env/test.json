@@ -30,7 +30,8 @@
     "bonita" : {
       "endpoint" : "http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest",
       "username" : "restuser",
-      "password" : "restbpm"
+      "password" : "restbpm",
+      "processName" : "QA_Data_Entry"
     }
 
   },

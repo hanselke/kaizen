@@ -19,6 +19,7 @@ mongoose = require 'mongoose'
 
 backend = require './js/backend'
 bonitaClientPackage = require './modules/bonita-client'
+bonitaTransformer = require './modules/bonita-transformer'
 
 ###
 # Setup version
@@ -260,6 +261,7 @@ module.exports = class App
       identityStore : @identityStore
       backend : backend
       bonitaClient : @bonitaClient
+      bonitaTransformer : bonitaTransformer
 
     # TODO: Order might be important, and we need to check that.
     @routes =
@@ -267,7 +269,7 @@ module.exports = class App
       legacy: new RoutesLegacy settings
       adminUsers: new RoutesAdminUsers settings
       routesUsers: new RoutesUsers settings
-      routesApi: new RoutesApi settings
+      routesApi: new RoutesApi settings,config.get('services:bonita')
 
     @app.set('views', __dirname + '/../views')
     @app.set('view engine', 'jade')

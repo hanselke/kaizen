@@ -3,11 +3,13 @@ _ = require 'underscore'
 
 module.exports = class RoutesApi
 
-  constructor:(settings) ->
+  constructor:(settings,@servicesBonita) ->
     _.extend @,settings
     throw new Error("app parameter is required") unless @app
     throw new Error("bonitaClient parameter is required") unless @bonitaClient
-    @processName = "QA_Data_Entry"
+    throw new Error("bonitaTransformer parameter is required") unless @bonitaTransformer
+    throw new Error("servicesBonita parameter is required") unless @servicesBonita
+    throw new Error("servicesBonita.processName parameter is required") unless @servicesBonita.processName
 
   setupLocals: () =>
 
@@ -28,23 +30,17 @@ module.exports = class RoutesApi
     res.json req.user.toRest(@baseUrl)
 
   getBoard: (req,res,next) =>
-    @bonitaClient.queryDefinition.getLastProcess @processName,req.user.username,null, (err,item) =>
+    @bonitaClient.queryDefinition.getLastProcess @servicesBonita.processName,req.user.username,null, (err,process) =>
       return next err if err
-      #console.log "RESULT: #{JSON.stringify(item)}"
+      #console.log "RESULT: #{JSON.stringify(process)}"
 
-      processUUID = item?.uuid?.value
+      processUUID = process?.uuid?.value
       return res.json {message: "processUUID not available from getLastProcess."},500 unless processUUID
 
       @bonitaClient.queryRuntime.getProcessInstances processUUID,req.user.username,null, (err,processInstances) =>
         return next err if err
-        return res.json {message: "processUUID not available from getLastProcess."},500 unless processInstances
-        #console.log "RESULT: #{JSON.stringify(processInstances)}"
-        
-        result =
-          backoffice: [],
-          sales: [],
-          purchasing: [],
-          done: []
-
-        res.json result
+        return res.json {message: "processInstances not available from getProcessInstances."},500 unless processInstances
+        board = @bonitaTransformer.toBoard process,processInstances
+        console.log "RESULT: #{JSON.stringify(board)}"
+        res.json board
 
