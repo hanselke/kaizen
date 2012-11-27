@@ -6,13 +6,16 @@ module.exports = class RoutesApi
   constructor:(settings) ->
     _.extend @,settings
     throw new Error("app parameter is required") unless @app
-    throw new Error("passport parameter is required") unless @passport
-    throw new Error("identityStore parameter is required") unless @identityStore
+    throw new Error("bonitaClient parameter is required") unless @bonitaClient
+    @processName = "QA_Data_Entry"
 
   setupLocals: () =>
 
   setupRoutes: () =>
     @app.get '/api/session', @getSession
+
+    # TODO: Ensure that we have a user here
+    @app.get '/api/board', @getBoard
 
   ###
   Retrieve the current session (e.g. the user that is currently logged in). 
@@ -23,3 +26,11 @@ module.exports = class RoutesApi
 
     #console.log "CURRENT USER #{JSON.stringify(req.user.toRest(@baseUrl))}"
     res.json req.user.toRest(@baseUrl)
+
+  getBoard: (req,res) =>
+    @bonitaClient.queryDefinition.getLastProcess @processName,req.user.username,null, (err,item) =>
+      return res.json {}, 500 if err
+      console.log "RESULT: #{JSON.stringify(item)}"
+
+      res.json item
+      

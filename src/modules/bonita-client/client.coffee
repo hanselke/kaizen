@@ -5,15 +5,26 @@ qs = require 'querystring'
 
 ###
 Sample requests
-curl -X POST -d '' -H 'Content-Type: application/xml' -H 'Accept: application/xml' -H 'Authorization: Basic cmVzdHVzZXI6cmVzdGJwbQ=='  http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest/API/identityAPI/getAllUsers
-
-
 curl -X POST -d 'options=user:admin' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/xml' -H 'Authorization: Basic cmVzdHVzZXI6cmVzdGJwbQ=='  http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest/API/identityAPI/getAllUsers
 
 admin:bpm
 
+
+curl -X POST -d 'options=user:admin' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/xml' -H 'Authorization: Basic cmVzdHVzZXI6cmVzdGJwbQ=='  http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest/API/queryDefinitionAPI/getProcesses
+
+Retrieve board data for that process
+curl -X POST -d 'options=user:admin' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/xml' -H 'Authorization: Basic cmVzdHVzZXI6cmVzdGJwbQ=='  http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest/API/queryRuntimeAPI/getProcessInstances/QA_Data_Entry--1.2
+
+Retrieve the uuid for the active process with that name
+curl -X POST -d 'options=user:admin' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/xml' -H 'Authorization: Basic cmVzdHVzZXI6cmVzdGJwbQ=='  http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest/API/queryDefinitionAPI/getLastProcess/QA_Data_Entry
+
+
 ###
+
+
 Identity = require './identity'
+QueryRuntime = require './query-runtime'
+QueryDefinition = require './query-definition'
 
 module.exports = class Client
   constructor: (@endpoint,@username,@password, @options = {}) ->
@@ -22,18 +33,22 @@ module.exports = class Client
     throw new Error("Username required") unless @username && @username.length > 0
     throw new Error("Password required") unless @password && @password.length > 0
 
+    @options =  {}
     _.defaults @options,
             maxCacheItems: 1000
             headers: {}
     @cache = {}
 
     @identity  = new Identity @
+    @queryRuntime = new QueryRuntime @
+    @queryDefinition = new QueryDefinition @
 
   _cleanEndpoint: (endpoint) =>
     return null unless endpoint
     endpoint.replace /\/+$/, ""
 
   _handleResult: (res, bodyBeforeXml, callback) =>
+      console.log "GOT THIS: #{bodyBeforeXml}"
       return callback new errors.AccessDenied("") if res.statusCode is 401 or res.statusCode is 403
 
       body = null
@@ -50,7 +65,7 @@ module.exports = class Client
       callback null, body, res.statusCode
 
   _getAuth: () =>
-    new Buffer("#{@username}:#{password}").toString('base64')
+    new Buffer("#{@username}:#{@password}").toString('base64')
 
   _reqWithData: (method, path, data = {}, actAsUser,opt, callback) =>
 
@@ -78,14 +93,14 @@ module.exports = class Client
 
 
   post: (path, data, opt = {}, callback) =>
-    @_reqWithData "POST", path, data, options, callback
+    @_reqWithData "POST", path, data, opt, callback
 
   ###
   patch: (path, data, opt = {}, callback) =>
-    @_reqWithData "PATCH", path, data, options, callback
+    @_reqWithData "PATCH", path, data, opt, callback
 
   put: (path, data, opt = {}, callback) =>
-    @_reqWithData "PUT", path, data, options, callback
+    @_reqWithData "PUT", path, data, opt, callback
 
 
 

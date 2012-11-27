@@ -588,7 +588,7 @@ function BoardController() {
 }
 BoardController.prototype = {
 	refresh: function() { var that = this
-		this.$xhr('GET', '/board',
+		this.$xhr('GET', '/api/board',
 			function(code, res) { that.cards = res }, that.errorHandler )
 	}
 }
@@ -771,7 +771,7 @@ function MainController() {
 }
 MainController.prototype = {
 	refresh: function() { var that = this
-		this.$xhr('GET', '/board',
+		this.$xhr('GET', '/api/board',
 			function(code, res) { that.cards = res }, that.errorHandler )
 	},
 	sendMsg: function(){
