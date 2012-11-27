@@ -61,8 +61,19 @@ module.exports = class RoutesAdminUsers
     @app.post '/admin/users/:username/roles', @addRolesToUser
 
 
+  _addRolesToBonita: (username,roles = [],cb) =>
+    return cb null unless roles.length > 0
+
+    addRole = (role,cb) =>
+      winston.info "Adding role #{role} to #{username}"
+      @bonitaClient.identity.addRoleToUser username, role,"admin",{},(err) =>
+        winston.error "Failed adding role #{role} to #{username} - Check if role exists" if err
+        cb null
+
+    async.forEach roles ,addRole, cb
+
   ###
-  Temporary helper to setup demo users. To do this run this once:
+  Adding roles to a user
   curl -X POST -d '{"roles" :["admin","user","test"]}' -H 'Content-Type: application/json' -H 'Accept: application/json' http://127.0.0.1:8001/admin/users/mw1/roles
   ###
   addRolesToUser: (req,res,next) =>
@@ -74,22 +85,31 @@ module.exports = class RoutesAdminUsers
       @identityStore.users.addRoles user._id,req.body.roles, (err) =>
         return next err if err
 
-        addRole = (role,cb) =>
-          winston.info "Adding role #{role} to #{username}"
-          @bonitaClient.identity.addRoleToUser username, role,"admin",{},(err) =>
-            winston.error "Failed adding role #{role} to #{username} - Check if role exists" if err
-            cb null
-
-        async.forEach req.body.roles ,addRole, (err) =>
+        @_addRolesToBonita username,req.body.roles, (err) =>
           # Here we will never have an error, as we are passing null in the little ones.
           res.json {}
+
+  ###
+  Add a user to passport and bonita
+  curl -X POST -d '{"username" : "mw9", "password": "testabc", "primaryEmail": "mw9@test.com","roles" : ["admin","sales","purchasing"]}' -H 'Content-Type: application/json' -H 'Accept: application/json' http://127.0.0.1:8001/admin/users/add-user-sync
+  ###
+  addUserSync: (req,res,next) =>
+    return next new errors.UnprocessableEntity("username") unless req.body.username
+    return next new errors.UnprocessableEntity("password") unless req.body.password
+    req.body.roles = [] unless req.body.roles
+
+    @identityStore.users.create req.body, (err,user) =>
+      return next err if err
+      @bonitaClient.identity.addUser req.body.username,req.body.password,"admin",null, (err,u) =>
+        return next err if err
+        @_addRolesToBonita req.body.username,req.body.roles, (err) =>
+          res.json user
 
   ###
   Temporary helper to setup demo users. To do this run this once:
   curl -X POST -d '{}' -H 'Content-Type: application/json' -H 'Accept: application/json' http://127.0.0.1:8001/admin/users/setup-demo
   ###
   setupDemoUsers: (req, res, next) =>
-
     createUser = (user,cb) =>
       @identityStore.users.create user, (err) =>
         # We ignore err here.
@@ -99,20 +119,6 @@ module.exports = class RoutesAdminUsers
       # We ignore err here.
       res.json {}
 
-  ###
-  Add a user to passport and bonita
-  curl -X POST -d '{"username" : "mw8", "password": "testabc", "primaryEmail": "mw5@test.com","roles" : ["admin","sales","purchasing"]}' -H 'Content-Type: application/json' -H 'Accept: application/json' http://127.0.0.1:8001/admin/users/add-user-sync
-  ###
-  addUserSync: (req,res,next) =>
-    return next new errors.UnprocessableEntity("username") unless req.body.username
-    return next new errors.UnprocessableEntity("password") unless req.body.password
-    req.roles = [] unless req.roles
-
-    @identityStore.users.create req.body, (err,user) =>
-      return next err if err
-      @bonitaClient.identity.addUser req.body.username,req.body.password,"admin",null, (err,u) =>
-        return next err if err
-        res.json user
 
 
   ###
@@ -129,5 +135,11 @@ module.exports = class RoutesAdminUsers
         @bonitaClient.identity.addUser user.username,"test1234","admin",null, (err,u) =>
           cb null
 
+      handleRoles = (user,cb) =>
+        @_addRolesToBonita user.username,user.roles, (err) =>
+          cb null
+
       async.forEach items || [], createUserInBonita, (err) =>
-        res.json {}
+        async.forEach items || [], handleRoles, (err) =>
+          res.json {}
+

@@ -40,6 +40,12 @@ The /config/env folder contains 3 config json files, one for each environment. T
 * Use npm-install to update the node_modules. When doing that on the server, make sure your environment is set to production
 * For keeping the process running as an alternative to forever: https://github.com/visionmedia/mon
 
+## Admin Endpoints
+
+* Sync users into bonita: curl -X POST -d '{}' -H 'Content-Type: application/json' -H 'Accept: application/json' http://127.0.0.1:8001/admin/users/sync-to-bonita
+* Add a user to passport and bonita curl -X POST -d '{"username" : "mw9", "password": "testabc", "primaryEmail": "mw9@test.com","roles" : ["admin","sales","purchasing"]}' -H 'Content-Type: application/json' -H 'Accept: application/json' http://127.0.0.1:8001/admin/users/add-user-sync
+* Adding roles to a user: curl -X POST -d '{"roles" :["admin","user","test"]}' -H 'Content-Type: application/json' -H 'Accept: application/json' http://127.0.0.1:8001/admin/users/mw1/roles
+
 ===
 
 
