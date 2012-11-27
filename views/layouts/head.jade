@@ -13,11 +13,6 @@ meta(name = 'keywords', content= "Open Business," + keywords)
 
 //meta(name = 'easyWayToPassStuff', content= config.get('services:facebook'))
 
-//-if(currentUser)
-//  meta( name = "channel-id", content = currentUser.id) 
-
-//-else
-//  meta( name = "channel-id", content = "hello_world")
 
 //link(href = asset("site/icons/favicon.ico"), rel = "shortcut icon" )
 //link(href = asset("site/icons/modeista-57x57.png"), rel = "apple-touch-icon" ,precomposed=true)
@@ -42,6 +37,7 @@ meta(name = 'keywords', content= "Open Business," + keywords)
   script(type="text/javascript")
     try{Typekit.load();}catch(e){}
 
+link(href='/css/bootstrap.css', rel='stylesheet')
 
 //link(href=asset('site.css'), rel='stylesheet')
 
@@ -55,7 +51,7 @@ meta( 'http-equiv'="imageresize", content="no" )
 meta( 'name'="mssmarttagspreventparsing", content="true" )
 //- TODO CANONICAL URL
 
-//script(src=asset('head.js')) 
+script(src='/lib/head.js') 
 
 //script(src='http://platform.twitter.com/anywhere.js?id=' + config.get('services:twitter') + '&v=1') 
 //script(src='http://platform.twitter.com/widgets.js') 
