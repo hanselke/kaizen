@@ -4,41 +4,47 @@ BASEDIR=$(dirname $0)
 
 pushd $BASEDIR/../assets
 # We are in assets now 
-bower install angular
-bower install bootstrap
+#bower install angular
+#bower install bootstrap
 bower install modernizr
 bower install underscore
-bower install jquery
+#bower install jquery
 #bower install jquery-ui
 #bower install jquery.form
-bower install json2
-bower install moment
+#bower install json2
+#bower install moment
 
 
 #Now copy stuff
-cp ./components/modernizr/modernizr.js ./js/external/head/modernizr.js
-cp ./components/jquery/jquery.js ./js/external/jquery/jquery.js
-cp ./components/jquery-ui/ui/jquery-ui.js ./js/external/jquery-ui/jquery-ui.js
+#cp ./components/angular/angular.js ../public/lib/angular.js
+#cp ./components/bootstrap/js/bootstrap-*.js ./js/external/global
+cp ./components/modernizr/modernizr.js ../public/lib/modernizr.js
+cp ./components/underscore/underscore.js ../public/lib/underscore.js
+#cp ./components/jquery/jquery.js ../public/lib/jquery.js
+#cp ./components/jquery-ui/ui/jquery-ui.js ../public/lib/jquery-ui.js
+#cp ./components/jquery.form/jquery.form.js ../public/lib/jquery.form.js
+#cp ./components/json2/json2.js ./js/external/global/json2.js
+#cp ./components/moment/moment.js ./js/external/global/moment.js
 
-cp ./components/bootstrap/js/bootstrap-*.js ./js/external/global
-cp ./components/json2/json2.js ./js/external/global/json2.js
-cp ./components/underscore/underscore.js ./js/external/global/underscore.js
+cp ./components-legacy/angular-ie-compat.js ../public/lib/angular-ie-compat.js
+cp ./components-legacy/autoresize.jquery.js ../public/lib/autoresize.jquery.js
 
 # compile bootstrap
-
-BOOTSTRAP=./css/external-partials/bootstrap.css
-BOOTSTRAP_LESS=./css/_bootstrap-modeista-custom.less
-BOOTSTRAP_RESPONSIVE=./css/external-partials/bootstrap-responsive.css
-BOOTSTRAP_RESPONSIVE_LESS=./components/bootstrap/less/responsive.less
-#LESS_COMPRESSOR ?= `which lessc`
-
 #
-# BUILD SIMPLE BOOTSTRAP DIRECTORY
-# lessc & uglifyjs are required
+#BOOTSTRAP=./css/external-partials/bootstrap.css
+#BOOTSTRAP_LESS=./css/_bootstrap-modeista-custom.less
+#BOOTSTRAP_RESPONSIVE=./css/external-partials/bootstrap-responsive.css
+#BOOTSTRAP_RESPONSIVE_LESS=./components/bootstrap/less/responsive.less
 #
-
-lessc $BOOTSTRAP_LESS > $BOOTSTRAP
-lessc $BOOTSTRAP_RESPONSIVE_LESS > $BOOTSTRAP_RESPONSIVE
+##LESS_COMPRESSOR ?= `which lessc`
+#
+##
+## BUILD SIMPLE BOOTSTRAP DIRECTORY
+## lessc & uglifyjs are required
+##
+#
+#lessc $BOOTSTRAP_LESS > $BOOTSTRAP
+#lessc $BOOTSTRAP_RESPONSIVE_LESS > $BOOTSTRAP_RESPONSIVE
 
 
 
