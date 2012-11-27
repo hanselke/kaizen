@@ -27,10 +27,24 @@ module.exports = class RoutesApi
     #console.log "CURRENT USER #{JSON.stringify(req.user.toRest(@baseUrl))}"
     res.json req.user.toRest(@baseUrl)
 
-  getBoard: (req,res) =>
+  getBoard: (req,res,next) =>
     @bonitaClient.queryDefinition.getLastProcess @processName,req.user.username,null, (err,item) =>
-      return res.json {}, 500 if err
-      console.log "RESULT: #{JSON.stringify(item)}"
+      return next err if err
+      #console.log "RESULT: #{JSON.stringify(item)}"
 
-      res.json item
-      
+      processUUID = item?.uuid?.value
+      return res.json {message: "processUUID not available from getLastProcess."},500 unless processUUID
+
+      @bonitaClient.queryRuntime.getProcessInstances processUUID,req.user.username,null, (err,processInstances) =>
+        return next err if err
+        return res.json {message: "processUUID not available from getLastProcess."},500 unless processInstances
+        #console.log "RESULT: #{JSON.stringify(processInstances)}"
+        
+        result =
+          backoffice: [],
+          sales: [],
+          purchasing: [],
+          done: []
+
+        res.json result
+

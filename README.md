@@ -38,7 +38,7 @@ The /config/env folder contains 3 config json files, one for each environment. T
 * Install less (npm install -g less) to make bootstrap work
 * use the script update-components to update the client side components (./bin/update-components)
 * Use npm-install to update the node_modules. When doing that on the server, make sure your environment is set to production
-
+* For keeping the process running as an alternative to forever: https://github.com/visionmedia/mon
 
 ===
 

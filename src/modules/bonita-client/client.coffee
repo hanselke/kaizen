@@ -24,6 +24,7 @@ curl -X POST -d 'options=user:admin' -H 'Content-Type: application/x-www-form-ur
 Identity = require './identity'
 QueryRuntime = require './query-runtime'
 QueryDefinition = require './query-definition'
+Runtime = require './runtime'
 
 module.exports = class Client
   constructor: (@endpoint,@username,@password, @options = {}) ->
@@ -41,6 +42,7 @@ module.exports = class Client
     @identity  = new Identity @
     @queryRuntime = new QueryRuntime @
     @queryDefinition = new QueryDefinition @
+    @runtime = new Runtime @
 
   _cleanEndpoint: (endpoint) =>
     return null unless endpoint
@@ -105,51 +107,3 @@ module.exports = class Client
   post: (path, actAsUser, data, opt = {}, callback) =>
     @_reqWithData "POST", path,actAsUser, data,  opt, callback
 
-  ###
-  patch: (path, data, opt = {}, callback) =>
-    @_reqWithData "PATCH", path, data, opt, callback
-
-  put: (path, data, opt = {}, callback) =>
-    @_reqWithData "PUT", path, data, opt, callback
-
-
-
-  delete: (path,actAsUser, opt = {}, callback) =>
-    headers =
-      'Accept' : 'application/xml'
-      'authorization' : "Basic #{@_getAuth()}"
-
-    _.extend headers, @options.headers
-
-    request
-      uri: "#{@endpoint}#{path}"
-      headers: headers
-      method: 'DELETE'
-     , (err, res, body) =>
-        if err
-          err.status = res.statusCode
-          return callback(err)
-
-        @_handleResult res, body, callback
-
-  get: (path,actAsUser, opt = {}, callback) =>
-    if !callback && _.isFunction opt
-      callback = opt
-      opt = {}
-
-    headers =
-      'Accept' : 'application/xml'
-      'authorization' : "Basic #{@_getAuth()}"
-
-    _.extend headers, @options.headers
-
-    request
-      uri: "#{@endpoint}#{path}"
-      headers: headers
-      method: 'GET'
-     , (err, res, body) =>
-       if err
-         err.status = res.statusCode
-         return callback(err)
-       @_handleResult res, body, callback
-  ###
