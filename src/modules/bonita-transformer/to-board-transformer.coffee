@@ -12,6 +12,7 @@ module.exports = (process,processInstances) ->
       name: participant.name || "" 
       cards: []
 
+
     #backoffice: [],
     #sales: [],
     #purchasing: [],
@@ -22,5 +23,11 @@ module.exports = (process,processInstances) ->
     label : "Done"
     name : 'done'
     cards: []
+
+  result.lanes[0].cards.push
+    id : "C1"
+    desc : "this is a card"
+    html : "<p>Hello</p>"
+    ready : "Ready"
   result
 

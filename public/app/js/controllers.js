@@ -795,7 +795,6 @@ MainController.prototype = {
 		this.$xhr('GET', '/api/board',
 			function(code, res) { 
 
-				that.cards = res 
 
 	/*
 	that.lane_headings = {
@@ -814,9 +813,11 @@ MainController.prototype = {
 
 	//that.lanes = ['customer', 'backoffice', 'sales', 'billing', 'warehouse', 'purchasing', 'done']
 
+	that.cards = {}
 	that.lane_headings = {}
 	_.each(res.lanes, function(x) {
 		that.lane_headings[x.name] = x.label;
+		that.cards[x.name] = x.cards
 	});
 
 	that.lanes = _.map(res.lanes, function(x) {return x.name;} );
