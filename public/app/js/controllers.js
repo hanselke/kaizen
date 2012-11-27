@@ -567,6 +567,10 @@ function BackofficeSalesQuoteController(){ var that = this
 }
 
 function BoardController() {
+	this.lane_headings = {}
+	this.lanes = []
+
+	/*
 	this.lane_headings = {
 		customer: "Customer",
 		backoffice: "Backoffice",
@@ -580,6 +584,9 @@ function BoardController() {
 		done: "Done"
 	}
 	this.lanes = ['customer', 'backoffice', 'sales', 'billing', 'warehouse', 'purchasing', 'done']
+
+	*/
+
 	this.refresh()
 	var that = this
 	this.$parent.$root.$on('refresh_board_event', function(){
@@ -589,7 +596,17 @@ function BoardController() {
 BoardController.prototype = {
 	refresh: function() { var that = this
 		this.$xhr('GET', '/api/board',
-			function(code, res) { that.cards = res }, that.errorHandler )
+			function(code, res) { that.cards = res 
+
+	that.lane_headings = {}
+	_.each(res.lanes, function(x) {
+		that.lane_headings[x.name] = x.label;
+	});
+
+	that.lanes = _.map(res.lanes, function(x) {return x.name;} );
+
+
+		}, that.errorHandler )
 	}
 }
 function BoardExamplesController() { var that = this
@@ -776,7 +793,11 @@ function MainController() {
 MainController.prototype = {
 	refresh: function() { var that = this
 		this.$xhr('GET', '/api/board',
-			function(code, res) { that.cards = res 
+			function(code, res) { 
+
+				that.cards = res 
+
+	/*
 	that.lane_headings = {
 		customer: "Customer",
 		backoffice: "Backoffice",
@@ -789,9 +810,17 @@ MainController.prototype = {
 		supplier: "Supplier",
 		done: "Done"
 	}
-	that.lanes = ['customer', 'backoffice', 'sales', 'billing', 'warehouse', 'purchasing', 'done']
-	
+	*/
 
+	//that.lanes = ['customer', 'backoffice', 'sales', 'billing', 'warehouse', 'purchasing', 'done']
+
+	that.lane_headings = {}
+	_.each(res.lanes, function(x) {
+		that.lane_headings[x.name] = x.label;
+	});
+
+	that.lanes = _.map(res.lanes, function(x) {return x.name;} );
+	
 			}, that.errorHandler )
 	},
 	sendMsg: function(){
