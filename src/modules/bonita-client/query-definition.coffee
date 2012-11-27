@@ -6,5 +6,5 @@ module.exports = class QueryDefinition
     throw new Error "client parameter is required" unless @client
 
   getLastProcess: (processName, actAsUser,opts = {},cb = ->) =>
-    @client.post "/API/queryDefinitionAPI/getLastProcess/#{processName}",actAsUser, opts, cb
+    @client.post "/API/queryDefinitionAPI/getLastProcess/#{processName}",actAsUser, {}, opts, cb
 

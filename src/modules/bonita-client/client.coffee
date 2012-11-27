@@ -1,7 +1,7 @@
 request = require 'request'
 _ = require 'underscore'
-xmlParser = require "libxmljs-easy"
 qs = require 'querystring'
+asyncParser = require('libxml-to-js')
 
 ###
 Sample requests
@@ -17,7 +17,6 @@ curl -X POST -d 'options=user:admin' -H 'Content-Type: application/x-www-form-ur
 
 Retrieve the uuid for the active process with that name
 curl -X POST -d 'options=user:admin' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/xml' -H 'Authorization: Basic cmVzdHVzZXI6cmVzdGJwbQ=='  http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest/API/queryDefinitionAPI/getLastProcess/QA_Data_Entry
-
 
 ###
 
@@ -47,27 +46,34 @@ module.exports = class Client
     return null unless endpoint
     endpoint.replace /\/+$/, ""
 
+  _parseXml: (xml,cb) =>
+    if xml and xml.length > 0
+      try
+        asyncParser xml, (err,body) =>
+          console.log "PARSED: #{JSON.stringify(err)} RES: #{JSON.stringify(body)}"
+          return cb err if err # Parsing error
+          cb null, body
+      catch e
+        #console.log "Error: #{JSON.stringify(e)}"
+        cb new Error("Invalid Body Content \n#{xml}"), null
+    else
+      cb null,null
+
   _handleResult: (res, bodyBeforeXml, callback) =>
-      console.log "GOT THIS: #{bodyBeforeXml}"
-      return callback new errors.AccessDenied("") if res.statusCode is 401 or res.statusCode is 403
+      #console.log "GOT THIS: #{bodyBeforeXml}"
+      return callback new errors.AccessDenied("") if res && res.statusCode is 401 or res.statusCode is 403
 
-      body = null
+      @_parseXml bodyBeforeXml, (err,body) =>
+        if res && !(res.statusCode >= 200 && res.statusCode < 300)
+          callback new Error(if body then body.message else "Request failed.")
+        else
+          callback null, body, res.statusCode
 
-      #console.log "WE ARE HERE #{bodyBeforeXml}"
-      if bodyBeforeXml and bodyBeforeXml.length > 0
-        try
-          # console.log "GETTING: #{bodyBeforeXml} END GETTING"
-          body = xmlParser.parse(bodyBeforeXml)
-        catch e
-          return callback( new Error("Invalid Body Content"), bodyBeforeXml, res.statusCode)
-
-      return callback(new Error(if body then body.message else "Request failed.")) unless res.statusCode >= 200 && res.statusCode < 300
-      callback null, body, res.statusCode
 
   _getAuth: () =>
     new Buffer("#{@username}:#{@password}").toString('base64')
 
-  _reqWithData: (method, path, data = {}, actAsUser,opt, callback) =>
+  _reqWithData: (method, path, actAsUser, data = {},opt, callback) =>
 
     headers =
       'Content-Type': 'application/x-www-form-urlencoded'
@@ -76,7 +82,11 @@ module.exports = class Client
 
     _.extend headers, @options.headers
 
-    data.user = actAsUser if actAsUser
+    data.options = "user:admin" 
+    #data.options = "user:#{actAsUser}" if actAsUser 
+
+    console.log "INVOKING #{method} #{@endpoint}#{path}"
+    console.log "    DATA #{qs.stringify data}"
 
     request
       uri: "#{@endpoint}#{path}"
@@ -92,8 +102,8 @@ module.exports = class Client
        @_handleResult res, body, callback
 
 
-  post: (path, data, opt = {}, callback) =>
-    @_reqWithData "POST", path, data, opt, callback
+  post: (path, actAsUser, data, opt = {}, callback) =>
+    @_reqWithData "POST", path,actAsUser, data,  opt, callback
 
   ###
   patch: (path, data, opt = {}, callback) =>

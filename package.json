@@ -64,7 +64,7 @@
         "simple-paginator" : "0.2.0",
         "mongoose-identity-store" : "0.2.1",
         "mongodb-errors" : "0.2.0",
-        "libxmljs-easy" : "0.1.1"
+        "libxml-to-js" : "0.3.10"
     },
     "bundledDependencies": [],
     "devDependencies": {
