@@ -8,7 +8,7 @@ config = require 'nconf'
 express = require 'express'
 color = require 'colors'
 passport = require 'passport'
-voila = require 'voila'
+#voila = require 'voila'
 expressMessages = require 'express-messages-bootstrap'
 trace = require './util/trace'
 passportSetup = require './site/passport-setup'
@@ -174,9 +174,9 @@ module.exports = class App
       childProcess.exec 'rm -rf ' + database_dir, (error, stdout, stderr) ->
         fs.mkdirSync database_dir, 0o0755
         backend.init_db()
-    else
-      database_dir = __dirname + '/../db'
-      backend.set_db_dir(database_dir)
+    #else
+    #  database_dir = __dirname + '/../db'
+    #  backend.set_db_dir(database_dir)
 
     # register other data store here
 
@@ -274,7 +274,7 @@ module.exports = class App
     @app.set('views', __dirname + '/../views')
     @app.set('view engine', 'jade')
 
-    @app.use '/assets', voila(__dirname + '/../', config.get('voila'))
+    #@app.use '/assets', voila(__dirname + '/../', config.get('voila'))
     @app.use checkNeedsInit()
 
     dummyFn = (userId,cb) ->
