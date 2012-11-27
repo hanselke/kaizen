@@ -13,7 +13,7 @@ block content
                 //-= render :partial = "shared/form_errors", :locals = {:resource = resource}
                 fieldset
                   legend
-                    |Or use your username and password
+                    |Sign in using your username (email) and password.
                   .control-group
                     label.control-label.hidden(for='username') User Name or Email
                     .controls
@@ -23,6 +23,6 @@ block content
                     .controls
                       //-,value=password
                       input#password.span4(name="password",type="password",placeholder="Password",:autocorrect="off",required="required",size="30")
-                      a(href=routesUsers.resetPassword) Forgot your password?
+                      //a(href=routesUsers.resetPassword) Forgot your password?
               .form-actions
                 input.btn.btn-primary.btn-large.action_username(type="submit",value="Sign In")
