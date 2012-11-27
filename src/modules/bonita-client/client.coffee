@@ -63,7 +63,7 @@ module.exports = class Client
 
   _handleResult: (res, bodyBeforeXml, callback) =>
       #console.log "GOT THIS: #{bodyBeforeXml}"
-      return callback new errors.AccessDenied("") if res && res.statusCode is 401 or res.statusCode is 403
+      return callback new errors.AccessDenied("") if res && (res.statusCode is 401 or res.statusCode is 403)
 
       @_parseXml bodyBeforeXml, (err,body) =>
         if res && !(res.statusCode >= 200 && res.statusCode < 300)
