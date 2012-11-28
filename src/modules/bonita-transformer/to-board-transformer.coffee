@@ -3,7 +3,7 @@ _ = require 'underscore-ext'
 ###
 Transforms raw data to the one that is sent to the client.
 ###
-module.exports = (processes,process,processInstances) ->
+module.exports = (processes,processInstances) ->
   result =
     lanes: []
 
@@ -24,20 +24,33 @@ module.exports = (processes,process,processInstances) ->
         result.lanes.push newLane
         adMap[activityDefinition.uuid.value] = newLane
        
-
+  ###
   result.lanes.push
     label : "Done"
     name : 'done'
     cards: []
+  ###
+
+  #console.log "ADMAP"
+  #console.log JSON.stringify(_.keys(adMap))
 
   for instance in processInstances?.ProcessInstance
+    console.log "ONE INSTANCE #{instance.instanceUUID.value}"
+    console.log JSON.stringify(instance)
+
     for activity in instance.activities?.ActivityInstance
-        result.lanes[0].cards.push
-          id : activity.uuid?.value
-          desc : activity.label
-          html : activity.description
-          ready : activity.state?.toUpperCase() is "READY" 
-          state : activity.state
+        activityId = activity.activityDefinitionUUID?.value
+        if activity.state is "READY"
+          console.log "ACTIVITY: #{activityId}"
+          myLane = adMap[activityId] # || _.last( result.lanes)
+
+          if myLane
+            myLane.cards.push
+              id : activity.uuid?.value
+              desc : activity.label
+              html : activity.description
+              ready : activity.state?.toUpperCase() is "READY" 
+              state : activity.state
 
   result
 
