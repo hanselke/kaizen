@@ -18,6 +18,9 @@ curl -X POST -d 'options=user:admin' -H 'Content-Type: application/x-www-form-ur
 Retrieve the uuid for the active process with that name
 curl -X POST -d 'options=user:admin' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/xml' -H 'Authorization: Basic cmVzdHVzZXI6cmVzdGJwbQ=='  http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest/API/queryDefinitionAPI/getLastProcess/QA_Data_Entry
 
+
+curl -X POST -d 'options=user:admin' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/xml' -H 'Authorization: Basic cmVzdHVzZXI6cmVzdGJwbQ=='  http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest/API/queryDefinitionAPI/getProcessActivities/QA_Data_Entry--1.2
+
 ###
 
 

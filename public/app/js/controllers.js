@@ -125,7 +125,7 @@ AppController.prototype = {
 		return this.currentUser.roles.indexOf(role) >= 0
 	},
 	nextTask: function(cb) { var that = this
-		this.$xhr('GET', '/tasks', function(code, bods) {
+		this.$xhr('GET', '/api/tasks', function(code, bods) {
 			that.$parent.$root.$emit('refresh_board_event');
 			(cb || that.goto_task_view)(that.bod = bods[0])
 		}, this.errorHandler)
@@ -819,6 +819,8 @@ MainController.prototype = {
 		that.lane_headings[x.name] = x.label;
 		that.cards[x.name] = x.cards
 	});
+
+	that.laneWidth = "10.00%"
 
 	that.lanes = _.map(res.lanes, function(x) {return x.name;} );
 	

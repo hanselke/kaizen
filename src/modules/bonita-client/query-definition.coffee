@@ -8,3 +8,5 @@ module.exports = class QueryDefinition
   getLastProcess: (processName, actAsUser,opts = {},cb = ->) =>
     @client.post "/API/queryDefinitionAPI/getLastProcess/#{processName}",actAsUser, {}, opts, cb
 
+  getProcessActivities: (processDefinitionUUID, actAsUser,opts = {},cb = ->) =>
+    @client.post "/API/queryDefinitionAPI/getProcessActivities/#{processDefinitionUUID}",actAsUser, {}, opts, cb

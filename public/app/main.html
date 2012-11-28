@@ -1,15 +1,9 @@
 <table class="page">
 	<tr><!-- row for kanban board -->
 		<td style="vertical-align: top" colspan="2">
-			<table id="board">
+			<table id="board" ng:show="lanes.length > 0">
 				<colgroup>
-					<col width="14.28%">
-					<col width="14.28%">
-					<col width="14.28%">
-					<col width="14.28%">
-					<col width="14.28%">
-					<col width="14.28%">
-					<col width="14.28%">
+					<col width="{{laneWidth}}" ng:repeat="lane in lanes">
 				</colgroup>
 				<tr>
 					<th ng:repeat="lane in lanes">{{lane_headings[lane]}}</th>
@@ -25,7 +19,7 @@
 				</tr>
 			</table>
 			<div class="help bubble up" style="margin-left: 400px">This is your kanban board</div>
-			<table class="cycletimes fullwidth" cellpadding=0 cellspacing=0>
+			<table class="cycletimes fullwidth" cellpadding=0 cellspacing=0 ng:show="lanes.length > 0">
 				<colgroup>
 					<col width="14.28%">
 					<col width="14.28%">
@@ -83,7 +77,7 @@
 		</tr>
 		<tr><!-- row for VSM -->
 			<td colspan="2">
-			<table id="vsm">
+			<table id="vsm" ng:show="lanes.length > 0">
 				<colgroup>
 					<col width="13.14%">
 					<col width="1.14%">
