@@ -32,19 +32,25 @@ module.exports = class RoutesApi
 
   getBoard: (req,res,next) =>
     return res.json {},401 unless req.user
-    @bonitaClient.queryDefinition.getLastProcess @servicesBonita.processName,req.user.username,null, (err,process) =>
+    @bonitaClient.queryDefinition.getProcesses req.user.username,null, (err,processes) =>
       return next err if err
-      #console.log "RESULT: #{JSON.stringify(process)}"
+      #console.log "GETPROCESSES=========="
+      #console.log "#{JSON.stringify(processes)}"
+      #console.log "GETPROCESSES##########"
 
-      processUUID = process?.uuid?.value
-      return res.json {message: "processUUID not available from getLastProcess."},500 unless processUUID
-
-      @bonitaClient.queryRuntime.getProcessInstances processUUID,req.user.username,null, (err,processInstances) =>
+      @bonitaClient.queryDefinition.getLastProcess @servicesBonita.processName,req.user.username,null, (err,process) =>
         return next err if err
-        return res.json {message: "processInstances not available from getProcessInstances."},500 unless processInstances
-        board = @bonitaTransformer.toBoard process,processInstances
-        console.log "RESULT: #{JSON.stringify(board)}"
-        res.json board
+        #console.log "GETLASTPROCESS: #{JSON.stringify(process)}"
+
+        processUUID = process?.uuid?.value
+        return res.json {message: "processUUID not available from getLastProcess."},500 unless processUUID
+
+        @bonitaClient.queryRuntime.getProcessInstances processUUID,req.user.username,null, (err,processInstances) =>
+          return next err if err
+          return res.json {message: "processInstances not available from getProcessInstances."},500 unless processInstances
+          board = @bonitaTransformer.toBoard processes,process,processInstances
+          console.log "RESULT: #{JSON.stringify(board)}"
+          res.json board
 
 
   ###

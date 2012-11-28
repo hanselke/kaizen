@@ -3,10 +3,10 @@
     "subdomain": "hansel-ke-orderingsystem",
     "domains": [],
     "description": "OpenBusiness Ordering System",
-    "version": "0.0.1-10",
+    "version": "0.0.1-11",
     "private": true,
     "scripts": {
-        "start": "./lib/index.js",
+        "start": "lib/index.js",
         "server-watch": "node_modules/.bin/coffee -c -w  -o lib src",
         "dev-debug": "NODE_ENV=development nodemon --debug ./lib/index.js",
         "dev": "NODE_ENV=development nodemon ./lib/index.js",
