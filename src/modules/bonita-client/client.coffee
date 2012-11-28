@@ -87,8 +87,8 @@ module.exports = class Client
 
     _.extend headers, @options.headers
 
-    data.options = "user:admin" 
-    #data.options = "user:#{actAsUser}" if actAsUser 
+    #data.options = "user:admin" 
+    data.options = "user:#{actAsUser}" if actAsUser 
 
     console.log "INVOKING #{method} #{@endpoint}#{path}"
     console.log "    DATA #{qs.stringify data}"
