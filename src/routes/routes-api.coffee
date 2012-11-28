@@ -59,4 +59,12 @@ module.exports = class RoutesApi
       console.log "RAW: #{JSON.stringify(taskList)}"
       tasks = @bonitaTransformer.toNextAction taskList
       console.log "TRANSFORMED: #{JSON.stringify(tasks)}"
-      res.json tasks
+
+      taskUUID = taskList?.uuid?.value
+
+      if taskUUID
+        @bonitaClient.runtime.assignTask taskUUID,req.user.username,req.user.username,{}, (err) =>
+          # Deal with task
+          res.json tasks
+      else
+        res.json tasks
