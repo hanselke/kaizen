@@ -14,43 +14,41 @@ bower install jquery-ui
 bower install json2
 #bower install moment
 
+cp ./components/bootstrap/js/bootstrap-*.js ./js/external/global
+cp ./components/modernizr/modernizr.js ./js/external/head/modernizr.js
+cp ./components/underscore/underscore.js ./js/external/global/underscore.js
+cp ./components/jquery/jquery.js ./js/external/jquery/jquery.js
+cp ./components/jquery-ui/ui/jquery-ui.js ./js/external/jquery-ui/jquery-ui.js
+cp ./components/json2/json2.js ./js/external/global/json2.js
+cp ./components-legacy/autoresize.jquery.js ./js/external/global-angular/autoresize.jquery.js
 
 #Now copy stuff
-#cp ./components/angular/angular.js ../public/lib/angular.js
-#cp ./components/bootstrap/js/bootstrap-*.js ./js/external/global
-cp ./components/modernizr/modernizr.js ../public/lib/modernizr.js
-cp ./components/underscore/underscore.js ../public/lib/underscore.js
-cp ./components/jquery/jquery.js ../public/lib/jquery.js
-cp ./components/jquery-ui/ui/jquery-ui.js ../public/lib/jquery-ui.js
-#cp ./components/jquery.form/jquery.form.js ../public/lib/jquery.form.js
-#cp ./components/json2/json2.js ./js/external/global/json2.js
-#cp ./components/moment/moment.js ./js/external/global/moment.js
+cp ./components/angular/angular.js ../public/lib/angular.js
 cp ./components-legacy/angular-ie-compat.js ../public/lib/angular-ie-compat.js
-cp ./components-legacy/autoresize.jquery.js ../public/lib/autoresize.jquery.js
 
 # Create the javascript for the outer site - order is important
 
-uglifyjs ./components/jquery/jquery.js --output ../public/lib/jquery.js
-uglifyjs ./components/jquery-ui/ui/jquery-ui.js --output ../public/lib/jquery-ui.js
+#uglifyjs ./components/jquery/jquery.js --output ../public/lib/jquery.js
+#uglifyjs ./components/jquery-ui/ui/jquery-ui.js --output ../public/lib/jquery-ui.js
 
 
-uglifyjs ./components/modernizr/modernizr.js --output ../public/lib/head.js
-uglifyjs ./components/json2/json2.js \
-         ./components/bootstrap/js/bootstrap-button.js \
-         ./components/bootstrap/js/bootstrap-affix.js \
-         ./components/bootstrap/js/bootstrap-carousel.js \
-         ./components/bootstrap/js/bootstrap-collapse.js \
-         ./components/bootstrap/js/bootstrap-dropdown.js \
-         ./components/bootstrap/js/bootstrap-modal.js \
-         ./components/bootstrap/js/bootstrap-scrollspy.js \
-         ./components/bootstrap/js/bootstrap-tab.js \
-         ./components/bootstrap/js/bootstrap-tooltip.js \
-         ./components/bootstrap/js/bootstrap-popover.js \
-         ./components/bootstrap/js/bootstrap-transition.js \
-         ./components/bootstrap/js/bootstrap-typeahead.js \
-         ./components/bootstrap/js/bootstrap-alert.js \
-         ./components/underscore/underscore.js \
-         --output ../public/lib/global.js
+#uglifyjs ./components/modernizr/modernizr.js --output ../public/lib/head.js
+#uglifyjs ./components/json2/json2.js \
+#         ./components/bootstrap/js/bootstrap-button.js \
+#         ./components/bootstrap/js/bootstrap-affix.js \
+#         ./components/bootstrap/js/bootstrap-carousel.js \
+#         ./components/bootstrap/js/bootstrap-collapse.js \
+#         ./components/bootstrap/js/bootstrap-dropdown.js \
+#         ./components/bootstrap/js/bootstrap-modal.js \
+#         ./components/bootstrap/js/bootstrap-scrollspy.js \
+#         ./components/bootstrap/js/bootstrap-tab.js \
+#         ./components/bootstrap/js/bootstrap-tooltip.js \
+#         ./components/bootstrap/js/bootstrap-popover.js \
+#         ./components/bootstrap/js/bootstrap-transition.js \
+#         ./components/bootstrap/js/bootstrap-typeahead.js \
+#         ./components/bootstrap/js/bootstrap-alert.js \
+#         ./components/underscore/underscore.js \
+#         --output ../public/lib/global.js
 
 # compile bootstrap
 #

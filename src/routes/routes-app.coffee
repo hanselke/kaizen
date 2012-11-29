@@ -32,5 +32,5 @@ module.exports = class RoutesOther
           pretty: true
 
   getSignin: (req,res,next) =>
-    res.render 'app/signin',
+    res.render 'app/signin.ejs',
           pretty: true

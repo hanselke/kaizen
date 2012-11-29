@@ -5,7 +5,7 @@
   <title>Open Business</title>
   <link rel="stylesheet" href="css/app.css" media="screen"/>
   <link rel="stylesheet" href="css/print.css" media="print"/>
-  <script src="/lib/modernizr.js"></script>
+  <script src="<%=asset('head.js')%>"></script>
 
 </head>
 <body ng:controller="AppController">
@@ -72,9 +72,10 @@
   <script>window.jQuery || document.write('<script src="/lib/jquery/jquery-1.6.2.min.js">\x3C/script>')</script>
   <script src="//code.angularjs.org/0.10.2/angular-0.10.2.min.js" ng:autobind></script>
   <script>window.angular || document.write('<script src="/lib/angular/angular.js" ng:autobind>\x3C/script>')</script> -->
-  <script src="/lib/jquery/jquery-1.6.2.min.js"></script>
-  <script src="/lib/autoresize.jquery.js"></script>
-  <script src="/lib/underscore.js"></script>
+
+  <script src="<%=asset('jquery.js')%>"></script>
+  <script src="<%=asset('global.js')%>"></script>
+  <script src="<%=asset('global-angular.js')%>"></script>
   <script src="/lib/angular/angular.js"  ng:autobind></script>
 
   <script src="/socket.io/socket.io.js"></script>

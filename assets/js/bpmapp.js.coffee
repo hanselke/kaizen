@@ -1,5 +1,5 @@
-#= require a/controllers
-#= require a/countries
-#= require a/filters
-#= require a/services
-#= require a/widgets
+#= require app/controllers
+#= require app/countries
+#= require app/filters
+#= require app/services
+#= require app/widgets
