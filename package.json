@@ -13,7 +13,7 @@
         "dev-old": "NODE_ENV=development nodemon ./lib/js/server.js",
         "dev-norestart": "NODE_ENV=development node ./lib/index.js",
         "inspect": "node-inspector &",
-        "assets": "rm -rf public/assets/* && voila -p /assets"
+        "assets": "rm -rf public/assets/* && node_modules/.bin/voila -p /assets"
     },
     "engines": {
         "node": "0.8.x"
