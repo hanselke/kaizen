@@ -3,6 +3,7 @@ class window.MainController
     @$scope.lane_headings = {}
     @$scope.lanes = []
     @$scope.colsFromLanes = []
+    @$scope.tdFromLanes = []
     
     @refresh()
 
@@ -20,8 +21,8 @@ class window.MainController
       @$scope.laneWidth = "10.00%"
       @$scope.lanes = _.map data.lanes, (x) -> x.name
 
-
       @$scope.colsFromLanes = @colsFromLanes @$scope.lanes
+      @$scope.tdFromLanes = @tdFromLanes @$scope.lanes
 
   colsFromLanes: (lanes = []) =>
     res = []
@@ -38,6 +39,19 @@ class window.MainController
       res.push width : "#{aWidth}%" 
       res.push width : "#{bWidth}%" 
     res
+
+  tdFromLanes: (lanes = []) =>
+    res = []
+
+    for lane in lanes
+      res.push 
+        klass : "value"
+        label : "14 min" 
+      res.push 
+        klass : "wait" 
+        label : "5 min"
+    res
+
 
     ###
     that = this

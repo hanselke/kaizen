@@ -31,12 +31,8 @@ table.page
               col(width="{{colsLane.width}}",ng-repeat='colsLane in colsFromLanes')
             
             tr
-              td.backoffice.value 14 min
-              td.wait 5 min
-              td.sales.value 40 min
-              td.wait 2 min
-              td.billing.value 11 min
-              td.wait 4 min
+              td(class="{{tdLane.klass}}", ng-repeat='tdLane in tdFromLanes')
+                |{{tdLane.label}}
     table.page.fullwidth(style='margin-top: 8px;')
       tr
         //
