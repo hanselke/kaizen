@@ -1,0 +1,2 @@
+myModule = angular.module("myModule", [])
+

@@ -28,12 +28,8 @@ table.page
         td(colspan='2')
           table#vsm(ng:show='lanes.length > 0')
             colgroup
-              col(width='9.14%')
-              col(width='5.14%')
-              col(width='9.14%')
-              col(width='5.14%')
-              col(width='9.14%')
-              col(width='5.14%')
+              col(width="{{colsLane.width}}",ng-repeat='colsLane in colsFromLanes')
+            
             tr
               td.backoffice.value 14 min
               td.wait 5 min

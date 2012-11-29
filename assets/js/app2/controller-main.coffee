@@ -2,6 +2,7 @@ class window.MainController
   constructor: (@$scope,@$http) ->
     @$scope.lane_headings = {}
     @$scope.lanes = []
+    @$scope.colsFromLanes = []
     
     @refresh()
 
@@ -19,7 +20,24 @@ class window.MainController
       @$scope.laneWidth = "10.00%"
       @$scope.lanes = _.map data.lanes, (x) -> x.name
 
-    #request.error that.errorHandler
+
+      @$scope.colsFromLanes = @colsFromLanes @$scope.lanes
+
+  colsFromLanes: (lanes = []) =>
+    res = []
+
+    aWidth = 0
+    bWidth = 0
+
+    if lanes.length > 0
+      aWidth = 100 / lanes.length
+      bWidth = aWidth / 3 * 1
+      aWidth = aWidth - bWidth
+
+    for lane in lanes
+      res.push width : "#{aWidth}%" 
+      res.push width : "#{bWidth}%" 
+    res
 
     ###
     that = this
