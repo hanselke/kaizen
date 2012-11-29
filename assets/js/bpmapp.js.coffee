@@ -16,6 +16,7 @@
 #= require app/legacy/controller-backoffice-sales-po.js
 
 #= require app/controller-main
+#= require app/controller-task
 #= require app/countries
 #= require app/filters
 #= require app/services

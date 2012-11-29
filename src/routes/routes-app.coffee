@@ -18,6 +18,7 @@ module.exports = class RoutesOther
     @app.get '/app/board',@getBoard
     @app.get '/app/main',@getMain
     @app.get '/app/signin',@getSignin
+    @app.get '/app/task',@getTask
 
   getApp: (req,res,next) =>
     res.render 'app/index.ejs',
@@ -33,4 +34,8 @@ module.exports = class RoutesOther
 
   getSignin: (req,res,next) =>
     res.render 'app/signin.ejs',
+          pretty: true
+
+  getTask: (req,res,next) =>
+    res.render 'app/task',
           pretty: true

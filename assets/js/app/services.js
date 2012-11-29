@@ -19,6 +19,7 @@ angular.service('myAngularApp', function($route) {
 	$route.when('/board-examples',  {template: 'board-examples', controller: BoardExamplesController})
 	$route.when('/print-quote',  {template: 'print-quote', controller: PrintQuoteController})
 	$route.when('/print-rfq',  {template: 'print-rfq', controller: PrintRFQController})
+	$route.when('/task',  {template: 'task', controller: TaskController})
 
 	$route.when('/backoffice-sales-po',  {template: 'backoffice-sales-po', controller: BackofficeSalesPOController})
 	$route.otherwise({redirectTo: '/'})
