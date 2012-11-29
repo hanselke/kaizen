@@ -7,14 +7,18 @@ function convertDateToUTC(date) {
 			date.getUTCMilliseconds())
 }
 
-angular.filter('boolean', function(input) {
+var myModule = angular.module('myModule', []);
+
+
+myModule.filter('boolean', function(input) {
 	return input ? 'true' : 'false';
 });
 
-angular.filter('percent', function(input) {
+myModule.filter('percent', function(input) {
 	return parseFloat(input || 0).toFixed(2)+'%';
 });
 
+/*
 angular.formatter('countrycode', {
 	parse: function(value){
 		return (value||'').toUpperCase();
@@ -23,28 +27,30 @@ angular.formatter('countrycode', {
 		return value;
 	}
 });
+*/
 
-angular.filter('won', function(flag) { return flag ? '✓' : '&mdash;' })
+myModule.filter('won', function(flag) { return flag ? '✓' : '&mdash;' })
 
 function dateDiff(startDate, endDate) {
 	function getWholeDays(date) { return Math.floor(date / (1000*60*60*24)) }
 	return getWholeDays(endDate) - getWholeDays(startDate)
 }
 
-angular.filter('dyndate', function(date) {
+myModule.filter('dyndate', function(date) {
 	var now = new Date()
 	var diff = dateDiff(date, now)
 	if (diff == 0) { // "8:44 PM" for today
-		return angular.filter.date.call(this, date, 'h:mm a')
+		return myModule.filter.date.call(this, date, 'h:mm a')
 	} else if (diff == 1) { // "yesterday at 8:44 PM" for yesterday
-		return 'yesterday at '+angular.filter.date.call(this, date, 'h:mm a')
+		return 'yesterday at '+myModule.filter.date.call(this, date, 'h:mm a')
 	// } else if (diff > 1 && diff <= 7) { // "5 days ago" within 1 week
 	// 	return diff+' days ago at '+angular.filter.date.call(this, date, 'h:mm a')
 	} else { // "Nov 6" else
-		return angular.filter.date.call(this, date, 'MMM d')
+		return myModule.filter.date.call(this, date, 'MMM d')
 	}
 })
 
+/*
 angular.formatter('datetime', {
 	parse: function(value){
 		value = value.replace(' ', 'T')
@@ -58,8 +64,9 @@ angular.formatter('datetime', {
 		return s
 	},
 	format: function(value){
-		return angular.filter.date.call(this, value, 'yyyy-MM-dd HH:mm:ss')
+		return myModule.filter.date.call(this, value, 'yyyy-MM-dd HH:mm:ss')
 	}
 })
+*/
 
-angular.filter('ml', function(s) { return angular.filter.html.call(this, s.replace(/\n/g, '<br/>')) })
+myModule.filter('ml', function(s) { return myModule.filter.html.call(this, s.replace(/\n/g, '<br/>')) })

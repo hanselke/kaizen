@@ -8,6 +8,7 @@ pushd $BASEDIR/../assets
 bower install bootstrap
 bower install modernizr
 bower install underscore
+bower install angular-ui
 bower install jquery
 bower install jquery-ui
 #bower install jquery.form
@@ -24,6 +25,7 @@ cp ./components-legacy/autoresize.jquery.js ./js/external/global-angular/autores
 
 #Now copy stuff
 cp ./components/angular/angular.js ../public/lib/angular.js
+cp ./components/angular-ui/build/angular-ui.min.js ../public/lib/angular-ui.js
 cp ./components-legacy/angular-ie-compat.js ../public/lib/angular-ie-compat.js
 
 # Create the javascript for the outer site - order is important

@@ -2,7 +2,10 @@
 
 //automatically resize the textarea's height according to the content
 //http://james.padolsey.com/javascript/jquery-plugin-autoresize/
-angular.widget('@ng:autoresize', function(expression, template) {
+var myModule = angular.module('myModule', []);
+
+/*
+myModule.widget('@ng:autoresize', function(expression, template) {
 	var bindExpr = template.attr('name')
 
  	return function(linkElement) {
@@ -32,3 +35,5 @@ angular.widget('@ng:autoresize', function(expression, template) {
 		linkElement.keyup() //initialize the textarea's height
 	}
 })
+
+*/

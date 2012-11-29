@@ -1,0 +1,83 @@
+table.page
+  tr
+    td(style='vertical-align: top;', colspan='2')
+      table#board(ng:show='lanes.length > 0')
+        colgroup
+          col(width='{{laneWidth}}', ng:repeat='lane in lanes')
+        tr
+          th(ng:repeat='lane in lanes') {{lane_headings[lane]}}
+        tr
+          td(ng:repeat='lane in lanes')
+            .card(ng:repeat='card in cards[lane]', ng:class='card[3]')
+              //
+                 <span class="id">{{card.id}}</span> 
+              span.desc {{card.desc}}
+              span(ng:show='card.ready') ✓
+      .help.bubble.up(style='margin-left: 400px;') This is your kanban board
+      table.cycletimes.fullwidth(cellpadding='0', cellspacing='0', ng:show='lanes.length > 0')
+        colgroup
+          col(width='{{laneWidth}}', ng:repeat='lane in lanes')
+        tr
+          td( ng:repeat='lane in lanes')
+            .cycle
+              .time Time: {{1288323623006 | date:m:s}}
+              .cost Cost: {{3.17 | currency}}
+      tr
+        //
+           row for VSM 
+        td(colspan='2')
+          table#vsm(ng:show='lanes.length > 0')
+            colgroup
+              col(width='9.14%')
+              col(width='5.14%')
+              col(width='9.14%')
+              col(width='5.14%')
+              col(width='9.14%')
+              col(width='5.14%')
+            tr
+              td.backoffice.value 14 min
+              td.wait 5 min
+              td.sales.value 40 min
+              td.wait 2 min
+              td.billing.value 11 min
+              td.wait 4 min
+    table.page.fullwidth(style='margin-top: 8px;')
+      tr
+        //
+           row for chat and company stream 
+        td(width='50%')
+          .chat
+            .header Chat
+            .content(style='height: 200px;')
+              #chat_window(style='height: 175px; background: white; padding-left: 2px; overflow-y: auto;')
+                div(ng:repeat='line in chat_lines', ng:class='getClassForMsg(line)')
+                  i(ng:show='line.name') {{line.name}}:
+                  | {{line.msg}}
+                  span.time [{{line.time | date:'HH:mm'}}]
+              .input(style='padding-right: 5px; height: 25px;')
+                form(ng:submit='sendMsg()')
+                  input.fullwidth(name='message')
+        td(width='50%')
+          .company_stream
+            .header Company stream
+            .content(style='height: 200px;')
+              div(style='height: 100%; background: white; padding-left: 2px;')
+                | You are subscribed to the Sales Order and Sales Department stream
+                span.time [2 mins ago]
+                i Chris
+                | sent out RFQs.
+                br
+                span.time [8 mins ago]
+                i Mon
+                | mapped suppliers for
+                a(href='href') RFQ#1234.
+                br
+                span.time [9 mins ago]
+                i Derrick
+                | mapped inventory for
+                a(href='href') RFQ#1234.
+                br
+                span.time [15 mins ago]
+                i Chris
+                | processed an incoming fax.
+                br

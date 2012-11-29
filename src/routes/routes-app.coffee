@@ -15,25 +15,16 @@ module.exports = class RoutesOther
       
   setupRoutes: () =>
     @app.get '/app',protectResource(), @getApp
-    @app.get '/app/board',@getBoard
     @app.get '/app/main',@getMain
-    @app.get '/app/signin',@getSignin
     @app.get '/app/task',@getTask
 
   getApp: (req,res,next) =>
     res.render 'app/index.ejs',
           pretty: true
 
-  getBoard: (req,res,next) =>
-    res.render 'app/board.ejs',
-          pretty: true
 
   getMain: (req,res,next) =>
-    res.render 'app/main.ejs',
-          pretty: true
-
-  getSignin: (req,res,next) =>
-    res.render 'app/signin.ejs',
+    res.render 'app/main',
           pretty: true
 
   getTask: (req,res,next) =>

@@ -19,7 +19,7 @@
   "clients": {
   },
   "services": {
-    "db": "mongodb://hansel:hansel!3!@alex.mongohq.com:10082/hansel-ke-orderingsystem",
+    "db": "mongodb://localhost/openbusiness-bpm",
     "intercom": null,
     "airbrake": null,
     "google-analytics": null,

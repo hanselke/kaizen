@@ -20,6 +20,10 @@ module.exports = (processes,processInstances) ->
             label: activityDefinition.description || ""
             name: activityDefinition.name || "" 
             id: activityDefinition.uuid.value
+            totalTime : 13422
+            totalCost: 34.2
+            beforeTime : 10000
+            afterTime: 3422
             cards: []
         result.lanes.push newLane
         adMap[activityDefinition.uuid.value] = newLane
@@ -52,6 +56,11 @@ module.exports = (processes,processInstances) ->
               ready : activity.state?.toUpperCase() is "READY" 
               state : activity.state
               processInstance : instance.instanceUUID.value
+              totalTime : 3522
+              totalCost: 4.1
+              beforeTime : 50
+              afterTime: 3472
+
 
   result
 
