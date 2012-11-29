@@ -1,10 +1,16 @@
+How to install and start on the server:
+Precon: mongodb installed locally
+
+NODE_ENV=production npm install
+NODE_ENV=production npm run-script assets
+NODE_ENV=production node ./lib/index.js
+
+You might want to run the last one inside forever
+
 Docs:
 
 The package.json file contains a couple of scripts that can and should be used as follows:
 
-* npm start
--> This starts the node server. Be sure that you set the environment (ENV) to production
-* npm run-script dev
 -> Starts in development mode. That means that the node process is restarted whenever a source fil e changes. See Tips section
 * npm run-script dev-norestart
 -> Starts in development mode but does not restart the process when the source changes.
