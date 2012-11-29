@@ -6,7 +6,8 @@ class window.MainController
     @refresh()
 
   refresh: () =>
-    request = @$http.get("/api/board")
+    request = @$http.get "/api/board"
+    request.error @$scope.errorHandler
     request.success (data, status, headers, config) =>
       window.lanesBoard = data.lanes
       @$scope.cards = {}

@@ -1,2 +1,2 @@
-window.TaskController = () ->
+window.TaskController = (@$scope) ->
   #
