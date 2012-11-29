@@ -66,7 +66,7 @@
     </tr>
   </table>
   <div style="text-align: center; display: none" ng:show="currentUser == null">
-    <ng:include src="'signin.html'" ng:controller="SigninController"></ng:include>
+    <ng:include src="'signin'" ng:controller="SigninController"></ng:include>
   </div>
 <!--  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
   <script>window.jQuery || document.write('<script src="/lib/jquery/jquery-1.6.2.min.js">\x3C/script>')</script>
@@ -76,12 +76,11 @@
   <script src="/lib/autoresize.jquery.js"></script>
   <script src="/lib/underscore.js"></script>
   <script src="/lib/angular/angular.js"  ng:autobind></script>
-  <script src="js/countries.js" type="text/javascript"></script>
-  <script src="js/services.js"></script>
-  <script src="/app/js/controllers.js"></script>
-  <script src="js/filters.js"></script>
-  <script src="js/widgets.js"></script>
+
   <script src="/socket.io/socket.io.js"></script>
+  <script src="<%=asset('bpmapp.js')%>"></script>
+  
+
     <!-- begin olark code --><script type='text/javascript'>/*{literal}<![CDATA[*/if(false){window.olark||(function(i){var e=window,h=document,a=e.location.protocol=="https:"?"https:":"http:",g=i.name,b="load";(function(){e[g]=function(){(c.s=c.s||[]).push(arguments)};var c=e[g]._={},f=i.methods.length; while(f--){(function(j){e[g][j]=function(){e[g]("call",j,arguments)}})(i.methods[f])} c.l=i.loader;c.i=arguments.callee;c.f=setTimeout(function(){if(c.f){(new Image).src=a+"//"+c.l.replace(".js",".png")+"&"+escape(e.location.href)}c.f=null},20000);c.p={0:+new Date};c.P=function(j){c.p[j]=new Date-c.p[0]};function d(){c.P(b);e[g](b)}e.addEventListener?e.addEventListener(b,d,false):e.attachEvent("on"+b,d); (function(){function l(j){j="head";return["<",j,"></",j,"><",z,' onl'+'oad="var d=',B,";d.getElementsByTagName('head')[0].",y,"(d.",A,"('script')).",u,"='",a,"//",c.l,"'",'"',"></",z,">"].join("")}var z="body",s=h[z];if(!s){return setTimeout(arguments.callee,100)}c.P(1);var y="appendChild",A="createElement",u="src",r=h[A]("div"),G=r[y](h[A](g)),D=h[A]("iframe"),B="document",C="domain",q;r.style.display="none";s.insertBefore(r,s.firstChild).id=g;D.frameBorder="0";D.id=g+"-loader";if(/MSIE[ ]+6/.test(navigator.userAgent)){D.src="javascript:false"} D.allowTransparency="true";G[y](D);try{D.contentWindow[B].open()}catch(F){i[C]=h[C];q="javascript:var d="+B+".open();d.domain='"+h.domain+"';";D[u]=q+"void(0);"}try{var H=D.contentWindow[B];H.write(l());H.close()}catch(E){D[u]=q+'d.write("'+l().replace(/"/g,String.fromCharCode(92)+'"')+'");d.close();'}c.P(2)})()})()})({loader:(function(a){return "static.olark.com/jsclient/loader0.js?ts="+(a?a[1]:(+new Date))})(document.cookie.match(/olarkld=([0-9]+)/)),name:"olark",methods:["configure","extend","declare","identify"]});
     /* custom configuration goes here (www.olark.com/documentation) */
     olark.identify('9877-850-10-6571');}/*]]>{/literal}*/</script>
