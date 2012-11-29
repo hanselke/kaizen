@@ -8,7 +8,7 @@ config = require 'nconf'
 express = require 'express'
 color = require 'colors'
 passport = require 'passport'
-#voila = require 'voila'
+voila = require 'voila'
 expressMessages = require 'express-messages-bootstrap'
 trace = require './util/trace'
 passportSetup = require './site/passport-setup'
@@ -62,6 +62,7 @@ RoutesLegacy = require './routes/routes-legacy'
 RoutesAdminUsers = require './routes/routes-admin-users'
 RoutesUsers = require './routes/routes-users'
 RoutesApi = require './routes/routes-api'
+RoutesApp = require './routes/routes-app'
 
 PassportBearerStrategy = require('passport-http-bearer').Strategy
 PassportLocalStrategy = require('passport-local').Strategy
@@ -274,11 +275,12 @@ module.exports = class App
       adminUsers: new RoutesAdminUsers settings
       routesUsers: new RoutesUsers settings
       routesApi: new RoutesApi settings,config.get('services:bonita')
+      routesApp: new RoutesApp settings
 
     @app.set('views', __dirname + '/../views')
     @app.set('view engine', 'jade')
 
-    #@app.use '/assets', voila(__dirname + '/../', config.get('voila'))
+    @app.use '/assets', voila(__dirname + '/../', config.get('voila'))
     @app.use checkNeedsInit()
 
     dummyFn = (userId,cb) ->

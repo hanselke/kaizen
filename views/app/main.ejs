@@ -11,8 +11,9 @@
 				<tr>
 					<td ng:repeat="lane in lanes">
 						<div ng:repeat="card in cards[lane]" class="card" ng:class="card[3]">
-							<span class="id">{{card.id}}</span>
-							<span class="desc">{{card.desc | html}}</span>
+							<!-- <span class="id">{{card.id}}</span> -->
+							
+							<span class="desc">{{card.desc}}</span>
 							<span ng:show="card.ready">✓</span>
 						</div>
 					</td>

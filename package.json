@@ -12,7 +12,8 @@
         "dev": "NODE_ENV=development nodemon ./lib/index.js",
         "dev-old": "NODE_ENV=development nodemon ./lib/js/server.js",
         "dev-norestart": "NODE_ENV=development node ./lib/index.js",
-        "inspect": "node-inspector &"
+        "inspect": "node-inspector &",
+        "assets": "rm -rf public/assets/* && voila -p /assets"
     },
     "engines": {
         "node": "0.8.x"
@@ -64,7 +65,8 @@
         "simple-paginator": "0.2.0",
         "mongoose-identity-store": "0.2.1",
         "mongodb-errors": "0.2.0",
-        "libxml-to-js": "0.3.10"
+        "libxml-to-js": "0.3.10",
+        "ejs" : "0.8.3"
     },
     "bundledDependencies": [],
     "devDependencies": {

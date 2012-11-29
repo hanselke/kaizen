@@ -48,9 +48,10 @@ module.exports = (processes,processInstances) ->
             myLane.cards.push
               id : activity.uuid?.value
               desc : activity.label
-              html : activity.description
+              #html : activity.description
               ready : activity.state?.toUpperCase() is "READY" 
               state : activity.state
+              processInstance : instance.instanceUUID.value
 
   result
 

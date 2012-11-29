@@ -73,9 +73,10 @@ module.exports = class RoutesApi
     @bonitaClient.queryRuntime.getTaskList procInstUUID, "READY",req.user.username,null, (err,taskList) =>
       return next err if err
 
-      #console.log "RAW: #{JSON.stringify(taskList)}"
+      console.log "RAW: #{JSON.stringify(taskList)}"
       result = @bonitaTransformer.toNextAction taskList,@servicesBonita.baseUrl
       
+      console.log "PRETRANS #{JSON.stringify(result)}"
       
 
       if result.taskUUID

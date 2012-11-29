@@ -10,19 +10,11 @@ module.exports = class RoutesOther
     throw new Error("app parameter is required") unless @app
 
   setupLocals: () =>
-    @routesRootPathHelper = new RoutesRootPathHelper
-    @app.use (req, res,next) =>
-      res.locals.routesRoot = @routesRootPathHelper
-      next()
+    @app.locals.routesRoot =  @routesRootPathHelper = new RoutesRootPathHelper
       
   setupRoutes: () =>
     @app.get '/', @home
-    #@app.get '/app',protectResource(), @getApp
     @app.get '/status', @status
-
-  getApp: (req,res,next) =>
-    res.render 'app/index',
-          pretty: true
 
   home: (req, res, next) =>
     res.redirect "/app"
