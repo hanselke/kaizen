@@ -20,7 +20,7 @@ table.page
         tr
           td( ng:repeat='lane in lanes2')
             .cycle
-              .time Time: {{lane.totalTime | date:m:s}}
+              .time Time: {{lane.totalTimeLabel}}
               .cost Cost: {{lane.totalCost | currency}}
       tr
         //

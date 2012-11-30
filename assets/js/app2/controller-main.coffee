@@ -27,6 +27,9 @@ class window.MainController
       @$scope.laneWidth = "#{aWidth}%"
       @$scope.lanes = _.map data.lanes, (x) -> x.name
 
+      for l in data.lanes
+        l.totalTimeLabel = moment.duration(l.totalTime).humanize()
+        
       @$scope.lanes2 = _.object( _.map( data.lanes, (x) -> [x.name,x]))
 
       @$scope.colsFromLanes = @colsFromLanes @$scope.lanes
