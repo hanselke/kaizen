@@ -2,6 +2,7 @@ class window.MainController
   constructor: (@$scope,@$http) ->
     @$scope.lane_headings = {}
     @$scope.lanes = []
+    @$scope.lanes2 = []
     @$scope.colsFromLanes = []
     @$scope.tdFromLanes = []
     
@@ -26,8 +27,10 @@ class window.MainController
       @$scope.laneWidth = "#{aWidth}%"
       @$scope.lanes = _.map data.lanes, (x) -> x.name
 
+      @$scope.lanes2 = _.object( _.map( data.lanes, (x) -> [x.name,x]))
+
       @$scope.colsFromLanes = @colsFromLanes @$scope.lanes
-      @$scope.tdFromLanes = @tdFromLanes @$scope.lanes
+      @$scope.tdFromLanes = @tdFromLanes @$scope.lanes2
 
   colsFromLanes: (lanes = []) =>
     res = []
@@ -45,16 +48,17 @@ class window.MainController
       res.push width : "#{bWidth}%" 
     res
 
-  tdFromLanes: (lanes = []) =>
+  tdFromLanes: (lanes2 = {}) =>
     res = []
 
-    for lane in lanes
+    for k in _.keys(lanes2)
+      lane = lanes2[k]
       res.push 
         klass : "value"
-        label : moment.duration(4500).humanize()
+        label : moment.duration(lane.beforeTime).humanize()
       res.push 
         klass : "wait" 
-        label : moment.duration(45000).humanize()
+        label : moment.duration(lane.afterTime).humanize()
     res
 
 

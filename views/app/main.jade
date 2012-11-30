@@ -18,10 +18,10 @@ table.page
         colgroup
           col(width='{{laneWidth}}', ng:repeat='lane in lanes')
         tr
-          td( ng:repeat='lane in lanes')
+          td( ng:repeat='lane in lanes2')
             .cycle
-              .time Time: {{1288323623006 | date:m:s}}
-              .cost Cost: {{3.17 | currency}}
+              .time Time: {{lane.totalTime | date:m:s}}
+              .cost Cost: {{lane.totalCost | currency}}
       tr
         //
            row for VSM 
