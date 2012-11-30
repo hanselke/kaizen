@@ -13,4 +13,5 @@
 #= require external/global/bootstrap-typeahead
 #= require external/global/bootstrap-alert
 #= require external/global/underscore
+#= require external/global/moment
 

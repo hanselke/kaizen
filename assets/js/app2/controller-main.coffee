@@ -18,7 +18,12 @@ class window.MainController
         @$scope.lane_headings[x.name] = x.label
         @$scope.cards[x.name] = x.cards
 
-      @$scope.laneWidth = "10.00%"
+      aWidth = 0
+      if data.lanes.length > 0
+        aWidth = 100 / data.lanes.length
+
+
+      @$scope.laneWidth = "#{aWidth}%"
       @$scope.lanes = _.map data.lanes, (x) -> x.name
 
       @$scope.colsFromLanes = @colsFromLanes @$scope.lanes
@@ -46,10 +51,10 @@ class window.MainController
     for lane in lanes
       res.push 
         klass : "value"
-        label : "14 min" 
+        label : moment.duration(4500).humanize()
       res.push 
         klass : "wait" 
-        label : "5 min"
+        label : moment.duration(45000).humanize()
     res
 
 
