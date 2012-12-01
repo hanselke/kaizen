@@ -59,5 +59,5 @@ class window.AppController
   errorHandler: (data, status, headers, config) =>
     @flashMessage "An error occured: #{status}"
 
-window.AppController::$inject = ['$route', '$location', '$window','$scope',"$http"]
+window.AppController.$inject = ['$route', '$location', '$window','$scope',"$http"]
 

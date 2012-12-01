@@ -1,3 +1,3 @@
 window.TaskController = (@$scope) ->
 
-window.TaskController::$inject = ['$scope']
+window.TaskController.$inject = ['$scope']

@@ -142,4 +142,4 @@ window.MainController:: =
   getClassForMsg: (line) ->
     "my-message"  if line.name is @currentUser.name
 ###
-window.MainController::$inject = ['$scope',"$http"]
+window.MainController.$inject = ['$scope',"$http"]
