@@ -1,6 +1,9 @@
 html, body { height: 100%; padding: 0; margin: 0; border: 0px solid }
-body { background: #449dd7; color: white;
+/* body { background: #449dd7; color: white;
 	font-family: "lucida grande",tahoma,verdana,arial,sans-serif; font-size: 13px }
+
+*/
+
 body > table { height: 100%; width: 100%; padding: 8px; margin: 0; border: 0px solid }
 body > table > tbody > tr { vertical-align: top }
 table.item { background: #bae0ed; color: black }
