@@ -3,6 +3,7 @@ class window.AppController
     @$scope.nextTask = @nextTask
     @$scope.flashMessage = @flashMessage
     @$scope.errorHandler = @errorHandler
+    @$scope.isInRole = @isInRole
 
     @$http.defaults.headers.post['Content-Type']='application/json'
 
@@ -25,6 +26,11 @@ class window.AppController
     @$scope.currentUser = user
     
     @chat_socket.emit("nick", nick: user.name) if user and user.name
+
+  isInRole: (role) =>
+    return false unless @$scope.currentUser
+
+    _.contains @$scope.currentUser.roles || [],role
 
 
   nextTask: (cb) =>
