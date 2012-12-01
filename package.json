@@ -13,7 +13,9 @@
         "dev-old": "NODE_ENV=development nodemon ./lib/js/server.js",
         "dev-norestart": "NODE_ENV=development node ./lib/index.js",
         "inspect": "node-inspector &",
-        "assets": "rm -rf public/assets/* && node_modules/.bin/voila -p /assets"
+        "assets": "rm -rf public/assets/* && node_modules/.bin/voila -p /assets",
+        "test": "NODE_ENV=test node_modules/.bin/mocha -R spec test/*-test.coffee",
+        "test-xunit": "NODE_ENV=test node_modules/.bin/mocha --timeout 10000 -C -R xunit test/*.coffee"
     },
     "engines": {
         "node": "0.8.x"

@@ -1,0 +1,5 @@
+--require assert
+--require should
+--globals name,app,skindb,i,len,asset
+--compilers coffee:coffee-script 
+--timeout 30s
