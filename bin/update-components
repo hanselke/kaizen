@@ -23,6 +23,7 @@ cp ./components/jquery-ui/ui/jquery-ui.js ./js/external/jquery-ui/jquery-ui.js
 cp ./components/json2/json2.js ./js/external/global/json2.js
 cp ./components/moment/moment.js ./js/external/global/moment.js
 cp ./components-legacy/autoresize.jquery.js ./js/external/global-angular/autoresize.jquery.js
+cp ./components-legacy/md5.js ./js/external/global-angular/md5js
 
 #Now copy stuff
 cp ./components/angular/angular.js ../public/lib/angular.js

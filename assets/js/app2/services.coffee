@@ -1,7 +1,8 @@
 ###
 App service which is responsible for the main configuration of the app.
 ###
-myModule = angular.module("myModule", [])
+myModule = angular.module("myModule", [window.myFilters])
+
 
 rpFn = ($routeProvider) ->
   $routeProvider.when("/", {templateUrl: "main", controller: MainController})
@@ -10,5 +11,5 @@ rpFn = ($routeProvider) ->
                 .when("/admin/users/add", {templateUrl: "admin/users/add",controller: AdminUsersAddController})
                 .otherwise redirectTo: "/"
 
-angular.module("myModule", []).config ["$routeProvider", rpFn]
+angular.module("myModule", ['myFilters']).config ["$routeProvider", rpFn]
 
