@@ -1,5 +1,7 @@
-
 _ = require 'underscore'
+async = require 'async'
+winston = require 'winston'
+errors = require 'some-errors'
 
 module.exports = class RoutesApi
 
@@ -20,6 +22,7 @@ module.exports = class RoutesApi
     @app.get '/api/board', @getBoard
     @app.get '/api/tasks', @getTasks
     @app.get '/api/admin/users', @getAdminUsers
+    @app.post '/api/admin/users', @postAdminUsers
 
   ###
   Retrieve the current session (e.g. the user that is currently logged in). 
@@ -96,3 +99,27 @@ module.exports = class RoutesApi
       return next err if err
       console.log JSON.stringify(result)
       res.json result
+
+
+  _addRolesToBonita: (username,roles = [],cb) =>
+    return cb null unless roles.length > 0
+
+    addRole = (role,cb) =>
+      winston.info "Adding role #{role} to #{username}"
+      @bonitaClient.identity.addRoleToUser username, role,"admin",{},(err) =>
+        winston.error "Failed adding role #{role} to #{username} - Check if role exists" if err
+        cb null
+
+    async.forEach roles ,addRole, cb
+
+  postAdminUsers: (req,res,next) =>
+    return next new errors.UnprocessableEntity("username") unless req.body.username
+    return next new errors.UnprocessableEntity("password") unless req.body.password
+    req.body.roles = [] unless req.body.roles
+
+    @identityStore.users.create req.body, (err,user) =>
+      return next err if err
+      @bonitaClient.identity.addUser req.body.username,req.body.password,"admin",null, (err,u) =>
+        return next err if err
+        @_addRolesToBonita req.body.username,req.body.roles, (err) =>
+          res.json user

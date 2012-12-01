@@ -1,0 +1,18 @@
+.container
+  .row
+    .span6
+      h1 Add a New User
+
+      form
+        fieldset
+          label User Name
+          input( type="text",placeholder="3..20 characters",ng-model="user.username")
+          span.help-block Please enter a username here.
+          label Password
+          input( type="password",placeholder="6..20 characters",ng-model="user.password")
+          span.help-block Please enter your password here.
+          label Email
+          input( type="email",placeholder="your@email.com",ng-model="user.primaryEmail")
+          span.help-block Please enter your email here.
+
+          button.btn.btn-primary( type="submit",ng-click="create(user)") Create User

@@ -4,5 +4,6 @@
 #= require app2/controller-task
 #= require app2/controller-main
 #= require app2/controller-admin-users
+#= require app2/controller-admin-users-add
 #= require app2/services
 
