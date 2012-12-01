@@ -6,9 +6,13 @@ module.exports = class Identity
     throw new Error "client parameter is required" unless @client
 
   ###
-  curl -X POST -d 'options=user:admin' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/xml' -H 'Authorization: Basic cmVzdHVzZXI6cmVzdGJwbQ=='  http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest/API/identityAPI/getAllUsers
+  curl -X POST -d 'options=user:admin' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/xml' -H 'Authorization: Basic cmVzdHVzZXI6cmVzdGJwbQ=='  http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest/API/identityAPI/getAllRoles
+  ###
+  getAllRoles: (actAsUser,opts = {},cb = ->) =>
+    @client.post "/API/identityAPI/getAllRoles",actAsUser,{}, opts, cb
 
-  
+  ###
+  curl -X POST -d 'options=user:admin' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/xml' -H 'Authorization: Basic cmVzdHVzZXI6cmVzdGJwbQ=='  http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest/API/identityAPI/getAllUsers
   ###
   getAllUsers: (actAsUser,opts = {},cb = ->) =>
     @client.post "/API/identityAPI/getAllUsers",actAsUser,{}, opts, cb
@@ -31,6 +35,12 @@ module.exports = class Identity
   ###
   addRoleToUser: (username,role,actAsUser,opts = {},cb = ->) =>
     @client.post "/API/identityAPI/addRoleToUser/#{role}/#{username}",actAsUser,{}, {}, cb
+
+  ###
+  curl -X POST -d 'options=user:admin' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/xml' -H 'Authorization: Basic cmVzdHVzZXI6cmVzdGJwbQ=='  http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest/API/identityAPI/removeRoleFromUser/admin/martin
+  ###
+  removeRoleFromUser: (username,role,actAsUser,opts = {},cb = ->) =>
+    @client.post "/API/identityAPI/removeRoleFromUser/#{role}/#{username}",actAsUser,{}, {}, cb
 
   removeUser: (username,actAsUser,opts = {},cb = ->) =>
     @client.post "/API/identityAPI/removeUser/#{username}",actAsUser,{}, {}, cb

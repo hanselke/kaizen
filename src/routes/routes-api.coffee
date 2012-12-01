@@ -26,6 +26,11 @@ module.exports = class RoutesApi
     @app.delete '/api/admin/users/:userId', @deleteAdminUser
     @app.post '/api/admin/users/synctobonita',@syncToBonita
     @app.post '/api/admin/users/syncfrombonita',@syncFromBonita
+
+    # This is a hack
+    @app.post '/api/admin/users/:userId/roles/:role', @addRole
+    @app.delete '/api/admin/users/:userId/roles/:role', @deleteRole
+
   ###
   Retrieve the current session (e.g. the user that is currently logged in). 
   Returns a 404 if no session exists - e.g. no user is logged in.
@@ -97,10 +102,13 @@ module.exports = class RoutesApi
 
   getAdminUsers: (req,res,next) =>
     return res.json {}, 401 unless req.user
-    @identityStore.users.all 0,100, (err,result) =>
+    @bonitaClient.identity.getAllRoles  "admin",{}, (err,roles) =>
       return next err if err
-      console.log JSON.stringify(result)
-      res.json result
+      @identityStore.users.all 0,100, (err,result) =>
+        return next err if err
+        result.roles = _.map roles.Role, (x) -> {name : x.name,label : x.label}
+        console.log JSON.stringify(result)
+        res.json result
 
 
   _addRolesToBonita: (username,roles = [],cb) =>
@@ -177,4 +185,36 @@ module.exports = class RoutesApi
             cb null
 
       async.forEach users.User || [], createOrUpdate, (err) =>
+        res.json {}
+
+  deleteRole: (req,res,next) =>
+    userId = req.params.userId
+    role = req.params.role
+
+    console.log "DELETE ROLE #{userId} #{role}"
+
+    @identityStore.users.removeRoles userId,[role], (err,r,item) =>
+      return next err if err
+
+      if item      
+        @bonitaClient.identity.removeRoleFromUser item.username,role,"admin",null, (err,u) =>
+          #return next err if err
+          res.json {}
+      else
+        res.json {}
+
+  addRole: (req,res,next) =>
+    userId = req.params.userId
+    role = req.params.role
+
+    console.log "ADD ROLE #{userId} #{role}"
+
+    @identityStore.users.addRoles userId,[role], (err,r,item) =>
+      return next err if err
+
+      if item      
+        @bonitaClient.identity.addRoleToUser item.username,role,"admin",null, (err,u) =>
+          #return next err if err
+          res.json {}
+      else
         res.json {}

@@ -16,7 +16,10 @@ table.table-striped.table-hover
       td
         |{{user.username}}
       td
-        |{{user.roles}}
+        a(ng-repeat="role in user.activeRoles",ng-click="removeRole(user._id,role)",style='background-color: green;padding:4px;margin-right:10px')
+          |{{role}}
+        a(ng-repeat="role in user.inactiveRoles",ng-click="addRole(user._id,role)",style='background-color: #ddd;padding:4px;margin-right:10px')
+          |{{role}}
       td
         |{{user.primaryEmail}}
       td
