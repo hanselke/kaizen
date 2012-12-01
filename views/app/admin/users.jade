@@ -8,7 +8,7 @@ table.table-striped.table-hover
       th(colspan=2) Name
       th Roles
       th Email
-
+      th Actions
   tbody
     tr(style="vertical-align:center;",ng-repeat='user in users')
       td
@@ -19,3 +19,5 @@ table.table-striped.table-hover
         |{{user.roles}}
       td
         |{{user.primaryEmail}}
+      td
+        button.btn.btn-warning(ng-click="deleteMe(user._id)") Delete

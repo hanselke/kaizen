@@ -23,6 +23,7 @@ module.exports = class RoutesApi
     @app.get '/api/tasks', @getTasks
     @app.get '/api/admin/users', @getAdminUsers
     @app.post '/api/admin/users', @postAdminUsers
+    @app.delete '/api/admin/users/:userId', @deleteAdminUser
 
   ###
   Retrieve the current session (e.g. the user that is currently logged in). 
@@ -123,3 +124,19 @@ module.exports = class RoutesApi
         return next err if err
         @_addRolesToBonita req.body.username,req.body.roles, (err) =>
           res.json user
+
+  deleteAdminUser: (req,res,next) =>
+    userId = req.params.userId
+    console.log "DELETE USER #{userId}"
+    @identityStore.users.destroy userId,null, (err,item) =>
+      return next err if err
+
+      if item      
+        @bonitaClient.identity.removeUser item.username,"admin",null, (err,u) =>
+          #return next err if err
+          res.json {}
+      else
+        res.json {}
+
+
+

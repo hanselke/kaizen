@@ -26,3 +26,6 @@ module.exports = class Identity
   ###
   addRoleToUser: (username,role,actAsUser,opts = {},cb = ->) =>
     @client.post "/API/identityAPI/addRoleToUser/#{role}/#{username}",actAsUser,{}, {}, cb
+
+  removeUser: (username,actAsUser,opts = {},cb = ->) =>
+    @client.post "/API/identityAPI/removeUser/#{username}",actAsUser,{}, {}, cb
