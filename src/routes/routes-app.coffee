@@ -17,6 +17,7 @@ module.exports = class RoutesOther
     @app.get '/app',protectResource(), @getApp
     @app.get '/app/main',@getMain
     @app.get '/app/task',@getTask
+    @app.get '/app/admin/users',@getAdminUsers
 
   getApp: (req,res,next) =>
     res.render 'app/index.ejs',
@@ -29,4 +30,8 @@ module.exports = class RoutesOther
 
   getTask: (req,res,next) =>
     res.render 'app/task',
+          pretty: true
+
+  getAdminUsers: (req,res,next) =>
+    res.render 'app/admin/users',
           pretty: true

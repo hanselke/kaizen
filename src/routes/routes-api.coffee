@@ -19,6 +19,7 @@ module.exports = class RoutesApi
     # TODO: Ensure that we have a user here
     @app.get '/api/board', @getBoard
     @app.get '/api/tasks', @getTasks
+    @app.get '/api/admin/users', @getAdminUsers
 
   ###
   Retrieve the current session (e.g. the user that is currently logged in). 
@@ -87,3 +88,11 @@ module.exports = class RoutesApi
           res.json result
       else
         res.json result
+
+
+  getAdminUsers: (req,res,next) =>
+    return res.json {}, 401 unless req.user
+    @identityStore.users.all 0,100, (err,result) =>
+      return next err if err
+      console.log JSON.stringify(result)
+      res.json result

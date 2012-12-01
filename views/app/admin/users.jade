@@ -1,0 +1,19 @@
+h2
+  |Users
+table.table-striped.table-hover
+  thead
+    tr
+      th(colspan=2) Name
+      th Roles
+      th Email
+
+  tbody
+    tr(style="vertical-align:center;",ng-repeat='user in users')
+      td
+          img(src="{{user.selectedUserImage}}",alt="{{user.displayName}}",style="width:30px; height:30px")
+      td
+        |{{user.username}}
+      td
+        |{{user.roles}}
+      td
+        |{{user.primaryEmail}}
