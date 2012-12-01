@@ -2,6 +2,7 @@ class window.AdminUsersController
   constructor: (@$scope,@$http) ->
     @$scope.deleteMe = @deleteMe
     @$scope.syncToBonita = @syncToBonita
+    @$scope.syncFromBonita = @syncFromBonita
     @$scope.users = []
     
     @refresh()
@@ -25,5 +26,10 @@ class window.AdminUsersController
     request.success (data, status, headers, config) =>
       @refresh()
 
+  syncFromBonita: () =>
+    request = @$http.post "/api/admin/users/syncfrombonita", {}
+    request.error @$scope.errorHandler
+    request.success (data, status, headers, config) =>
+      @refresh()
 
 window.AdminUsersController.$inject = ['$scope',"$http"]

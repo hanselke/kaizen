@@ -25,6 +25,7 @@ module.exports = class RoutesApi
     @app.post '/api/admin/users', @postAdminUsers
     @app.delete '/api/admin/users/:userId', @deleteAdminUser
     @app.post '/api/admin/users/synctobonita',@syncToBonita
+    @app.post '/api/admin/users/syncfrombonita',@syncFromBonita
   ###
   Retrieve the current session (e.g. the user that is currently logged in). 
   Returns a 404 if no session exists - e.g. no user is logged in.
@@ -156,3 +157,24 @@ module.exports = class RoutesApi
       async.forEach items || [], createUserInBonita, (err) =>
         async.forEach items || [], handleRoles, (err) =>
           res.json {}
+
+  syncFromBonita: (req,res,next) =>
+    @bonitaClient.identity.getAllUsers  "admin",{}, (err,users) =>
+      #console.log JSON.stringify(users)
+      
+      createOrUpdate = (user,cb) =>
+        console.log user.username
+        @identityStore.users.getByName user.username, (err,item) =>
+          return cb null if err || item
+
+          data = 
+            username : user.username
+            password : 'bpm'
+            primaryEmail : "#{user.uuid}@x.com"
+
+          @identityStore.users.create data, (err,item) =>
+            winston.error "ERROR: #{err}" if err
+            cb null
+
+      async.forEach users.User || [], createOrUpdate, (err) =>
+        res.json {}
