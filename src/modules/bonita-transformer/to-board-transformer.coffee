@@ -1,4 +1,5 @@
 _ = require 'underscore-ext'
+moment = require 'moment'
 
 ###
 Transforms raw data to the one that is sent to the client.
@@ -47,17 +48,24 @@ module.exports = (processDefinition,processInstances) ->
           console.log "ACTIVITY DEFINITION: #{activityDefinitionUUID}"
           myLane = adMap[activityDefinitionUUID] # || _.last( result.lanes)
 
+          #use moment here
+          ###
+                    startedDate= moment( activity.startedDate || 0) #1354080180430
+          lastUpdate = moment(activity.lastUpdate || 0)   #1354088710758
+
+          ###
+
           startedDate= activity.startedDate || 0 #1354080180430
           lastUpdate = activity.lastUpdate || 0  #1354088710758
           totalTime = lastUpdate - startedDate
           beforeTime = 0
           afterTime = 0
 
-          if totalTime > 10000000000
+          if startedDate is 0 || lastUpdate is 0 || totalTime > 10000000000
             totalTime = 0
             beforeTime = 0
             afterTime = 0
-            
+
           instanceStateUpdates = activity.instanceStateUpdates
 
           if _.isObject( instanceStateUpdates) && _.keys(instanceStateUpdates).length > 0

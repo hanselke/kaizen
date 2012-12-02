@@ -68,7 +68,8 @@
         "mongoose-identity-store": "0.2.3",
         "mongodb-errors": "0.2.0",
         "libxml-to-js": "0.3.10",
-        "ejs" : "0.8.3"
+        "ejs" : "0.8.3",
+        "moment" : "1.7.2"
     },
     "bundledDependencies": [],
     "devDependencies": {
