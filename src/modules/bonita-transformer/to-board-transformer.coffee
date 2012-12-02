@@ -40,6 +40,11 @@ getIterationDescriptors = (processDefinition) ->
   currentExitNode = null
 
   for i in [0, descriptors.length - 1]
+    
+    console.log "DESCRIPTORS===="
+    console.log JSON.stringify( descriptors)
+    console.log "DESCRIPTORS----"
+    
     if currentEntryNode is null
       ###  
         step 1: look for the IterationDescriptor group with an empty <otherNodes>, marked by <otherNodes/>
@@ -55,9 +60,11 @@ getIterationDescriptors = (processDefinition) ->
 
       ###
       n =  _.find descriptors, (x) -> x.otherNodes.length is 0
-      #otherNodes = _.exclude otherNodes, (x) -> true
+      descriptors = _.reject descriptors, (x) -> x.otherNodes.length is 0
       currentEntryNode = _.first( n.entryNodes) 
       currentExitNode = _.first(n.exitNodes)
+      console.log "NEW ENTRY: #{currentEntryNode}"
+      console.log "NEW EXIT: #{currentExitNode}"
 
       result.push n if n
     else
@@ -92,17 +99,12 @@ getIterationDescriptors = (processDefinition) ->
 
       #otherNodes = _.exclude otherNodes, (x) -> true
       if n
-        currentEntryNode =  _.first(n.entryNodes) 
-        currentExitNode =  _.first(n.exitNodes)
+        currentEntryNode = _.first(n.entryNodes)
+        currentExitNode =  "assign_#{_.first(n.exitNodes) }" 
+        console.log "NEW ENTRY: #{currentEntryNode}"
+        console.log "NEW EXIT: #{currentExitNode}"
+
         result.push n
-
-
-
-  console.log "----##"
-  console.log JSON.stringify result
-  console.log "----##"
-
-  # Enter_Floor_Data
 
   result
 
@@ -197,7 +199,7 @@ module.exports = (processDefinition,processInstances) ->
         lane.beforeTime = lane.beforeTime + card.beforeTime
         lane.afterTime = lane.afterTime + card.totalTime
 
-  getIterationDescriptors(processDefinition)
+  #getIterationDescriptors(processDefinition)
 
   result
 
