@@ -19,10 +19,10 @@ module.exports = (processDefinition,processInstances) ->
           label: activityDefinition.description || ""
           name: activityDefinition.name || "" 
           id: activityDefinition.uuid.value
-          totalTime : 13422
-          totalCost: 34.2
-          beforeTime : 10000
-          afterTime: 3422
+          totalTime : 0
+          totalCost: 0
+          beforeTime : 0
+          afterTime: 0
           cards: []
       result.lanes.push newLane
       adMap[activityDefinition.uuid.value] = newLane
@@ -47,6 +47,26 @@ module.exports = (processDefinition,processInstances) ->
           console.log "ACTIVITY DEFINITION: #{activityDefinitionUUID}"
           myLane = adMap[activityDefinitionUUID] # || _.last( result.lanes)
 
+          startedDate= activity.startedDate || 0 #1354080180430
+          lastUpdate = activity.lastUpdate || 0  #1354088710758
+          totalTime = lastUpdate - startedDate
+          beforeTime = 0
+          afterTime = 0
+
+          if totalTime > 10000000000
+            totalTime = 0
+            beforeTime = 0
+            afterTime = 0
+            
+          instanceStateUpdates = activity.instanceStateUpdates
+
+          if _.isObject( instanceStateUpdates) && _.keys(instanceStateUpdates).length > 0
+            instanceStateUpdates = [instanceStateUpdates.InstanceStateUpdate]
+          
+          if instanceStateUpdates && _.isArray instanceStateUpdates && instanceStateUpdates.length > 0
+            beforeTime = _.first(instanceStateUpdates).date - activity.startedDate
+            afterTime = activity.lastUpdate - _.first(instanceStateUpdates).date
+
           if myLane
             myLane.cards.push
               id : activity.uuid?.value
@@ -55,11 +75,17 @@ module.exports = (processDefinition,processInstances) ->
               ready : activity.state?.toUpperCase() is "READY" 
               state : activity.state
               processInstance : instance.instanceUUID.value
-              totalTime : 3522
-              totalCost: 4.1
-              beforeTime : 50
-              afterTime: 3472
+              totalTime :  totalTime
+              totalCost: 0
+              beforeTime : beforeTime
+              afterTime: afterTime
 
+    for lane in result.lanes
+      for card in lane.cards
+        lane.totalTime = lane.totalTime + card.totalTime
+        lane.totalCost = lane.totalCost + card.totalCost
+        lane.beforeTime = lane.beforeTime + card.beforeTime
+        lane.afterTime = lane.afterTime + card.totalTime
 
   result
 

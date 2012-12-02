@@ -4,7 +4,6 @@ htmlRequestHelper = require './support/html-request-helper'
 fromRequestHelper = require './support/form-request-helper'
 
 describe 'WHEN testing the route api tasks', ->
-  
   before (done) ->
     helper.start null, () ->
       helper.testData().createUser "martin","123456", () ->
