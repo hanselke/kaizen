@@ -74,7 +74,7 @@
     "devDependencies": {
         "coffee-script": "1.4.0",
         "should": "1.2.1",
-        "vows": "",
+        "mongoskin": "0.4.4",
         "mocha": "1.6.0"
     }
 }

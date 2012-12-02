@@ -4,11 +4,14 @@ App = require '../../lib/app'
 request = require 'request'
 qs = require 'querystring'
 async = require 'async'
+mongoskin = require 'mongoskin'
+bonitaMockServer = require './bonita-mock-server'
+
 
 class Helper
   port: 8002
 
-  app : null
+  openBusinessApp : null
 
   fixturePath: (fileName) =>
     "#{__dirname}/../fixtures/#{fileName}"
@@ -29,21 +32,21 @@ class Helper
   start: (obj = {}, done) =>
     _.defaults obj, { }
 
-    obj.cleanDatabase = true if obj.initDatabase
-
-    @app =  @app || new App {}
+    @openBusinessApp =  @openBusinessApp || new App {}
+    
 
     stuff = []
-
     stuff.push (cb) =>
-      @app.start @port, cb
+      bonitaMockServer(8010,cb)
+    stuff.push (cb) =>
+      @openBusinessApp.start @port, cb
 
     async.series stuff, done
 
   stop: (done) =>
-    if @app
-      @app.stop ->
-        @app = null
+    if @openBusinessApp
+      @openBusinessApp.stop =>
+        @openBusinessApp = null
         done()
     else
       done()

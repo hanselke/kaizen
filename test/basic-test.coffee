@@ -7,6 +7,19 @@ describe 'WHEN testing the home page', ->
   after ( done) ->
     helper.stop done
 
-  describe 'app.routes.root', ->
+  describe 'openBusinessApp.routes.root', ->
     it 'should exist', ->
-      should.exist helper.app.routes.root
+      should.exist helper.openBusinessApp.routes.root
+  describe 'openBusinessApp.routes.adminUsers', ->
+    it 'should exist', ->
+      should.exist helper.openBusinessApp.routes.adminUsers
+  describe 'openBusinessApp.routes.routesUsers', ->
+    it 'should exist', ->
+      should.exist helper.openBusinessApp.routes.routesUsers
+  describe 'openBusinessApp.routes.routesApi', ->
+    it 'should exist', ->
+      should.exist helper.openBusinessApp.routes.routesApi
+  describe 'openBusinessApp.routes.routesApp', ->
+    it 'should exist', ->
+      should.exist helper.openBusinessApp.routes.routesApp
+

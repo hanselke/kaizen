@@ -28,7 +28,7 @@
     "pubnub" : null,
     "braintree" : null,
     "bonita" : {
-      "endpoint" : "http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest",
+      "endpoint" : "http://localhost:8010",
       "username" : "restuser",
       "password" : "restbpm",
       "processName" : "QA_Data_Entry",

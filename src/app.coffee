@@ -17,7 +17,6 @@ identityStorePackage = require 'mongoose-identity-store'
 corser = require 'corser'
 mongoose = require 'mongoose'
 
-backend = require './js/backend'
 bonitaClientPackage = require './modules/bonita-client'
 bonitaTransformer = require './modules/bonita-transformer'
 protectResource = require './site/protect-resource'
@@ -58,7 +57,6 @@ errors = require 'some-errors'
 
 
 RoutesRoot = require './routes/routes-root'
-RoutesLegacy = require './routes/routes-legacy'
 RoutesAdminUsers = require './routes/routes-admin-users'
 RoutesUsers = require './routes/routes-users'
 RoutesApi = require './routes/routes-api'
@@ -168,23 +166,6 @@ module.exports = class App
     @identityStore = identityStorePackage.store(oauthProvider : config.get('provider'))
     @bonitaClient = bonitaClientPackage.client config.get('services:bonita')
 
-    ###
-    if env isnt "production"
-      database_dir = __dirname + '/../db-test'
-      backend.set_db_dir(database_dir)
-      fs = require 'fs'
-      childProcess = require 'child_process'
-      childProcess.exec 'rm -rf ' + database_dir, (error, stdout, stderr) ->
-        fs.mkdirSync database_dir, 0o0755
-        backend.init_db()
-    ###
-    #else
-    #  database_dir = __dirname + '/../db'
-    #  backend.set_db_dir(database_dir)
-
-    # register other data store here
-
-
     @baseUrl = baseUrl = config.get('site:url')
 
     # Ensures that we use only one local url for passport so that it does not lose cokies
@@ -264,14 +245,12 @@ module.exports = class App
       passport : passport
       baseUrl : @baseUrl
       identityStore : @identityStore
-      backend : backend
       bonitaClient : @bonitaClient
       bonitaTransformer : bonitaTransformer
 
     # TODO: Order might be important, and we need to check that.
     @routes =
       root : new RoutesRoot settings
-      legacy: new RoutesLegacy settings
       adminUsers: new RoutesAdminUsers settings
       routesUsers: new RoutesUsers settings
       routesApi: new RoutesApi settings,config.get('services:bonita')
@@ -307,5 +286,6 @@ module.exports = class App
     cb null, @ if cb
 
   stop: (cb = null) =>
-    @server.close() if @server
-    cb null, @ if cb
+    mongoose.disconnect =>
+      @server.close() if @server
+      cb null, @ if cb

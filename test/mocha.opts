@@ -1,5 +1,5 @@
 --require assert
 --require should
---globals name,app,skindb,i,len,asset
+--globals name,openBusinessApp,skindb,i,len,asset
 --compilers coffee:coffee-script 
 --timeout 30s
