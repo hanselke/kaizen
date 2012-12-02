@@ -4,6 +4,7 @@ class window.AppController
     @$scope.flashMessage = @flashMessage
     @$scope.errorHandler = @errorHandler
     @$scope.isInRole = @isInRole
+    @$scope.toBoards = @toBoards
 
     @$http.defaults.headers.post['Content-Type']='application/json'
 
@@ -32,13 +33,20 @@ class window.AppController
 
     _.contains @$scope.currentUser.roles || [],role
 
+  toBoards: (cb) =>
+    @$location.path "/"
 
   nextTask: (cb) =>
-    @currentTask = 
+
+    # Remove this in production
+    ###
+    @$scope.currentTask = 
       taskFormURL : "http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita?mode=app&task=QA_Data_Entry--1.3--2--Enter_Floor_Data--ita760b542-c98b-4134-829a-b73f22b7e07a--mainActivityInstance--noLoop"
       taskUUID : "QA_Data_Entry--1.3--2--Enter_Floor_Data--ita760b542-c98b-4134-829a-b73f22b7e07a--mainActivityInstance--noLoop"
-      @$location.path "/task"
-
+    @$location.path "/task"
+    return 
+    ###
+    
     processInstanceUUID = null
 
     for lane in window.lanesBoard || []
@@ -48,13 +56,10 @@ class window.AppController
     if processInstanceUUID
       request = @$http.get "/api/tasks?procInstUUID=#{processInstanceUUID}"
       request.success (data, status, headers, config) =>
-      #request.error (data, status, headers, config) =>
-      #  @setCurrentUser null
 
-      @currentTask = data
+      @$scope.currentTask = data
 
       @$location.path "/task"
-        #that.$parent.$root.$emit('refresh_board_event')
 
     else
       alert "There is nothing to do at the moment"

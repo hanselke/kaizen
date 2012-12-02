@@ -1,1 +1,4 @@
-iframe(src="http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita?mode=app&task=QA_Data_Entry--1.3--2--Enter_Floor_Data--ita760b542-c98b-4134-829a-b73f22b7e07a--mainActivityInstance--noLoop",frameborder="0",scrolling="no",seamless="seamless",style="width:100%;height:100%")
+
+p(ng-show="!currentTask.taskFormURL") No tasks loaded. Click "Next Action" to load a task
+
+iframe(src="{{currentTask.taskFormURL}}",frameborder="0",scrolling="no",seamless="seamless",style="width:100%;height:100%")
