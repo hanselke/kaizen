@@ -162,7 +162,7 @@ module.exports = class App
     #
     ###
     @app  = express()
-    mongoose.connect config.get('services:db')
+    @database = mongoose.connect config.get('services:db')
     @identityStore = identityStorePackage.store(oauthProvider : config.get('provider'))
     @bonitaClient = bonitaClientPackage.client config.get('services:bonita')
 
@@ -287,5 +287,6 @@ module.exports = class App
 
   stop: (cb = null) =>
     mongoose.disconnect =>
+      @database = null
       @server.close() if @server
       cb null, @ if cb

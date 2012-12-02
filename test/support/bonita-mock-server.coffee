@@ -1,8 +1,15 @@
 express = require 'express'
+fixtureHelper  = require './fixture-helper'
 
 class BonitaServerMock
   constructor:(@port) ->
     @mockServer = express()
+
+    @mockServer.post '/API/queryDefinitionAPI/getProcesses',(req,res) =>
+      res.send fixtureHelper.loadFixture 'get-processes.xml'
+
+    @mockServer.post '/API/queryRuntimeAPI/getProcessInstances/:processUUID',(req,res) =>
+      res.send fixtureHelper.loadFixture 'get-process-instances.xml'
 
     ###
     @mockServer.get '/token-infos/:token', (req, res) =>

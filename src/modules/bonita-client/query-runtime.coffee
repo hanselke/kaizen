@@ -5,6 +5,9 @@ module.exports = class QueryRuntime
   constructor:(@client) ->
     throw new Error "client parameter is required" unless @client
 
+  ###
+  curl -X POST -d 'options=user:admin' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/xml' -H 'Authorization: Basic cmVzdHVzZXI6cmVzdGJwbQ=='  http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest/API/queryRuntimeAPI/getProcessInstances/QA_Data_Entry--1.3
+  ###
   getProcessInstances: (processUUID, actAsUser,opts = {},cb = ->) =>
     @client.post "/API/queryRuntimeAPI/getProcessInstances/#{processUUID}",actAsUser,{}, opts, cb
 
