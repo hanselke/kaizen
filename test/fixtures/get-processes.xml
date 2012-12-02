@@ -1,6 +1,15 @@
 <set>
   <ProcessDefinition>
     <description></description>
+    <name>QA_Data_X</name>
+    <label>QA Data X</label>
+    <uuid>
+      <value>QA_Data_Entry--X</value>
+    </uuid>
+  </ProcessDefinition>
+
+  <ProcessDefinition>
+    <description></description>
     <name>QA_Data_Entry</name>
     <label>QA Data Entry</label>
     <uuid>

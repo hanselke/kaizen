@@ -3,30 +3,29 @@ _ = require 'underscore-ext'
 ###
 Transforms raw data to the one that is sent to the client.
 ###
-module.exports = (processes,processInstances) ->
+module.exports = (processDefinition,processInstances) ->
   result =
     lanes: []
 
   adMap = {}
 
-  for processDefinition in processes?.ProcessDefinition
-    for activityDefinition in processDefinition.activities?.ActivityDefinition
-      if  activityDefinition.description && 
-          _.isString(activityDefinition.description) &&
-          activityDefinition.description.length > 0 && 
-          activityDefinition.uuid && 
-          activityDefinition.uuid.value
-        newLane = 
-            label: activityDefinition.description || ""
-            name: activityDefinition.name || "" 
-            id: activityDefinition.uuid.value
-            totalTime : 13422
-            totalCost: 34.2
-            beforeTime : 10000
-            afterTime: 3422
-            cards: []
-        result.lanes.push newLane
-        adMap[activityDefinition.uuid.value] = newLane
+  for activityDefinition in processDefinition.activities?.ActivityDefinition
+    if  activityDefinition.description && 
+        _.isString(activityDefinition.description) &&
+        activityDefinition.description.length > 0 && 
+        activityDefinition.uuid && 
+        activityDefinition.uuid.value
+      newLane = 
+          label: activityDefinition.description || ""
+          name: activityDefinition.name || "" 
+          id: activityDefinition.uuid.value
+          totalTime : 13422
+          totalCost: 34.2
+          beforeTime : 10000
+          afterTime: 3422
+          cards: []
+      result.lanes.push newLane
+      adMap[activityDefinition.uuid.value] = newLane
        
   ###
   result.lanes.push
