@@ -67,25 +67,17 @@ module.exports = class RoutesApi
     {"processUUID":{"value":"QA_Data_Entry--1.2"},"instanceUUID":{"value":"QA_Data_Entry--1.2--9"},"rootInstanceUUID":{"value":"QA_Data_Entry--1.2--9"},"uuid":{"value":"QA_Data_Entry--1.2--9--Enter_Floor_Data--itb7637faf-37c4-4cfb-9d10-4306be713a16--mainActivityInstance--noLoop"},"iterationId":"itb7637faf-37c4-4cfb-9d10-4306be713a16","activityInstanceId":"mainActivityInstance","loopId":"noLoop","state":"READY","userId":"admin","lastUpdate":"1353306603343","label":"Enter Floor Data","description":{},"name":"Enter_Floor_Data","startedDate":"0","endedDate":"0","readyDate":"1353306603263","activityDefinitionUUID":{"value":"QA_Data_Entry--1.2--Enter_Floor_Data"},"expectedEndDate":"0","priority":"0","type":"Human","human":"true","stateUpdates":{"StateUpdate":{"dbid":"0","date":"1353306603263","state":"READY","updateUserId":"SYSTEM","initialState":"READY"}},"clientVariables":{},"variableUpdates":{},"assignUpdates":{"AssignUpdate":{"dbid":"0","date":"1353306603345","state":"READY","updateUserId":"SYSTEM","userId":"admin"}},"candidates":{}}}
   ###
   getTasks: (req,res,next) =>
-    console.log "RE: #{JSON.stringify(req.query)} AND #{JSON.stringify(req.params)}"
     return res.json {},401 unless req.user
     procInstUUID = req.params.procInstUUID || req.query.procInstUUID
-
     return res.json {},422 unless procInstUUID
 
     @bonitaClient.queryRuntime.getTaskList procInstUUID, "READY",req.user.username,null, (err,taskList) =>
       return next err if err
 
-      console.log "RAW: #{JSON.stringify(taskList)}"
       result = @bonitaTransformer.toNextAction taskList,@servicesBonita.baseUrl
       
-      console.log "PRETRANS #{JSON.stringify(result)}"
-      
-
       if result.taskUUID
         @bonitaClient.runtime.assignTask result.taskUUID,req.user.username,req.user.username,{}, (err) =>
-          # Deal with task
-          console.log "TRANSFORMED: #{JSON.stringify(tasks)}"
 
           res.json result
       else

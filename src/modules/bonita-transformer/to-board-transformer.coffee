@@ -39,13 +39,13 @@ module.exports = (processDefinition,processInstances) ->
 
   for instance in processInstances?.ProcessInstance
     console.log "ONE INSTANCE #{instance.instanceUUID.value}"
-    console.log JSON.stringify(instance)
+    #console.log JSON.stringify(instance)
 
     for activity in instance.activities?.ActivityInstance
-        activityId = activity.activityDefinitionUUID?.value
-        if activity.state is "READY"
-          console.log "ACTIVITY: #{activityId}"
-          myLane = adMap[activityId] # || _.last( result.lanes)
+        activityDefinitionUUID = activity.activityDefinitionUUID?.value
+        if true #activity.state is "READY"
+          console.log "ACTIVITY DEFINITION: #{activityDefinitionUUID}"
+          myLane = adMap[activityDefinitionUUID] # || _.last( result.lanes)
 
           if myLane
             myLane.cards.push

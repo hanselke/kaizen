@@ -61,9 +61,10 @@ describe 'WHEN testing the route api board', ->
         laneC.should.have.property 'beforeTime'
         laneC.should.have.property 'afterTime'
         laneC.should.have.property 'cards'
-        laneC.cards.should.have.lengthOf 1
+        laneC.cards.should.have.lengthOf 2
         should.exist laneC.cards[0]
         laneCcard0 = laneC.cards[0]
+        laneCcard1 = laneC.cards[1]
 
         laneCcard0.should.have.property "id","QA_Data_Entry--1.3--2--Enter_Floor_Data--ita760b542-c98b-4134-829a-b73f22b7e07a--mainActivityInstance--noLoop"
         laneCcard0.should.have.property "desc","Enter Floor Data"
@@ -74,5 +75,15 @@ describe 'WHEN testing the route api board', ->
         laneCcard0.should.have.property "totalCost"
         laneCcard0.should.have.property "beforeTime"
         laneCcard0.should.have.property "afterTime"
+
+        laneCcard1.should.have.property "id","QA_Data_Entry--1.3--4--Enter_Floor_Data--it1355b6fc-47af-47fd-86cf-62be9e552c51--mainActivityInstance--noLoop"
+        laneCcard1.should.have.property "desc","Enter Floor Data"
+        laneCcard1.should.have.property "ready",true
+        laneCcard1.should.have.property "state","READY"
+        laneCcard1.should.have.property "processInstance","QA_Data_Entry--1.3--4"
+        laneCcard1.should.have.property "totalTime"
+        laneCcard1.should.have.property "totalCost"
+        laneCcard1.should.have.property "beforeTime"
+        laneCcard1.should.have.property "afterTime"
 
         done()

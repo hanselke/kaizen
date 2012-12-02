@@ -34,8 +34,10 @@ class window.AppController
 
 
   nextTask: (cb) =>
-    @$location.path "/task"
-    return
+    @currentTask = 
+      taskFormURL : "http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita?mode=app&task=QA_Data_Entry--1.3--2--Enter_Floor_Data--ita760b542-c98b-4134-829a-b73f22b7e07a--mainActivityInstance--noLoop"
+      taskUUID : "QA_Data_Entry--1.3--2--Enter_Floor_Data--ita760b542-c98b-4134-829a-b73f22b7e07a--mainActivityInstance--noLoop"
+      @$location.path "/task"
 
     processInstanceUUID = null
 
@@ -49,11 +51,9 @@ class window.AppController
       #request.error (data, status, headers, config) =>
       #  @setCurrentUser null
 
-      data = 
-        url : "http://spiegel.de"
+      @currentTask = data
 
-      if data.url
-        @$location.path "/task"
+      @$location.path "/task"
         #that.$parent.$root.$emit('refresh_board_event')
 
     else

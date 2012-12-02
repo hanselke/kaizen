@@ -7,16 +7,20 @@ module.exports = (taskList,bonitaBaseUrl) ->
   result = 
     task : null
 
-  console.log "INPUT: #{JSON.stringify(taskList)}"
 
-  if _.isObject taskList && _.keys(taskList).length > 0
+  taskList = taskList.ActivityInstance
+  console.log "======="
+  console.log "INPUT: #{JSON.stringify(taskList)}"
+  console.log "======="
+
+  if _.isObject( taskList) && _.keys(taskList).length > 0
     result.task = taskList
   else if _.isArray taskList
     result.task = _.first taskList
 
   if result.task
     result.taskUUID = result.task.uuid?.value
-    result.formUrl = "#{bonitaBaseUrl}?mode=app&task=#{result.taskUUID}" 
+    result.taskFormURL = "#{bonitaBaseUrl}?mode=app&task=#{result.taskUUID}" 
 
   result
 

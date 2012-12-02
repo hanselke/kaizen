@@ -6,10 +6,16 @@ class BonitaServerMock
     @mockServer = express()
 
     @mockServer.post '/API/queryDefinitionAPI/getProcesses',(req,res) =>
-      res.send fixtureHelper.loadFixture 'get-processes.xml'
+      res.send fixtureHelper.loadFixture 'case1-get-processes.xml'
 
     @mockServer.post '/API/queryRuntimeAPI/getProcessInstances/:processUUID',(req,res) =>
-      res.send fixtureHelper.loadFixture 'get-process-instances.xml'
+      res.send fixtureHelper.loadFixture 'case1-get-process-instances.xml'
+
+    @mockServer.post '/API/queryRuntimeAPI/getTaskList/:instanceUUID/:taskState',(req,res) =>
+      res.send fixtureHelper.loadFixture 'case1-get-tasklist.xml'
+
+    @mockServer.post '/API/runtimeAPI/assignTask/:taskUUID/:actorId',(req,res) =>
+      res.send ""
 
     ###
     @mockServer.get '/token-infos/:token', (req, res) =>
