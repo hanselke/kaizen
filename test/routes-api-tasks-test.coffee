@@ -22,7 +22,7 @@ describe 'WHEN testing the route api tasks', ->
         should.exist body
         body = JSON.parse(body)
         should.exist body
-        body.should.have.property 'taskFormURL','http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita?mode=app&task=QA_Data_Entry--1.3--2--Enter_Floor_Data--ita760b542-c98b-4134-829a-b73f22b7e07a--mainActivityInstance--noLoop'
-        body.should.have.property 'taskUUID','QA_Data_Entry--1.3--2--Enter_Floor_Data--ita760b542-c98b-4134-829a-b73f22b7e07a--mainActivityInstance--noLoop'
+        body.should.have.property 'taskFormURL','http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita?mode=app&task=QA_Data_Entry--1.5--7--Assign_enter_floor_data--itd90fdebc-749e-444a-925b-283c619c6ac9--mainActivityInstance--noLoop'
+        body.should.have.property 'taskUUID','QA_Data_Entry--1.5--7--Assign_enter_floor_data--itd90fdebc-749e-444a-925b-283c619c6ac9--mainActivityInstance--noLoop'
 
         done()

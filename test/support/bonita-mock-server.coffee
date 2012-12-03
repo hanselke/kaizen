@@ -11,11 +11,14 @@ class BonitaServerMock
     @mockServer.post '/API/queryRuntimeAPI/getProcessInstances/:processUUID',(req,res) =>
       res.send fixtureHelper.loadFixture 'case1-get-process-instances.xml'
 
-    @mockServer.post '/API/queryRuntimeAPI/getTaskList/:instanceUUID/:taskState',(req,res) =>
-      res.send fixtureHelper.loadFixture 'case1-get-tasklist.xml'
+    #@mockServer.post '/API/queryRuntimeAPI/getTaskList/:instanceUUID/:taskState',(req,res) =>
+    #  res.send fixtureHelper.loadFixture 'case1-get-tasklist.xml'
 
     @mockServer.post '/API/runtimeAPI/assignTask/:taskUUID/:actorId',(req,res) =>
       res.send ""
+
+    @mockServer.post '/API/queryRuntimeAPI/getOneTask/:state',(req,res) =>
+      res.send fixtureHelper.loadFixture 'case1-get-one-task.xml'
 
     ###
     @mockServer.get '/token-infos/:token', (req, res) =>

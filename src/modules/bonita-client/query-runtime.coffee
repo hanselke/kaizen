@@ -30,6 +30,7 @@ module.exports = class QueryRuntime
     @client.post "/API/queryRuntimeAPI/getTasks/#{instanceUUID}",actAsUser,{}, opts, cb
 
   ###
+  curl -X POST -d 'options=user:hansel' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/xml' -H 'Authorization: Basic cmVzdHVzZXI6cmVzdGJwbQ=='  http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest/API/queryRuntimeAPI/getOneTask/READY
   curl -X POST -d 'options=user:admin' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/xml' -H 'Authorization: Basic cmVzdHVzZXI6cmVzdGJwbQ=='  http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest/API/queryRuntimeAPI/getOneTask/READY
   ###  
   getOneTask: (state="READY",actAsUser,opts = {},cb = ->) =>
