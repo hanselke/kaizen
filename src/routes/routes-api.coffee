@@ -171,8 +171,29 @@ module.exports = class RoutesApi
 
   syncFromBonita: (req,res,next) =>
     @bonitaClient.identity.getAllUsers  "admin",{}, (err,users) =>
-      #console.log JSON.stringify(users)
-      
+      loadRoles = (user,cb) =>
+        @bonitaClient.identity.getUserRoles user.username,"admin", {}, (err,roles) =>
+          #console.log "GETUSERROLES: #{user.username} ==> #{JSON.stringify(roles)}"
+
+          if roles && roles.Role && _.isArray( roles.Role)
+            roles = roles.Role
+          else if roles && roles.Role
+            roles = [roles.Role]
+          else
+            roles = []
+
+          roles = _.map roles, (x) -> x.name
+
+          console.log "---> #{roles}"
+          ###
+          {}
+          GETUSERROLES: hansel ==> {"Role":{"description":{},"dbid":"0","uuid":"d964abec-6bda-4367-a4b1-0bbe42bc2c08","name":"shift manager","label":"Shift Manager"}}
+          GETUSERROLES: james ==> {"Role":[{"description":"The admin role","dbid":"0","uuid":"994e325b-cc4d-46b5-bc6d-7a9403d926bc","name":"admin","label":"Admin"},{"description":{},"dbid":"0","uuid":"a0f300cc-449
+          ###
+
+          @identityStore.users.patch user.username, roles : roles, null, (err) =>
+            cb()
+
       createOrUpdate = (user,cb) =>
         #console.log user.username
         @identityStore.users.getByName user.username, (err,item) =>
@@ -188,7 +209,8 @@ module.exports = class RoutesApi
             cb null
 
       async.forEach users.User || [], createOrUpdate, (err) =>
-        res.json {}
+        async.forEach users.User || [], loadRoles, (err) =>
+          res.json {}
 
   deleteRole: (req,res,next) =>
     userId = req.params.userId

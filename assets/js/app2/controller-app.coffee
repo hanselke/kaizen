@@ -9,7 +9,6 @@ class window.AppController
     @$scope.setItem = @setItem
     @$scope.getCurrentTask = @getCurrentTask
 
-
     @$http.defaults.headers.post['Content-Type']='application/json'
 
     @$scope.currentUser = undefined
@@ -43,7 +42,7 @@ class window.AppController
     @$location.path "/"
 
   getCurrentTask: () =>
-    @$scope.getItem "#{@$scope.currentUser}-name", null
+    @$scope.getItem "#{@$scope.currentUser.name}-task", null
 
 
   nextTask: (cb) =>
@@ -62,7 +61,7 @@ class window.AppController
       @$scope.flashMessage "Nothing to do at the moment"
     request.success (data, status, headers, config) =>
       @$scope.currentTask = data
-      @$scope.setItem "#{@$scope.currentUser}-name", @$scope.currentTask
+      @$scope.setItem "#{@$scope.currentUser.name}-task", @$scope.currentTask
 
       if @$scope.currentTask
         @$location.path "/task"

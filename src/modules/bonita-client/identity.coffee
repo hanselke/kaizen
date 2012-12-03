@@ -44,3 +44,13 @@ module.exports = class Identity
 
   removeUser: (username,actAsUser,opts = {},cb = ->) =>
     @client.post "/API/identityAPI/removeUser/#{username}",actAsUser,{}, {}, cb
+
+
+  ###
+  curl -X POST -d 'options=user:admin' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/xml' -H 'Authorization: Basic cmVzdHVzZXI6cmVzdGJwbQ=='  http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest/API/identityAPI/getUserRoles/hansel
+  POST 
+  ###
+  getUserRoles: (username,actAsUser,opts = {},cb = ->) =>
+    @client.post "/API/identityAPI/getUserRoles/#{username}",actAsUser,{}, {}, cb
+
+
