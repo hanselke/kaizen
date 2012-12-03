@@ -5,6 +5,10 @@ class window.AppController
     @$scope.errorHandler = @errorHandler
     @$scope.isInRole = @isInRole
     @$scope.toBoards = @toBoards
+    @$scope.getItem = @getItem
+    @$scope.setItem = @setItem
+    @$scope.getCurrentTask = @getCurrentTask
+
 
     @$http.defaults.headers.post['Content-Type']='application/json'
 
@@ -16,6 +20,8 @@ class window.AppController
     request = @$http.get('/api/session')
     request.success (data, status, headers, config) =>
         @setCurrentUser data
+        @$scope.currentTask = @getCurrentTask()
+
     request.error (data, status, headers, config) =>
         @setCurrentUser null
 
@@ -36,6 +42,10 @@ class window.AppController
   toBoards: (cb) =>
     @$location.path "/"
 
+  getCurrentTask: () =>
+    @$scope.getItem "#{@$scope.currentUser}-name", null
+
+
   nextTask: (cb) =>
 
     # Remove this in production
@@ -52,6 +62,7 @@ class window.AppController
       @$scope.flashMessage "Nothing to do at the moment"
     request.success (data, status, headers, config) =>
       @$scope.currentTask = data
+      @$scope.setItem "#{@$scope.currentUser}-name", @$scope.currentTask
 
       if @$scope.currentTask
         @$location.path "/task"
@@ -80,6 +91,15 @@ class window.AppController
 
   errorHandler: (data, status, headers, config) =>
     @flashMessage "An error occured: #{status}"
+
+  getItem: (name, defaultValue) =>
+    if localStorage && typeof(localStorage.getItem) is 'function' && name in localStorage
+      return localStorage.getItem(name)
+    defaultValue
+  
+  setItem: (name, value) =>
+    if localStorage && typeof(localStorage.setItem) is 'function'
+      localStorage.setItem name, value
 
 window.AppController.$inject = ['$route', '$location', '$window','$scope',"$http"]
 
