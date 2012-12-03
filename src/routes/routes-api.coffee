@@ -56,6 +56,8 @@ module.exports = class RoutesApi
 
       return res.json {message: "processUUID not available from getProcesses."},500 unless processUUID
 
+      #console.log "PICKED ProcessInstance: #{processUUID}"
+
       @bonitaClient.queryRuntime.getProcessInstances processUUID,req.user.username,null, (err,processInstances) =>
         #console.log "INSTANCEXX: #{JSON.stringify(processInstances)}"
         return next err if err

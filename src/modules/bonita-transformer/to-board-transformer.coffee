@@ -25,9 +25,9 @@ module.exports = (processDefinition,processInstances) ->
         activityDefinition.uuid && 
         activityDefinition.uuid.value
 
-      #console.log "&&&&&&&"
-      #console.log JSON.stringify(activityDefinition)
-      #console.log "&&&&&&&"
+      console.log "&&&&&&&"
+      console.log JSON.stringify(activityDefinition)
+      console.log "&&&&&&&"
 
       newLane = 
           label: activityDefinition.description || ""
@@ -48,15 +48,36 @@ module.exports = (processDefinition,processInstances) ->
     name : 'done'
     cards: []
   ###
+  result.lanes = _.sortBy( result.lanes, (x) -> x.order)
 
-  #console.log "ADMAP"
-  #console.log JSON.stringify(_.keys(adMap))
+  result.lanes.unshift
+          label: "Start"
+          name: ""
+          order: 0
+          id: ''
+          totalTime : 0
+          totalCost: 0
+          beforeTime : 0
+          afterTime: 0
+          cards: []
 
-  for instance in processInstances?.ProcessInstance
+
+  console.log "ADMAP ##########"
+  console.log JSON.stringify(_.keys(adMap))
+  console.log "ADMAP ##########--"
+
+  processInstances = processInstances.ProcessInstance
+
+  console.log "$$$$$$$$$$$"
+  console.log JSON.stringify(processInstances)
+  console.log "$$$$$$$$$$$"
+
+
+  for instance in processInstances
 
     for activity in instance.activities?.ActivityInstance
         activityDefinitionUUID = activity.activityDefinitionUUID?.value
-        if true #activity.state is "READY"
+        if activity.state isnt "FINISHED"
           myLane = adMap[activityDefinitionUUID] # || _.last( result.lanes)
 
 
@@ -87,6 +108,8 @@ module.exports = (processDefinition,processInstances) ->
             beforeTime = _.first(instanceStateUpdates).date - activity.startedDate
             afterTime = activity.lastUpdate - _.first(instanceStateUpdates).date
 
+          myLane = result.lanes[0] unless myLane
+
           if myLane
             myLane.cards.push
               id : activity.uuid?.value
@@ -95,6 +118,7 @@ module.exports = (processDefinition,processInstances) ->
               ready : activity.state?.toUpperCase() is "READY" 
               state : activity.state
               processInstance : instance.instanceUUID.value
+              activityDefinitionUUID : activityDefinitionUUID
               totalTime :  totalTime
               totalCost: 0
               beforeTime : beforeTime
@@ -108,7 +132,6 @@ module.exports = (processDefinition,processInstances) ->
         lane.afterTime = lane.afterTime + card.totalTime
 
 
-  result.lanes = _.sortBy( result.lanes, (x) -> x.order)
 
   result
 
