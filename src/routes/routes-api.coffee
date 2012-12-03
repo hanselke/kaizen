@@ -44,17 +44,20 @@ module.exports = class RoutesApi
   getBoard: (req,res,next) =>
     return res.json {},401 unless req.user
     @bonitaClient.queryDefinition.getProcesses req.user.username,null, (err,processes) =>
+      #console.log "Processes ------"
+      #console.log JSON.stringify(processes)
+      #console.log "Processes ------"
       return next err if err
 
       processName = @servicesBonita.processName
-      processDefinition = _.find( processes.ProcessDefinition, (x) -> x.name is processName)
+      processDefinition = _.find( processes.ProcessDefinition, (x) -> x.name is processName && x.state is "ENABLED")
 
       processUUID = processDefinition?.uuid?.value
 
       return res.json {message: "processUUID not available from getProcesses."},500 unless processUUID
 
       @bonitaClient.queryRuntime.getProcessInstances processUUID,req.user.username,null, (err,processInstances) =>
-        console.log "INSTANCEXX: #{JSON.stringify(processInstances)}"
+        #console.log "INSTANCEXX: #{JSON.stringify(processInstances)}"
         return next err if err
         return res.json {message: "processInstances not available from getProcessInstances."},500 unless processInstances
         board = @bonitaTransformer.toBoard processDefinition,processInstances
@@ -91,7 +94,7 @@ module.exports = class RoutesApi
       @identityStore.users.all 0,100, (err,result) =>
         return next err if err
         result.roles = _.map roles.Role, (x) -> {name : x.name,label : x.label}
-        console.log JSON.stringify(result)
+        #console.log JSON.stringify(result)
         res.json result
 
 
@@ -120,7 +123,7 @@ module.exports = class RoutesApi
 
   deleteAdminUser: (req,res,next) =>
     userId = req.params.userId
-    console.log "DELETE USER #{userId}"
+    #console.log "DELETE USER #{userId}"
     @identityStore.users.destroy userId,null, (err,item) =>
       return next err if err
 
@@ -155,7 +158,7 @@ module.exports = class RoutesApi
       #console.log JSON.stringify(users)
       
       createOrUpdate = (user,cb) =>
-        console.log user.username
+        #console.log user.username
         @identityStore.users.getByName user.username, (err,item) =>
           return cb null if err || item
 
@@ -175,7 +178,7 @@ module.exports = class RoutesApi
     userId = req.params.userId
     role = req.params.role
 
-    console.log "DELETE ROLE #{userId} #{role}"
+    #console.log "DELETE ROLE #{userId} #{role}"
 
     @identityStore.users.removeRoles userId,[role], (err,r,item) =>
       return next err if err
@@ -191,7 +194,7 @@ module.exports = class RoutesApi
     userId = req.params.userId
     role = req.params.role
 
-    console.log "ADD ROLE #{userId} #{role}"
+    #console.log "ADD ROLE #{userId} #{role}"
 
     @identityStore.users.addRoles userId,[role], (err,r,item) =>
       return next err if err

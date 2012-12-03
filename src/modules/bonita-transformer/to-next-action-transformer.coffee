@@ -9,9 +9,9 @@ module.exports = (taskList,bonitaBaseUrl) ->
 
 
   taskList = taskList.ActivityInstance
-  console.log "======="
-  console.log "INPUT: #{JSON.stringify(taskList)}"
-  console.log "======="
+  #console.log "======="
+  #console.log "INPUT: #{JSON.stringify(taskList)}"
+  #console.log "======="
 
   if _.isObject( taskList) && _.keys(taskList).length > 0
     result.task = taskList

@@ -3,6 +3,11 @@ moment = require 'moment'
 
 processDefinitionToLaneOrder = require './process-definition-to-lane-order'
 
+orderFromActivityDefinition = (activityDefinition) ->
+  return 9999 unless activityDefinition.label && activityDefinition.label.length > 0 && activityDefinition.label.indexOf(" ") > 0
+  label = activityDefinition.label.substr(0,activityDefinition.label.indexOf(" "))
+  parseInt(label,0)
+
 
 ###
 Transforms raw data to the one that is sent to the client.
@@ -19,9 +24,15 @@ module.exports = (processDefinition,processInstances) ->
         activityDefinition.description.length > 0 && 
         activityDefinition.uuid && 
         activityDefinition.uuid.value
+
+      #console.log "&&&&&&&"
+      #console.log JSON.stringify(activityDefinition)
+      #console.log "&&&&&&&"
+
       newLane = 
           label: activityDefinition.description || ""
           name: activityDefinition.name || "" 
+          order: orderFromActivityDefinition(activityDefinition)
           id: activityDefinition.uuid.value
           totalTime : 0
           totalCost: 0
@@ -47,6 +58,7 @@ module.exports = (processDefinition,processInstances) ->
         activityDefinitionUUID = activity.activityDefinitionUUID?.value
         if true #activity.state is "READY"
           myLane = adMap[activityDefinitionUUID] # || _.last( result.lanes)
+
 
           #use moment here
           ###
@@ -95,7 +107,8 @@ module.exports = (processDefinition,processInstances) ->
         lane.beforeTime = lane.beforeTime + card.beforeTime
         lane.afterTime = lane.afterTime + card.totalTime
 
-  processDefinitionToLaneOrder(processDefinition)
+
+  result.lanes = _.sortBy( result.lanes, (x) -> x.order)
 
   result
 
