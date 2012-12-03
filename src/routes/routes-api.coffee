@@ -71,6 +71,7 @@ module.exports = class RoutesApi
   Sample:
     {"processUUID":{"value":"QA_Data_Entry--1.2"},"instanceUUID":{"value":"QA_Data_Entry--1.2--9"},"rootInstanceUUID":{"value":"QA_Data_Entry--1.2--9"},"uuid":{"value":"QA_Data_Entry--1.2--9--Enter_Floor_Data--itb7637faf-37c4-4cfb-9d10-4306be713a16--mainActivityInstance--noLoop"},"iterationId":"itb7637faf-37c4-4cfb-9d10-4306be713a16","activityInstanceId":"mainActivityInstance","loopId":"noLoop","state":"READY","userId":"admin","lastUpdate":"1353306603343","label":"Enter Floor Data","description":{},"name":"Enter_Floor_Data","startedDate":"0","endedDate":"0","readyDate":"1353306603263","activityDefinitionUUID":{"value":"QA_Data_Entry--1.2--Enter_Floor_Data"},"expectedEndDate":"0","priority":"0","type":"Human","human":"true","stateUpdates":{"StateUpdate":{"dbid":"0","date":"1353306603263","state":"READY","updateUserId":"SYSTEM","initialState":"READY"}},"clientVariables":{},"variableUpdates":{},"assignUpdates":{"AssignUpdate":{"dbid":"0","date":"1353306603345","state":"READY","updateUserId":"SYSTEM","userId":"admin"}},"candidates":{}}}
   ###
+  ###
   getTasks: (req,res,next) =>
     return res.json {},401 unless req.user
     procInstUUID = req.params.procInstUUID || req.query.procInstUUID
@@ -84,6 +85,19 @@ module.exports = class RoutesApi
       if result.taskUUID
         @bonitaClient.runtime.assignTask result.taskUUID,req.user.username,req.user.username,{}, (err) =>
 
+          res.json result
+      else
+        res.json result
+  ###
+  getTasks: (req,res,next) =>
+    return res.json {},401 unless req.user
+
+    @bonitaClient.queryRuntime.getOneTask "READY",req.user.username,null, (err,taskList) =>
+      return next err if err
+      result = @bonitaTransformer.toNextAction taskList,@servicesBonita.baseUrl
+      
+      if result.taskUUID
+        @bonitaClient.runtime.assignTask result.taskUUID,req.user.username,req.user.username,{}, (err) =>
           res.json result
       else
         res.json result

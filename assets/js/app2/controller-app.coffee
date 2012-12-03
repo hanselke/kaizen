@@ -46,7 +46,19 @@ class window.AppController
     @$location.path "/task"
     return 
     ###
-    
+
+    request = @$http.get "/api/tasks"
+    request.error (data, status, headers, config) =>
+      @$scope.flashMessage "Nothing to do at the moment"
+    request.success (data, status, headers, config) =>
+      @$scope.currentTask = data
+
+      if @$scope.currentTask
+        @$location.path "/task"
+      else
+        @$scope.flashMessage "Nothing to do at the moment"
+
+    ###
     processInstanceUUID = null
 
     for lane in window.lanesBoard || []
@@ -56,13 +68,12 @@ class window.AppController
     if processInstanceUUID
       request = @$http.get "/api/tasks?procInstUUID=#{processInstanceUUID}"
       request.success (data, status, headers, config) =>
-
-      @$scope.currentTask = data
-
-      @$location.path "/task"
+        @$scope.currentTask = data
+        @$location.path "/task"
 
     else
       alert "There is nothing to do at the moment"
+    ###
 
   flashMessage: (msg) =>
     alert "#{msg}"
