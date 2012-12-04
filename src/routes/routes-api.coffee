@@ -98,8 +98,10 @@ module.exports = class RoutesApi
       
       if result.taskUUID
         @bonitaClient.runtime.assignTask result.taskUUID,req.user.username,req.user.username,{}, (err) =>
+          console.log JSON.stringify(result)
           res.json result
       else
+        console.log JSON.stringify(result)
         res.json result
 
 

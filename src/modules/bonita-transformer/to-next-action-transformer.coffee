@@ -8,11 +8,6 @@ module.exports = (nextTask,bonitaBaseUrl) ->
 
   result = {}
 
-
-  console.log "=====RR=="
-  console.log "INPUT: #{JSON.stringify(nextTask)}"
-  console.log "=====RR=="
-
   if nextTask && nextTask.value
     result.taskUUID = nextTask.value
     result.taskFormURL = "#{bonitaBaseUrl}?mode=app&task=#{result.taskUUID}"
