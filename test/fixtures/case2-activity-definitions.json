@@ -1,0 +1,786 @@
+[
+   {
+      "description":{
+
+      },
+      "name":"Assign_enter_floor_data",
+      "label":"Assign enter floor data",
+      "processDefinitionUUID":{
+         "value":"QA_Data_Entry--1.51"
+      },
+      "uuid":{
+         "value":"QA_Data_Entry--1.51--Assign_enter_floor_data"
+      },
+      "deadlines":{
+
+      },
+      "performers":{
+         "string":"Floor"
+      },
+      "joinType":"XOR",
+      "splitType":"AND",
+      "connectors":{
+
+      },
+      "dataFields":{
+
+      },
+      "outgoingTransitions":{
+         "TransitionDefinition":{
+            "description":{
+
+            },
+            "name":"Assign_enter_floor_data___1_Enter_Floor_Data",
+            "processDefinitionUUID":{
+               "value":"QA_Data_Entry--1.51"
+            },
+            "uuid":{
+               "value":"QA_Data_Entry--1.51--Assign_enter_floor_data___1_Enter_Floor_Data"
+            },
+            "from":"Assign_enter_floor_data",
+            "to":"_1_Enter_Floor_Data",
+            "isDefault":"false"
+         }
+      },
+      "incomingTransitions":{
+         "TransitionDefinition":[
+            {
+               "description":{
+
+               },
+               "name":"_1_Enter_Floor_Data__Assign_enter_floor_data",
+               "processDefinitionUUID":{
+                  "value":"QA_Data_Entry--1.51"
+               },
+               "uuid":{
+                  "value":"QA_Data_Entry--1.51--_1_Enter_Floor_Data__Assign_enter_floor_data"
+               },
+               "condition":"shift1_Round1_Done == false",
+               "from":"_1_Enter_Floor_Data",
+               "to":"Assign_enter_floor_data",
+               "isDefault":"false"
+            },
+            {
+               "description":{
+
+               },
+               "name":"_3_Approve2__Assign_enter_floor_data",
+               "processDefinitionUUID":{
+                  "value":"QA_Data_Entry--1.51"
+               },
+               "uuid":{
+                  "value":"QA_Data_Entry--1.51--_3_Approve2__Assign_enter_floor_data"
+               },
+               "condition":"shift1_Round1_Approve2 == false",
+               "from":"_3_Approve2",
+               "to":"Assign_enter_floor_data",
+               "isDefault":"false"
+            },
+            {
+               "description":{
+
+               },
+               "name":"Start__Assign_enter_floor_data",
+               "processDefinitionUUID":{
+                  "value":"QA_Data_Entry--1.51"
+               },
+               "uuid":{
+                  "value":"QA_Data_Entry--1.51--Start__Assign_enter_floor_data"
+               },
+               "from":"Start",
+               "to":"Assign_enter_floor_data",
+               "isDefault":"false"
+            },
+            {
+               "description":{
+
+               },
+               "name":"_2_Approve1__Assign_enter_floor_data",
+               "processDefinitionUUID":{
+                  "value":"QA_Data_Entry--1.51"
+               },
+               "uuid":{
+                  "value":"QA_Data_Entry--1.51--_2_Approve1__Assign_enter_floor_data"
+               },
+               "condition":"shift1_Round1_Approve1 == false",
+               "from":"_2_Approve1",
+               "to":"Assign_enter_floor_data",
+               "isDefault":"false"
+            }
+         ]
+      },
+      "boundaryEvents":{
+
+      },
+      "subflowInParameters":{
+
+      },
+      "subflowOutParameters":{
+
+      },
+      "asynchronous":"false",
+      "executingTime":"0",
+      "priority":"0",
+      "inCycle":"true",
+      "outgoingEvents":{
+
+      },
+      "type":"Human",
+      "loop":"false",
+      "beforeExecution":"false",
+      "catchEvent":"false",
+      "terminateProcess":"false"
+   },
+   {
+      "description":"Shift Manager Approval",
+      "name":"_2_Approve1",
+      "label":"2 Approve1",
+      "processDefinitionUUID":{
+         "value":"QA_Data_Entry--1.51"
+      },
+      "uuid":{
+         "value":"QA_Data_Entry--1.51--_2_Approve1"
+      },
+      "deadlines":{
+
+      },
+      "performers":{
+         "string":"Shift_Manager"
+      },
+      "joinType":"XOR",
+      "splitType":"AND",
+      "connectors":{
+
+      },
+      "filter":{
+         "@":{
+            "class":"org.ow2.bonita.facade.def.element.impl.ConnectorDefinitionImpl"
+         },
+         "description":{
+
+         },
+         "className":"org.bonitasoft.connectors.bonita.filters.AssignedUserTaskFilter",
+         "clientParameters":{
+            "entry":{
+               "string":"setActivityName",
+               "Object-array":{
+                  "string":"Assign_approve1"
+               }
+            }
+         },
+         "throwingException":"true"
+      },
+      "dataFields":{
+
+      },
+      "outgoingTransitions":{
+         "TransitionDefinition":[
+            {
+               "description":{
+
+               },
+               "name":"_2_Approve1__Assign_enter_floor_data",
+               "processDefinitionUUID":{
+                  "value":"QA_Data_Entry--1.51"
+               },
+               "uuid":{
+                  "value":"QA_Data_Entry--1.51--_2_Approve1__Assign_enter_floor_data"
+               },
+               "condition":"shift1_Round1_Approve1 == false",
+               "from":"_2_Approve1",
+               "to":"Assign_enter_floor_data",
+               "isDefault":"false"
+            },
+            {
+               "description":{
+
+               },
+               "name":"_2_Approve1__Assign_approve2",
+               "processDefinitionUUID":{
+                  "value":"QA_Data_Entry--1.51"
+               },
+               "uuid":{
+                  "value":"QA_Data_Entry--1.51--_2_Approve1__Assign_approve2"
+               },
+               "condition":"shift1_Round1_Approve1 == true",
+               "from":"_2_Approve1",
+               "to":"Assign_approve2",
+               "isDefault":"false"
+            }
+         ]
+      },
+      "incomingTransitions":{
+         "TransitionDefinition":{
+            "description":{
+
+            },
+            "name":"Assign_approve1___2_Approve1",
+            "processDefinitionUUID":{
+               "value":"QA_Data_Entry--1.51"
+            },
+            "uuid":{
+               "value":"QA_Data_Entry--1.51--Assign_approve1___2_Approve1"
+            },
+            "from":"Assign_approve1",
+            "to":"_2_Approve1",
+            "isDefault":"false"
+         }
+      },
+      "boundaryEvents":{
+
+      },
+      "subflowInParameters":{
+
+      },
+      "subflowOutParameters":{
+
+      },
+      "asynchronous":"false",
+      "executingTime":"0",
+      "priority":"0",
+      "inCycle":"true",
+      "outgoingEvents":{
+
+      },
+      "type":"Human",
+      "loop":"false",
+      "beforeExecution":"false",
+      "catchEvent":"false",
+      "terminateProcess":"false"
+   },
+   {
+      "description":"Production Manager Approval",
+      "name":"_3_Approve2",
+      "label":"3 Approve2",
+      "processDefinitionUUID":{
+         "value":"QA_Data_Entry--1.51"
+      },
+      "uuid":{
+         "value":"QA_Data_Entry--1.51--_3_Approve2"
+      },
+      "deadlines":{
+
+      },
+      "performers":{
+         "string":"Production_Manager"
+      },
+      "joinType":"XOR",
+      "splitType":"AND",
+      "connectors":{
+
+      },
+      "filter":{
+         "@":{
+            "class":"org.ow2.bonita.facade.def.element.impl.ConnectorDefinitionImpl"
+         },
+         "description":{
+
+         },
+         "className":"org.bonitasoft.connectors.bonita.filters.AssignedUserTaskFilter",
+         "clientParameters":{
+            "entry":{
+               "string":"setActivityName",
+               "Object-array":{
+                  "string":"Assign_approve2"
+               }
+            }
+         },
+         "throwingException":"true"
+      },
+      "dataFields":{
+
+      },
+      "outgoingTransitions":{
+         "TransitionDefinition":[
+            {
+               "description":{
+
+               },
+               "name":"_3_Approve2__End___Entry_approved",
+               "processDefinitionUUID":{
+                  "value":"QA_Data_Entry--1.51"
+               },
+               "uuid":{
+                  "value":"QA_Data_Entry--1.51--_3_Approve2__End___Entry_approved"
+               },
+               "from":"_3_Approve2",
+               "to":"End___Entry_approved",
+               "isDefault":"false"
+            },
+            {
+               "description":{
+
+               },
+               "name":"_3_Approve2__Assign_enter_floor_data",
+               "processDefinitionUUID":{
+                  "value":"QA_Data_Entry--1.51"
+               },
+               "uuid":{
+                  "value":"QA_Data_Entry--1.51--_3_Approve2__Assign_enter_floor_data"
+               },
+               "condition":"shift1_Round1_Approve2 == false",
+               "from":"_3_Approve2",
+               "to":"Assign_enter_floor_data",
+               "isDefault":"false"
+            }
+         ]
+      },
+      "incomingTransitions":{
+         "TransitionDefinition":{
+            "description":{
+
+            },
+            "name":"Assign_approve2___3_Approve2",
+            "processDefinitionUUID":{
+               "value":"QA_Data_Entry--1.51"
+            },
+            "uuid":{
+               "value":"QA_Data_Entry--1.51--Assign_approve2___3_Approve2"
+            },
+            "from":"Assign_approve2",
+            "to":"_3_Approve2",
+            "isDefault":"false"
+         }
+      },
+      "boundaryEvents":{
+
+      },
+      "subflowInParameters":{
+
+      },
+      "subflowOutParameters":{
+
+      },
+      "asynchronous":"false",
+      "executingTime":"0",
+      "priority":"0",
+      "inCycle":"true",
+      "outgoingEvents":{
+
+      },
+      "type":"Human",
+      "loop":"false",
+      "beforeExecution":"false",
+      "catchEvent":"false",
+      "terminateProcess":"false"
+   },
+   {
+      "description":{
+
+      },
+      "name":"End___Entry_approved",
+      "label":"End - Entry approved",
+      "processDefinitionUUID":{
+         "value":"QA_Data_Entry--1.51"
+      },
+      "uuid":{
+         "value":"QA_Data_Entry--1.51--End___Entry_approved"
+      },
+      "deadlines":{
+
+      },
+      "performers":{
+
+      },
+      "joinType":"XOR",
+      "splitType":"AND",
+      "connectors":{
+
+      },
+      "dataFields":{
+
+      },
+      "outgoingTransitions":{
+
+      },
+      "incomingTransitions":{
+         "TransitionDefinition":{
+            "description":{
+
+            },
+            "name":"_3_Approve2__End___Entry_approved",
+            "processDefinitionUUID":{
+               "value":"QA_Data_Entry--1.51"
+            },
+            "uuid":{
+               "value":"QA_Data_Entry--1.51--_3_Approve2__End___Entry_approved"
+            },
+            "from":"_3_Approve2",
+            "to":"End___Entry_approved",
+            "isDefault":"false"
+         }
+      },
+      "boundaryEvents":{
+
+      },
+      "subflowInParameters":{
+
+      },
+      "subflowOutParameters":{
+
+      },
+      "asynchronous":"false",
+      "executingTime":"0",
+      "priority":"0",
+      "inCycle":"false",
+      "outgoingEvents":{
+
+      },
+      "type":"Automatic",
+      "loop":"false",
+      "beforeExecution":"false",
+      "catchEvent":"false",
+      "terminateProcess":"true"
+   },
+   {
+      "description":"QA Checks",
+      "name":"_1_Enter_Floor_Data",
+      "label":"1 Enter Floor Data",
+      "processDefinitionUUID":{
+         "value":"QA_Data_Entry--1.51"
+      },
+      "uuid":{
+         "value":"QA_Data_Entry--1.51--_1_Enter_Floor_Data"
+      },
+      "deadlines":{
+
+      },
+      "performers":{
+         "string":"Floor"
+      },
+      "joinType":"XOR",
+      "splitType":"AND",
+      "connectors":{
+
+      },
+      "filter":{
+         "@":{
+            "class":"org.ow2.bonita.facade.def.element.impl.ConnectorDefinitionImpl"
+         },
+         "description":{
+
+         },
+         "className":"org.bonitasoft.connectors.bonita.filters.AssignedUserTaskFilter",
+         "clientParameters":{
+            "entry":{
+               "string":"setActivityName",
+               "Object-array":{
+                  "string":"Assign_enter_floor_data"
+               }
+            }
+         },
+         "throwingException":"true"
+      },
+      "dataFields":{
+
+      },
+      "outgoingTransitions":{
+         "TransitionDefinition":[
+            {
+               "description":{
+
+               },
+               "name":"_1_Enter_Floor_Data__Assign_approve1",
+               "processDefinitionUUID":{
+                  "value":"QA_Data_Entry--1.51"
+               },
+               "uuid":{
+                  "value":"QA_Data_Entry--1.51--_1_Enter_Floor_Data__Assign_approve1"
+               },
+               "condition":"shift1_Round1_Done == true",
+               "from":"_1_Enter_Floor_Data",
+               "to":"Assign_approve1",
+               "isDefault":"false"
+            },
+            {
+               "description":{
+
+               },
+               "name":"_1_Enter_Floor_Data__Assign_enter_floor_data",
+               "processDefinitionUUID":{
+                  "value":"QA_Data_Entry--1.51"
+               },
+               "uuid":{
+                  "value":"QA_Data_Entry--1.51--_1_Enter_Floor_Data__Assign_enter_floor_data"
+               },
+               "condition":"shift1_Round1_Done == false",
+               "from":"_1_Enter_Floor_Data",
+               "to":"Assign_enter_floor_data",
+               "isDefault":"false"
+            }
+         ]
+      },
+      "incomingTransitions":{
+         "TransitionDefinition":{
+            "description":{
+
+            },
+            "name":"Assign_enter_floor_data___1_Enter_Floor_Data",
+            "processDefinitionUUID":{
+               "value":"QA_Data_Entry--1.51"
+            },
+            "uuid":{
+               "value":"QA_Data_Entry--1.51--Assign_enter_floor_data___1_Enter_Floor_Data"
+            },
+            "from":"Assign_enter_floor_data",
+            "to":"_1_Enter_Floor_Data",
+            "isDefault":"false"
+         }
+      },
+      "boundaryEvents":{
+
+      },
+      "subflowInParameters":{
+
+      },
+      "subflowOutParameters":{
+
+      },
+      "asynchronous":"false",
+      "executingTime":"0",
+      "priority":"0",
+      "inCycle":"true",
+      "outgoingEvents":{
+
+      },
+      "type":"Human",
+      "loop":"false",
+      "beforeExecution":"false",
+      "catchEvent":"false",
+      "terminateProcess":"false"
+   },
+   {
+      "description":{
+
+      },
+      "name":"Start",
+      "label":"Start",
+      "processDefinitionUUID":{
+         "value":"QA_Data_Entry--1.51"
+      },
+      "uuid":{
+         "value":"QA_Data_Entry--1.51--Start"
+      },
+      "deadlines":{
+
+      },
+      "performers":{
+
+      },
+      "joinType":"XOR",
+      "splitType":"AND",
+      "connectors":{
+
+      },
+      "dataFields":{
+
+      },
+      "outgoingTransitions":{
+         "TransitionDefinition":{
+            "description":{
+
+            },
+            "name":"Start__Assign_enter_floor_data",
+            "processDefinitionUUID":{
+               "value":"QA_Data_Entry--1.51"
+            },
+            "uuid":{
+               "value":"QA_Data_Entry--1.51--Start__Assign_enter_floor_data"
+            },
+            "from":"Start",
+            "to":"Assign_enter_floor_data",
+            "isDefault":"false"
+         }
+      },
+      "incomingTransitions":{
+
+      },
+      "boundaryEvents":{
+
+      },
+      "subflowInParameters":{
+
+      },
+      "subflowOutParameters":{
+
+      },
+      "asynchronous":"false",
+      "executingTime":"0",
+      "priority":"0",
+      "inCycle":"false",
+      "outgoingEvents":{
+
+      },
+      "type":"Automatic",
+      "loop":"false",
+      "beforeExecution":"false",
+      "catchEvent":"false",
+      "terminateProcess":"false"
+   },
+   {
+      "description":{
+
+      },
+      "name":"Assign_approve1",
+      "label":"Assign approve1",
+      "processDefinitionUUID":{
+         "value":"QA_Data_Entry--1.51"
+      },
+      "uuid":{
+         "value":"QA_Data_Entry--1.51--Assign_approve1"
+      },
+      "deadlines":{
+
+      },
+      "performers":{
+         "string":"Shift_Manager"
+      },
+      "joinType":"XOR",
+      "splitType":"AND",
+      "connectors":{
+
+      },
+      "dataFields":{
+
+      },
+      "outgoingTransitions":{
+         "TransitionDefinition":{
+            "description":{
+
+            },
+            "name":"Assign_approve1___2_Approve1",
+            "processDefinitionUUID":{
+               "value":"QA_Data_Entry--1.51"
+            },
+            "uuid":{
+               "value":"QA_Data_Entry--1.51--Assign_approve1___2_Approve1"
+            },
+            "from":"Assign_approve1",
+            "to":"_2_Approve1",
+            "isDefault":"false"
+         }
+      },
+      "incomingTransitions":{
+         "TransitionDefinition":{
+            "description":{
+
+            },
+            "name":"_1_Enter_Floor_Data__Assign_approve1",
+            "processDefinitionUUID":{
+               "value":"QA_Data_Entry--1.51"
+            },
+            "uuid":{
+               "value":"QA_Data_Entry--1.51--_1_Enter_Floor_Data__Assign_approve1"
+            },
+            "condition":"shift1_Round1_Done == true",
+            "from":"_1_Enter_Floor_Data",
+            "to":"Assign_approve1",
+            "isDefault":"false"
+         }
+      },
+      "boundaryEvents":{
+
+      },
+      "subflowInParameters":{
+
+      },
+      "subflowOutParameters":{
+
+      },
+      "asynchronous":"false",
+      "executingTime":"0",
+      "priority":"0",
+      "inCycle":"true",
+      "outgoingEvents":{
+
+      },
+      "type":"Human",
+      "loop":"false",
+      "beforeExecution":"false",
+      "catchEvent":"false",
+      "terminateProcess":"false"
+   },
+   {
+      "description":{
+
+      },
+      "name":"Assign_approve2",
+      "label":"Assign approve2",
+      "processDefinitionUUID":{
+         "value":"QA_Data_Entry--1.51"
+      },
+      "uuid":{
+         "value":"QA_Data_Entry--1.51--Assign_approve2"
+      },
+      "deadlines":{
+
+      },
+      "performers":{
+         "string":"Production_Manager"
+      },
+      "joinType":"XOR",
+      "splitType":"AND",
+      "connectors":{
+
+      },
+      "dataFields":{
+
+      },
+      "outgoingTransitions":{
+         "TransitionDefinition":{
+            "description":{
+
+            },
+            "name":"Assign_approve2___3_Approve2",
+            "processDefinitionUUID":{
+               "value":"QA_Data_Entry--1.51"
+            },
+            "uuid":{
+               "value":"QA_Data_Entry--1.51--Assign_approve2___3_Approve2"
+            },
+            "from":"Assign_approve2",
+            "to":"_3_Approve2",
+            "isDefault":"false"
+         }
+      },
+      "incomingTransitions":{
+         "TransitionDefinition":{
+            "description":{
+
+            },
+            "name":"_2_Approve1__Assign_approve2",
+            "processDefinitionUUID":{
+               "value":"QA_Data_Entry--1.51"
+            },
+            "uuid":{
+               "value":"QA_Data_Entry--1.51--_2_Approve1__Assign_approve2"
+            },
+            "condition":"shift1_Round1_Approve1 == true",
+            "from":"_2_Approve1",
+            "to":"Assign_approve2",
+            "isDefault":"false"
+         }
+      },
+      "boundaryEvents":{
+
+      },
+      "subflowInParameters":{
+
+      },
+      "subflowOutParameters":{
+
+      },
+      "asynchronous":"false",
+      "executingTime":"0",
+      "priority":"0",
+      "inCycle":"true",
+      "outgoingEvents":{
+
+      },
+      "type":"Human",
+      "loop":"false",
+      "beforeExecution":"false",
+      "catchEvent":"false",
+      "terminateProcess":"false"
+   }
+]
