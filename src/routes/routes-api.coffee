@@ -92,12 +92,14 @@ module.exports = class RoutesApi
   getTasks: (req,res,next) =>
     return res.json {},401 unless req.user
 
+    #req.user.username
     @bonitaClient.queryRuntime.getOneTask "READY",req.user.username,null, (err,taskList) =>
       return next err if err
       result = @bonitaTransformer.toNextAction taskList,@servicesBonita.baseUrl
       
       if result.taskUUID
-        @bonitaClient.runtime.assignTask result.taskUUID,req.user.username,"admin",{}, (err) =>
+        @bonitaClient.runtime.executeTask result.taskUUID,true, req.user.username,opts = {},(err) ->
+        #@bonitaClient.runtime.assignTask result.taskUUID,req.user.username,"admin",{}, (err) =>
           console.log "ASSIGNING TASK: #{err}"
           console.log JSON.stringify(result)
           res.json result
