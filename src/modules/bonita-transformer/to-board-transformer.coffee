@@ -38,7 +38,6 @@ module.exports = (processDefinition,processInstances) ->
         cards: []
 
   sortedActivityDefinitionsForState = _.sortBy(_.filter(activityDefinitions, (x) -> x.isState),(x) -> x.order ) 
-  console.log "SORTED: #{JSON.stringify(sortedActivityDefinitionsForState)}"
 
   for activityDefinition in sortedActivityDefinitionsForState
     result.lanes.push
