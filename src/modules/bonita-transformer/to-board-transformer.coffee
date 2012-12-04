@@ -89,13 +89,25 @@ module.exports = (processDefinition,processInstances) ->
   ###
   5. Now we work with process instances.
   ###
-  processInstances = processInstances.ProcessInstance
+  pp = []
+  if _.isArray processInstances.ProcessInstance
+    pp = processInstances.ProcessInstance
+  else if processInstances.ProcessInstance
+    pp = [processInstances.ProcessInstance]
 
-  for instance in processInstances
+  for instance in pp
 
-    for activity in instance.activities?.ActivityInstance
+    activity = null
+    aaXX = instance.activities?.ActivityInstance
+    if aaXX && _.isArray(aaXX)
+      activity = _.last(aaXX)
+    else if aaXX
+      activity = [aaXX]
+
+    #for activity in instance.activities?.ActivityInstance
+    if activity
         activityDefinitionUUID = activity.activityDefinitionUUID?.value
-        if activity.state isnt "FINISHED"
+        if true #activity.state isnt "FINISHED"
           myLane = adMap[activityDefinitionUUID] # || _.last( result.lanes)
 
 
