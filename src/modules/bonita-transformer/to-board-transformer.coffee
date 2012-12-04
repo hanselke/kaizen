@@ -9,6 +9,17 @@ orderFromActivityDefinition = (activityDefinition) ->
   parseInt(label,0)
 
 
+isInReadyState = (activityDefinitionUUID,activityDefinitions = []) ->
+  return true unless activityDefinitionUUID
+  activityDefinition = _.find(activityDefinitions, (x) -> x.id is activityDefinitionUUID)
+  return true unless activityDefinition
+  activityDefinition.isAssign || activityDefinition.isStart || activityDefinition.isEnd
+
+cleanDesc = (label) ->
+  return label unless label && label.length > "Assign ".length && label.indexOf("Assign ") is 0
+  label = label.substr "Assign ".length
+  label[0].toUpperCase() + label.substr(1)
+
 ###
 Transforms raw data to the one that is sent to the client.
 ###
@@ -120,9 +131,9 @@ module.exports = (processDefinition,processInstances) ->
           if myLane
             myLane.cards.push
               id : activity.uuid?.value
-              desc : activity.label
+              desc : cleanDesc( activity.label)
               #html : activity.description
-              ready : activity.state?.toUpperCase() is "READY" 
+              ready : isInReadyState(activity.uuid?.value,activityDefinitions) # activity.state?.toUpperCase() is "READY" 
               state : activity.state
               processInstance : instance.instanceUUID.value
               activityDefinitionUUID : activityDefinitionUUID

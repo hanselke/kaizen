@@ -50,7 +50,7 @@ describe 'WHEN testing the route api tasks', ->
       card0 = lane.cards[0]
       should.exist card0
       card0.should.have.property "id","QA_Data_Entry--1.51--2--Assign_enter_floor_data--it6441d631-41fd-4e87-8ae4-d7adb8ac8445--mainActivityInstance--noLoop"
-      card0.should.have.property "desc","Assign enter floor data" # Transform this to Enter floor data
+      card0.should.have.property "desc","Enter floor data" # Transform this to Enter floor data
       card0.should.have.property "ready",true
       card0.should.have.property "state","READY"
       card0.should.have.property "processInstance","QA_Data_Entry--1.51--2"
@@ -63,7 +63,7 @@ describe 'WHEN testing the route api tasks', ->
       card1 = lane.cards[1]
       should.exist card1
       card1.should.have.property "id","QA_Data_Entry--1.51--3--Assign_enter_floor_data--itd25cbe54-d4ce-452a-92c8-edf215b62727--mainActivityInstance--noLoop"
-      card1.should.have.property "desc","Assign enter floor data" # Transform this to Enter floor data
+      card1.should.have.property "desc","Enter floor data" # Transform this to Enter floor data
       card1.should.have.property "ready",true
       card1.should.have.property "state","READY"
       card1.should.have.property "processInstance","QA_Data_Entry--1.51--3"
