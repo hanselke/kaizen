@@ -18,6 +18,7 @@ class window.MainController
       _.each data.lanes, (x) =>
         @$scope.lane_headings[x.name] = x.label
         @$scope.cards[x.name] = x.cards
+        
 
       aWidth = 0
       if data.lanes.length > 0
