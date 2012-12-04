@@ -49,7 +49,10 @@ module.exports = (processDefinition,processInstances) ->
         afterTime: 0
         cards: []
 
-  for activityDefinition in _.filter(_.sortBy(activityDefinitions,(x) -> x.order ) , (x) -> x.isState)
+  sortedActivityDefinitionsForState = _.sortBy(_.filter(activityDefinitions, (x) -> x.isState),(x) -> x.order ) 
+  console.log "SORTED: #{JSON.stringify(sortedActivityDefinitionsForState)}"
+
+  for activityDefinition in sortedActivityDefinitionsForState
     result.lanes.push
         label: activityDefinition.description || ""
         name: activityDefinition.name || "" 
