@@ -97,7 +97,8 @@ module.exports = class RoutesApi
       result = @bonitaTransformer.toNextAction taskList,@servicesBonita.baseUrl
       
       if result.taskUUID
-        @bonitaClient.runtime.assignTask result.taskUUID,req.user.username,req.user.username,{}, (err) =>
+        @bonitaClient.runtime.assignTask result.taskUUID,req.user.username,"admin",{}, (err) =>
+          console.log "ASSIGNING TASK: #{err}"
           console.log JSON.stringify(result)
           res.json result
       else
