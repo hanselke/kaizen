@@ -1,7 +1,6 @@
 _ = require 'underscore-ext'
 moment = require 'moment'
 
-processDefinitionToLaneOrder = require './process-definition-to-lane-order'
 activityDefinitionTransformer = require './activity-definition-transformer'
 
 orderFromActivityDefinition = (activityDefinition) ->
@@ -16,17 +15,6 @@ Transforms raw data to the one that is sent to the client.
 module.exports = (processDefinition,processInstances) ->
   result =
     lanes: []
-
-
-  ###
-  console.log "ALL ACTIVITIES@@@"
-  console.log JSON.stringify(processDefinition.activities.ActivityDefinition)
-  console.log "ALL ACTIVITIES@@@@"
-
-  console.log "ALL ACTIVITIES"
-  console.log JSON.stringify(_.map(processDefinition.activities?.ActivityDefinition,activityDefinitionTransformer))
-  console.log "ALL ACTIVITIES"
-  ###
 
   ###
   Here is what needs to happen now:
@@ -88,56 +76,10 @@ module.exports = (processDefinition,processInstances) ->
     for activityDefinition in lane.activityDefinitions
       adMap[activityDefinition.id] = lane
 
-
-
   ###
-  for activityDefinition in processDefinition.activities?.ActivityDefinition
-    if  activityDefinition.description && 
-        _.isString(activityDefinition.description) &&
-        activityDefinition.description.length > 0 && 
-        activityDefinition.uuid && 
-        activityDefinition.uuid.value
-
-      newLane = 
-          label: activityDefinition.description || ""
-          name: activityDefinition.name || "" 
-          order: orderFromActivityDefinition(activityDefinition)
-          id: activityDefinition.uuid.value
-          totalTime : 0
-          totalCost: 0
-          beforeTime : 0
-          afterTime: 0
-          activityDefinitionIds: [activityDefinition.uuid.value]
-          cards: []
-      result.lanes.push newLane
-      adMap[activityDefinition.uuid.value] = newLane
-
-  result.lanes = _.sortBy( result.lanes, (x) -> x.order)
-
-  result.lanes.unshift
-          label: "Start"
-          name: ""
-          order: 0
-          id: ''
-          totalTime : 0
-          totalCost: 0
-          beforeTime : 0
-          afterTime: 0
-          cards: []
-  ###
-
-  ###
-  console.log "ADMAP"
-  console.log JSON.stringify(_.keys(adMap))
-  console.log "ADMAP"
+  5. Now we work with process instances.
   ###
   processInstances = processInstances.ProcessInstance
-
-  ###
-  console.log "$$$$$$$$$$$"
-  console.log JSON.stringify(processInstances)
-  console.log "$$$$$$$$$$$"
-  ###
 
   for instance in processInstances
 
