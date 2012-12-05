@@ -14,7 +14,8 @@ table.page
               span.desc {{card.desc}}
               span(ng:show='card.ready') ✓
       .help.bubble.up(style='margin-left: 400px;') This is your kanban board
-      table.cycletimes.fullwidth(cellpadding='0', cellspacing='0', ng:show='lanes.length > 0')
+      
+      table.cycletimes.fullwidth(cellpadding='0', cellspacing='0', ng:show='false && lanes.length > 0')
         colgroup
           col(width='{{laneWidth}}', ng:repeat='lane in lanes')
         tr
@@ -26,7 +27,7 @@ table.page
         //
            row for VSM 
         td(colspan='2')
-          table#vsm(ng:show='lanes.length > 0')
+          table#vsm(ng:show='false && lanes.length > 0')
             colgroup
               col(width="{{colsLane.width}}",ng-repeat='colsLane in colsFromLanes')
             
