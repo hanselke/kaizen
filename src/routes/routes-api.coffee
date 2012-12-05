@@ -44,16 +44,23 @@ module.exports = class RoutesApi
 
   getBoard: (req,res,next) =>
     return res.json {},401 unless req.user
-    @bonitaClient.queryDefinition.getProcesses req.user.username,null, (err,processes) =>
-      #console.log "Processes ------"
-      #console.log JSON.stringify(processes)
-      #console.log "Processes ------"
+
+    processName = @servicesBonita.processName
+    #@bonitaClient.queryDefinition.getProcesses req.user.username,null, (err,processes) =>
+
+    @bonitaClient.queryDefinition.getLastProcess processName, req.user.username,null, (err,process) => 
+      console.log "Processes ------"
+      console.log JSON.stringify(process)
+      console.log "Processes ------"
       return next err if err
 
-      processName = @servicesBonita.processName
-      processDefinition = _.find( processes.ProcessDefinition, (x) -> x.name is processName && x.state is "ENABLED")
+      
+      #processDefinition = _.find( processes.ProcessDefinition, (x) -> x.name is processName && x.state is "ENABLED")
 
-      processUUID = processDefinition?.uuid?.value
+      #processUUID = processDefinition?.uuid?.value
+
+      processDefinition = process
+      processUUID = process.uuid?.value
 
       return res.json {message: "processUUID not available from getProcesses."},500 unless processUUID
 
@@ -130,7 +137,6 @@ module.exports = class RoutesApi
 
               #"admin"
               #@bonitaClient.runtime.startTask taskUUID,true,req.user.username,{}, (err) =>
-
               @bonitaClient.runtime.assignTask taskUUID,req.user.username,req.user.username,{}, (err) =>
  
                 console.log "------5"
