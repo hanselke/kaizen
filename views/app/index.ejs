@@ -24,12 +24,6 @@
           <div style="padding-left:5px">
             <button style="margin-top:1em;margin-bottom:1em;font-weight:bold;height:2em;color:blue" ng:click="nextTask()">Next action</button><br>
           </div>
-          <div style="padding-left:5px">
-            <button style="margin-top:1em;margin-bottom:1em;font-weight:bold;height:2em;color:blue" ng:click="toBoards()">To Boards</button><br>
-          </div>
-          <div style="padding-left:5px">
-            <button style="margin-top:1em;margin-bottom:1em;font-weight:bold;height:2em;color:blue" ng:click="createTask()">Create Task</button><br>
-          </div>
 
           <div style="padding:5px 5px 1px 5px">
             <table><tr><td>
@@ -38,6 +32,14 @@
               </a>
             </td><td>{{currentUser.username}}</td></tr></table>
           </div>
+
+           <div style="padding-left:5px;margin-top:100px">
+            <button style="margin-top:1em;margin-bottom:1em;font-weight:bold;height:2em;color:#ff7400" ng:click="toBoards()">To Boards</button><br>
+          </div>
+          <div style="padding-left:5px">
+            <button style="margin-top:1em;margin-bottom:1em;font-weight:bold;height:2em;color:#ff7400" ng:click="createTask()">Create Task</button><br>
+          </div>
+
           <div>
           <ul ng-show="isInRole('admin')">
           <li><a href="#/admin/users">Users</a></li>
