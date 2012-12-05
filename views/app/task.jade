@@ -1,4 +1,6 @@
 
-p(ng-show="!currentTask.taskFormURL") No tasks loaded. Click "Next Action" to load a task
+p(ng-show="!currentTask.taskFormURL",style="margin-top:200px;margin-left:100px;margin-right:100px") No tasks loaded. Click "Next Action" to load a task
 
 iframe(ng-show="currentTask.taskFormURL", src="{{currentTask.taskFormURL}}",frameborder="0",scrolling="no",seamless="seamless",style="width:100%;height:100%")
+
+.overaalay(style='position:absolute;z-index:1;margin-left:0;margin-right:0;top:0;height:140px;background-color:white;width:100%')
