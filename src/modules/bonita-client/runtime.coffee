@@ -18,6 +18,7 @@ module.exports = class Runtime
     @client.post "/API/runtimeAPI/startTask/#{taskUUID}/#{assign}",actAsUser,{}, opts, cb
 
   ###
+  curl -X POST -d 'options=user:james' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/xml' -H 'Authorization: Basic cmVzdHVzZXI6cmVzdGJwbQ=='  http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest/API/runtimeAPI/executeTask/QA_Data_Entry--1.2--16--Assign_enter_floor_data--it9f228c2a-3a3e-4889-9dca-28fc00fa1db2--mainActivityInstance--noLoop/true
   ###
   executeTask: (taskUUID,assign = false, actAsUser,opts = {},cb = ->) =>
     @client.post "/API/runtimeAPI/executeTask/#{taskUUID}/#{assign}",actAsUser,{}, opts, cb

@@ -100,9 +100,10 @@ module.exports = (processDefinition,processInstances) ->
     activity = null
     aaXX = instance.activities?.ActivityInstance
     if aaXX && _.isArray(aaXX)
-      activity = _.last(aaXX)
+      dd = (d for d in aaXX when d.state != "FINISHED")
+      activity = _.last(dd)
     else if aaXX
-      activity = [aaXX]
+      activity = aaXX
 
     #for activity in instance.activities?.ActivityInstance
     if activity

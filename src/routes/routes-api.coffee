@@ -70,44 +70,70 @@ module.exports = class RoutesApi
 
 
   ###
-  Sample:
-    {"processUUID":{"value":"QA_Data_Entry--1.2"},"instanceUUID":{"value":"QA_Data_Entry--1.2--9"},"rootInstanceUUID":{"value":"QA_Data_Entry--1.2--9"},"uuid":{"value":"QA_Data_Entry--1.2--9--Enter_Floor_Data--itb7637faf-37c4-4cfb-9d10-4306be713a16--mainActivityInstance--noLoop"},"iterationId":"itb7637faf-37c4-4cfb-9d10-4306be713a16","activityInstanceId":"mainActivityInstance","loopId":"noLoop","state":"READY","userId":"admin","lastUpdate":"1353306603343","label":"Enter Floor Data","description":{},"name":"Enter_Floor_Data","startedDate":"0","endedDate":"0","readyDate":"1353306603263","activityDefinitionUUID":{"value":"QA_Data_Entry--1.2--Enter_Floor_Data"},"expectedEndDate":"0","priority":"0","type":"Human","human":"true","stateUpdates":{"StateUpdate":{"dbid":"0","date":"1353306603263","state":"READY","updateUserId":"SYSTEM","initialState":"READY"}},"clientVariables":{},"variableUpdates":{},"assignUpdates":{"AssignUpdate":{"dbid":"0","date":"1353306603345","state":"READY","updateUserId":"SYSTEM","userId":"admin"}},"candidates":{}}}
-  ###
-  ###
-  getTasks: (req,res,next) =>
-    return res.json {},401 unless req.user
-    procInstUUID = req.params.procInstUUID || req.query.procInstUUID
-    return res.json {},422 unless procInstUUID
+  Purpose is to retrieve the next eligible task for a user.
+  Scenario:
+    1. curl -X POST -d 'options=user:jack' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/xml' -H 'Authorization: Basic cmVzdHVzZXI6cmVzdGJwbQ=='  http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest/API/queryRuntimeAPI/getOneTask/READY
+    2. curl -X POST -d 'options=user:jack' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/xml' -H 'Authorization: Basic cmVzdHVzZXI6cmVzdGJwbQ=='  http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest/API/runtimeAPI/executeTask/QA_Data_Entry--1.51--7--Assign_enter_floor_data--it079eb8be-05f5-473e-805f-7e5ad655ae26--mainActivityInstance--noLoop/true
+    3. curl -X POST -d 'options=user:jack' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/xml' -H 'Authorization: Basic cmVzdHVzZXI6cmVzdGJwbQ=='  http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest/API/queryRuntimeAPI/getTask/QA_Data_Entry--1.51--7--Assign_enter_floor_data--it079eb8be-05f5-473e-805f-7e5ad655ae26--mainActivityInstance--noLoop
+    4. curl -X POST -d 'options=user:jack' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/xml' -H 'Authorization: Basic cmVzdHVzZXI6cmVzdGJwbQ=='  http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest/API/queryRuntimeAPI/getOneTaskByProcessInstanceUUIDAndActivityState/QA_Data_Entry--1.51--7/READY
+    5. curl -X POST -d 'options=user:jack' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/xml' -H 'Authorization: Basic cmVzdHVzZXI6cmVzdGJwbQ=='  http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest/API/runtimeAPI/startTask/QA_Data_Entry--1.51--7--_1_Enter_Floor_Data--it079eb8be-05f5-473e-805f-7e5ad655ae26--mainActivityInstance--noLoop/true
 
-    @bonitaClient.queryRuntime.getTaskList procInstUUID, "READY",req.user.username,null, (err,taskList) =>
-      return next err if err
-
-      result = @bonitaTransformer.toNextAction taskList,@servicesBonita.baseUrl
-      
-      if result.taskUUID
-        @bonitaClient.runtime.assignTask result.taskUUID,req.user.username,req.user.username,{}, (err) =>
-
-          res.json result
-      else
-        res.json result
   ###
+
   getTasks: (req,res,next) =>
     return res.json {},401 unless req.user
 
-    #req.user.username
+    ###
+    Obtain one eligible task
+    ###
     @bonitaClient.queryRuntime.getOneTask "READY",req.user.username,null, (err,taskList) =>
+      console.log "------1"
+      console.log JSON.stringify(taskList)
+      console.log "------1"
+
       return next err if err
-      result = @bonitaTransformer.toNextAction taskList,@servicesBonita.baseUrl
       
-      if result.taskUUID
-        @bonitaClient.runtime.executeTask result.taskUUID,true, req.user.username,opts = {},(err) ->
-        #@bonitaClient.runtime.assignTask result.taskUUID,req.user.username,"admin",{}, (err) =>
-          console.log "ASSIGNING TASK: #{err}"
-          console.log JSON.stringify(result)
-          res.json result
+      firstTaskUUID = taskList?.value
+      
+      if firstTaskUUID
+        ###
+        This is most likely an assign task. So we execute it and assign it to the current user
+        ###
+        @bonitaClient.runtime.executeTask firstTaskUUID,true, req.user.username,opts = {},(err) ->
+          console.log "------2"
+          console.log "EXECUTE TASK"
+          console.log "------2"
+          return next err if err
+          ###
+          # Now we need to retrieve the process instance id.
+          ###
+          @bonitaClient.runtime.getTask firstTaskUUID,"admin",{}, (err,t) =>
+            return next err if err
+            console.log "------3"
+            console.log JSON.stringify(t)
+            console.log "------3"
+
+            processInstanceId = t?.ActivityInstance?.instanceUUID
+            return res.json {} unless processInstanceId
+
+            ### 
+            Now we retrieve a list of possible task states
+            ###
+            @bonitaClient.runtime.getOneTaskByProcessInstanceUUIDAndActivityState processInstanceId,"READY",req.user.username,{}, (err,nextTask) =>
+              console.log "------4"
+              console.log JSON.stringify(nextTask)
+              console.log "------4"
+
+              taskUUID = nextTask?.value
+
+              @bonitaClient.runtime.startTask taskUUID,req.user.username,"admin",{}, (err) =>
+                console.log "------5"
+                console.log "EXECUTE"
+                console.log "------5"
+                result = @bonitaTransformer.toNextAction taskUUID,@servicesBonita.baseUrl
+                res.json result
       else
-        console.log JSON.stringify(result)
-        res.json result
+        res.json {}
 
 
   getAdminUsers: (req,res,next) =>
