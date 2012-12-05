@@ -108,7 +108,8 @@ module.exports = class RoutesApi
           ###
           # Now we need to retrieve the process instance id.
           ###
-          @bonitaClient.queryRuntime.getTask firstTaskUUID,"admin",{}, (err,t) =>
+          # "admin"
+          @bonitaClient.queryRuntime.getTask firstTaskUUID,req.user.username,{}, (err,t) =>
             return next err if err
             console.log "------3"
             console.log JSON.stringify(t)
