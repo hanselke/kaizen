@@ -69,11 +69,11 @@
         "mongodb-errors": "0.2.0",
         "libxml-to-js": "0.3.10",
         "ejs" : "0.8.3",
+        "coffee-script": "1.4.0",
         "moment" : "1.7.2"
     },
     "bundledDependencies": [],
     "devDependencies": {
-        "coffee-script": "1.4.0",
         "should": "1.2.1",
         "mongoskin": "0.4.4",
         "mocha": "1.6.0"
