@@ -13,13 +13,13 @@
 <body ng:controller="AppController">
   <div class="help overlay" onclick="$('.help').hide()"></div>
   <div class="noPrint" style="position:fixed; width:100%; height:22px; bottom:0px; text-align: right;">
-    <div style="display: inline-block;height:22px;padding:3px 4px;margin-right: 282px;border-radius: 5px 5px 0 0; color:#aaa; background: url('img/open-business-logo.jpg');cursor:pointer;font-family: Helvetica;font-size: 14px" onclick="$('.help').show()">Help</div></div>
+    <div style="display: inline-block;height:22px;padding:3px 4px;margin-right: 282px;border-radius: 5px 5px 0 0; color:#aaa; background: url('img/background-small.png');cursor:pointer;font-family: Helvetica;font-size: 14px" onclick="$('.help').show()">Help</div></div>
   <table ng:show="currentUser" style="display:none">
     <tr style="height: 10px">
       <td style="width: 100px" ng:show="currentUser" class="noPrint">
         <div style="background-color: white; border-radius: 7px;color:black" class="fullheight">
           <div style="padding: 7px 5px">
-            <a href="#"><img src="img/logo.png" style="width: 110px"/></a>
+            <a href="#"><img src="img/open-business-logo.jpg" style="width: 110px"/></a>
           </div>
           <div style="padding-left:5px">
             <button style="margin-top:1em;margin-bottom:1em;font-weight:bold;height:2em;color:blue" ng:click="nextTask()">Next action</button><br>
