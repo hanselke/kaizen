@@ -60,5 +60,14 @@ module.exports = class Runtime
   unassignTask: (taskUUID, actAsUser,opts = {},cb = ->) =>
     @client.post "/API/runtimeAPI/unassignTask/#{taskUUID}",actAsUser,{}, opts, cb
 
+  ###
+  curl -X POST -d 'options=user:jack' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Accept: application/xml' -H 'Authorization: Basic cmVzdHVzZXI6cmVzdGJwbQ=='  http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita-server-rest/API/runtimeAPI/instantiateProcess/QA_Data_Entry--1.51
+  result
+      <ProcessInstanceUUID>
+        <value>QA_Data_Entry--1.51--8</value>
+      </ProcessInstanceUUID>
+  ###
+  instantiateProcess: (processUUID, actAsUser,opts = {},cb = ->) =>
+    @client.post "/API/runtimeAPI/instantiateProcess/#{processUUID}",actAsUser,{}, opts, cb
 
 

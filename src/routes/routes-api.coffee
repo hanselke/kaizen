@@ -21,6 +21,7 @@ module.exports = class RoutesApi
     # TODO: Ensure that we have a user here
     @app.get '/api/board', @getBoard
     @app.get '/api/tasks', @getTasks
+    @app.post '/api/tasks', @createTask
     @app.get '/api/admin/users', @getAdminUsers
     @app.post '/api/admin/users', @postAdminUsers
     @app.delete '/api/admin/users/:userId', @deleteAdminUser
@@ -276,3 +277,17 @@ module.exports = class RoutesApi
           res.json {}
       else
         res.json {}
+
+  createTask: (req,res,next) =>
+    return res.json {}, 401 unless req.user
+    @bonitaClient.queryDefinition.getLastProcess @servicesBonita.processName, "admin",{},(err,process) =>
+      return next err if err
+
+      processUUID = process?.uuid?.value
+      return res.send {} unless processUUID
+
+      @bonitaClient.runtime.instantiateProcess processUUID, req.user.username,{},(err,newProcess) =>
+        return next err if err
+        res.json
+          processInstanceUUID : newProcess?.value
+

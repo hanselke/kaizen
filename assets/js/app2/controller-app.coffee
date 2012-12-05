@@ -1,6 +1,7 @@
 class window.AppController
   constructor: (@$route, @$location, @$window,@$scope,@$http) ->
     @$scope.nextTask = @nextTask
+    @$scope.createTask = @createTask
     @$scope.flashMessage = @flashMessage
     @$scope.errorHandler = @errorHandler
     @$scope.isInRole = @isInRole
@@ -44,6 +45,13 @@ class window.AppController
   getCurrentTask: () =>
     @$scope.getItem "#{@$scope.currentUser.name}-task", null
 
+  createTask: (cb) =>
+    request = @$http.post "/api/tasks", {}
+    request.error (data, status, headers, config) =>
+      @$scope.flashMessage "Failed to create task"
+    request.success (data, status, headers, config) =>
+      @$scope.flashMessage "Task created"
+      # SHould invoke refresh here / ah well
 
   nextTask: (cb) =>
 
