@@ -128,7 +128,7 @@ module.exports = class RoutesApi
               taskUUID = nextTask?.value
 
               #"admin"
-              @bonitaClient.runtime.startTask taskUUID,req.user.username,req.user.username,{}, (err) =>
+              @bonitaClient.runtime.startTask taskUUID,true,req.user.username,{}, (err) =>
                 console.log "------5"
                 console.log "EXECUTE"
                 console.log "------5"
