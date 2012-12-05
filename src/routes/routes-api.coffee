@@ -114,7 +114,7 @@ module.exports = class RoutesApi
             console.log JSON.stringify(t)
             console.log "------3"
 
-            processInstanceId = t?.instanceUUID
+            processInstanceId = t?.instanceUUID?.value
             return res.json {} unless processInstanceId
 
             ### 
