@@ -99,7 +99,7 @@ module.exports = class RoutesApi
         ###
         This is most likely an assign task. So we execute it and assign it to the current user
         ###
-        @bonitaClient.runtime.executeTask firstTaskUUID,true, req.user.username,opts = {},(err) ->
+        @bonitaClient.runtime.executeTask firstTaskUUID,true, req.user.username,opts = {},(err) =>
           console.log "------2"
           console.log "EXECUTE TASK"
           console.log "------2"
@@ -107,19 +107,19 @@ module.exports = class RoutesApi
           ###
           # Now we need to retrieve the process instance id.
           ###
-          @bonitaClient.runtime.getTask firstTaskUUID,"admin",{}, (err,t) =>
+          @bonitaClient.queryRuntime.getTask firstTaskUUID,"admin",{}, (err,t) =>
             return next err if err
             console.log "------3"
             console.log JSON.stringify(t)
             console.log "------3"
 
-            processInstanceId = t?.ActivityInstance?.instanceUUID
+            processInstanceId = t?.instanceUUID
             return res.json {} unless processInstanceId
 
             ### 
             Now we retrieve a list of possible task states
             ###
-            @bonitaClient.runtime.getOneTaskByProcessInstanceUUIDAndActivityState processInstanceId,"READY",req.user.username,{}, (err,nextTask) =>
+            @bonitaClient.queryRuntime.getOneTaskByProcessInstanceUUIDAndActivityState processInstanceId,"READY",req.user.username,{}, (err,nextTask) =>
               console.log "------4"
               console.log JSON.stringify(nextTask)
               console.log "------4"
