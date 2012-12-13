@@ -2,8 +2,10 @@
 html(xmlns:ng='http://angularjs.org/', ng:app='myModule')
   head
     meta(charset='utf-8')
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Open Business
     link(rel='stylesheet', href='/css/bootstrap.css', media='screen')
+    link(rel='stylesheet', href='/css/bootstrap-responsive.css', media='screen')
     link(rel='stylesheet', href='css/app.css', media='screen')
     link(rel='stylesheet', href='css/print.css', media='print')
     script(src=asset('head.js'))
@@ -16,7 +18,7 @@ html(xmlns:ng='http://angularjs.org/', ng:app='myModule')
 
     .navbar.navbar-static-top
       .navbar-inner
-        .container
+        .container-fluid
           a.brand(href="/")
             |Open Business Solutions
 
@@ -30,45 +32,17 @@ html(xmlns:ng='http://angularjs.org/', ng:app='myModule')
               ul.dropdown-menu
                 li
                   a(href='') Edit Profile
+                li(ng-show='isInRole(\'admin\')')
+                  a(href='#/admin/users') Admin
                 li.divider
                 li
                   a.do-not-route(href='/users/sign-out') Sign Out
             li(ng:show='!currentUser')
               a.do-not-route(href="/users/sign-in") Sign In
 
+    div(style="position:fixed;bottom:0px;left:0px;right:0px;top:41px")
+      ng:view
 
-
-    table(ng:show='currentUser', style='display: none;')
-      tr(style='height: 10px;')
-        td.noPrint(style='width: 100px;', ng:show='currentUser')
-          .fullheight(style='background-color: white; border-radius: 7px; color: black;')
-            div(style='padding: 7px 5px;')
-              a(href='#')
-                img(src='img/open-business-logo.jpg', style='width: 110px;')
-            div(style='padding-left: 5px;')
-              button(style='margin-top: 1em; margin-bottom: 1em; font-weight: bold; height: 2em; color: blue;', ng:click='nextTask()') Next action
-              br
-            div(style='padding: 5px 5px 1px 5px;')
-              table
-                tr
-                  td
-                    a(href='/users/sign-out')
-                      img(ng:src='{{currentUser.primaryEmail | gravatar}}', style='border-radius: 5px; height: 50px; width: 50px;')
-                  td {{currentUser.username}}
-            div(style='padding-left: 5px; margin-top: 100px;')
-              button(style='margin-top: 1em; margin-bottom: 1em; font-weight: bold; height: 2em; color: #ff7400;', ng:click='toBoards()') To Boards
-              br
-            div(style='padding-left: 5px;')
-              button(style='margin-top: 1em; margin-bottom: 1em; font-weight: bold; height: 2em; color: #ff7400;', ng:click='createTask()') Create Task
-              br
-            div
-              ul(ng-show='isInRole(\'admin\')')
-                li
-                  a(href='#/admin/users') Users
-        td(style='height: 100%;')
-          ng:view(style='height: 100%; display: block;')
-    div(style='text-align: center; display: none;', ng:show='currentUser == null')
-      p Loading...
     //
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="/lib/jquery/jquery-1.6.2.min.js">\x3C/script>')</script>

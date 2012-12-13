@@ -25,12 +25,12 @@ html(lang='en', class="no-js layout-standard",'xmlns:fb'="http://www.facebook.co
 
     .navbar.navbar-static-top
       .navbar-inner
-        .container
+        .container-fluid
           a.brand(href="/")
             |Open Business Solutions
           //include ./navbar-identity
 
-    .container.main
+    .container-fluid.main
       block content 
 
     include partial-layout-footer
