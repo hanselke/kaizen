@@ -3,7 +3,7 @@ html(xmlns:ng='http://angularjs.org/', ng:app='myModule')
   head
     meta(charset='utf-8')
     title Open Business
-    link(rel='stylesheet', href='css/bootstrap.css', media='screen')
+    link(rel='stylesheet', href='/css/bootstrap.css', media='screen')
     link(rel='stylesheet', href='css/app.css', media='screen')
     link(rel='stylesheet', href='css/print.css', media='print')
     script(src=asset('head.js'))
@@ -11,6 +11,33 @@ html(xmlns:ng='http://angularjs.org/', ng:app='myModule')
     .help.overlay(onclick='$(\'.help\').hide()')
     .noPrint(style='position: fixed; width: 100%; height: 22px; bottom: 0px; text-align: right;')
       div(style='display: inline-block; height: 22px; padding: 3px 4px; margin-right: 282px; border-radius: 5px 5px 0 0; color: #aaa; background: url(\'img/background-small.png\'); cursor: pointer; font-family: Helvetica; font-size: 14px;', onclick='$(\'.help\').show()') Help
+
+    include ../layouts/flashes
+
+    .navbar.navbar-static-top
+      .navbar-inner
+        .container
+          a.brand(href="/")
+            |Open Business Solutions
+
+          ul.nav.pull-right
+            li.dropdown(ng:show='currentUser')
+              a.dropdown-toggle(href="#", data-toggle="dropdown")
+                .avatar-container(style="width:20px;height:20px;display:inline-block;margin-right:8px")
+                  img(alt='{{currentUser.username}}',ng:src='{{currentUser.primaryEmail | gravatar}}',style="width:20px;height:20px")
+                span {{currentUser.username}}
+                b.caret
+              ul.dropdown-menu
+                li
+                  a(href='') Edit Profile
+                li.divider
+                li
+                  a.do-not-route(href='/users/sign-out') Sign Out
+            li(ng:show='!currentUser')
+              a.do-not-route(href="/users/sign-in") Sign In
+
+
+
     table(ng:show='currentUser', style='display: none;')
       tr(style='height: 10px;')
         td.noPrint(style='width: 100px;', ng:show='currentUser')
