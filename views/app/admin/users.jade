@@ -1,31 +1,51 @@
-h2
-  span Users&nbsp;
-  a(href="#/admin/users/add",style="font-weight:normal;font-size:smaller") Add a new one
 
-table.table-striped.table-hover
-  thead
-    tr
-      th(colspan=2) Name
-      th Roles
-      th Email
-      th Actions
-  tbody
-    tr(style="vertical-align:center;",ng-repeat='user in users')
-      td
-          img(src="{{user.primaryEmail | gravatar }}",alt="{{user.displayName}}",style="width:30px; height:30px")
-      td
-        |{{user.username}}
-      td
-        a(ng-repeat="role in user.activeRoles",ng-click="removeRole(user._id,role)",style='background-color: green;padding:4px;margin-right:10px')
-          |{{role}}
-        a(ng-repeat="role in user.inactiveRoles",ng-click="addRole(user._id,role)",style='background-color: #ddd;padding:4px;margin-right:10px')
-          |{{role}}
-      td
-        |{{user.primaryEmail}}
-      td
-        button.btn.btn-warning(ng-click="deleteMe(user._id)") Delete
+.row(style="position:absolute;top:0px;bottom:200px;")
+  .container-fluid
+    .span2(style="margin-top:40px")
+      .well
+        ul.nav.nav-list
+          li.nav-header
+            |Users
+          li.active
+            |Overview
+          li
+            a(href="#/admin/users/add") Add a new one
+      .well
+        ul.nav.nav-list
+          li.nav-header
+            |More Admin
+          li
+            a(href="#/admin/processes") Processes
 
-p
-  button.btn.btn-warning(ng-click="syncToBonita()") Sync To Bonita
-  button.btn.btn-warning(ng-click="syncFromBonita()") Sync From Bonita
-  
+    .span10
+
+      h2
+        span Users&nbsp;
+        a(href="#/admin/users/add",style="font-weight:normal;font-size:smaller") Add a new one
+        button.btn.btn-warning(ng-click="syncToBonita()") Sync To Bonita
+        button.btn.btn-warning(ng-click="syncFromBonita()") Sync From Bonita
+
+      table.table-striped.table-hover
+        thead
+          tr
+            th(colspan=2) Name
+            th Roles
+            th Email
+            th Actions
+        tbody
+          tr(style="vertical-align:center;",ng-repeat='user in users')
+            td
+                img(src="{{user.primaryEmail | gravatar }}",alt="{{user.displayName}}",style="width:30px; height:30px")
+            td
+              |{{user.username}}
+            td
+              a(ng-repeat="role in user.activeRoles",ng-click="removeRole(user._id,role)",style='background-color: green;padding:4px;margin-right:10px')
+                {{role}}
+              a(ng-repeat="role in user.inactiveRoles",ng-click="addRole(user._id,role)",style='background-color: #ddd;padding:4px;margin-right:10px')
+                |{{role}}
+            td
+              |{{user.primaryEmail}}
+            td
+              button.btn.btn-warning(ng-click="deleteMe(user._id)") Delete
+
+        

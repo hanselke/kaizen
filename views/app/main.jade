@@ -1,99 +1,101 @@
-table(ng:show='currentUser', style='display: none;')
-  tr(style='height: 10px;')
-    td.noPrint(style='width: 100px;', ng:show='currentUser')
-      .fullheight(style='background-color: white; border-radius: 7px; color: black;')
-        div(style='padding: 7px 5px;')
-          a(href='#')
-            img(src='img/open-business-logo.jpg', style='width: 110px;')
-        div(style='padding-left: 5px;')
-          button(style='margin-top: 1em; margin-bottom: 1em; font-weight: bold; height: 2em; color: blue;', ng:click='nextTask()') Next action
-          br
-        div(style='padding-left: 5px; margin-top: 100px;')
-          button(style='margin-top: 1em; margin-bottom: 1em; font-weight: bold; height: 2em; color: #ff7400;', ng:click='toBoards()') To Boards
-          br
-        div(style='padding-left: 5px;')
-          button(style='margin-top: 1em; margin-bottom: 1em; font-weight: bold; height: 2em; color: #ff7400;', ng:click='createTask()') Create Task
-          br
 
-    td(style='height: 100%;')
-      table.page
-        tr
-          td(style='vertical-align: top;', colspan='2')
-            table#board(ng:show='lanes.length > 0')
-              colgroup
-                col(width='{{laneWidth}}', ng:repeat='lane in lanes')
+.row(style="position:absolute;top:0px;bottom:200px;")
+  .container-fluid
+    .span12
+      table(ng:show='currentUser', style='display: none;')
+        tr(style='height: 10px;')
+          td(style='height: 100%;')
+            table.page
               tr
-                th(ng:repeat='lane in lanes') {{lane_headings[lane]}}
-              tr
-                td(ng:repeat='lane in lanes')
-                  .card(ng:repeat='card in cards[lane]', ng:class='card[3]')
-                    //
-                       <span class="id">{{card.id}}</span> 
-                    span.desc {{card.desc}}
-                    span(ng:show='card.ready') ✓
-            .help.bubble.up(style='margin-left: 400px;') This is your kanban board
-            
-            table.cycletimes.fullwidth(cellpadding='0', cellspacing='0', ng:show='false && lanes.length > 0')
-              colgroup
-                col(width='{{laneWidth}}', ng:repeat='lane in lanes')
-              tr
-                td( ng:repeat='lane in lanes2')
-                  .cycle
-                    .time Time: {{lane.totalTimeLabel}}
-                    .cost Cost: {{lane.totalCost | currency}}
-            tr
-              //
-                 row for VSM 
-              td(colspan='2')
-                table#vsm(ng:show='false && lanes.length > 0')
-                  colgroup
-                    col(width="{{colsLane.width}}",ng-repeat='colsLane in colsFromLanes')
+                td(style='vertical-align: top;', colspan='2')
+                  table#board(ng:show='lanes.length > 0')
+                    colgroup
+                      col(width='{{laneWidth}}', ng:repeat='lane in lanes')
+                    tr
+                      th(ng:repeat='lane in lanes') {{lane_headings[lane]}}
+                    tr
+                      td(ng:repeat='lane in lanes')
+                        .card(ng:repeat='card in cards[lane]', ng:class='card[3]')
+                          //
+                             <span class="id">{{card.id}}</span> 
+                          span.desc {{card.desc}}
+                          span(ng:show='card.ready') ✓
+                  .help.bubble.up(style='margin-left: 400px;') This is your kanban board
                   
+                  table.cycletimes.fullwidth(cellpadding='0', cellspacing='0', ng:show='false && lanes.length > 0')
+                    colgroup
+                      col(width='{{laneWidth}}', ng:repeat='lane in lanes')
+                    tr
+                      td( ng:repeat='lane in lanes2')
+                        .cycle
+                          .time Time: {{lane.totalTimeLabel}}
+                          .cost Cost: {{lane.totalCost | currency}}
                   tr
-                    td(class="{{tdLane.klass}}", ng-repeat='tdLane in tdFromLanes')
-                      |{{tdLane.label}}
-          table.page.fullwidth(style='margin-top: 8px;display:none')
-            tr
-              //
-                 row for chat and company stream 
-              td(width='50%')
-                .chat
-                  .header Chat
-                  .content(style='height: 200px;')
-                    #chat_window(style='height: 175px; background: white; padding-left: 2px; overflow-y: auto;')
-                      div(ng:repeat='line in chat_lines', ng:class='getClassForMsg(line)')
-                        i(ng:show='line.name') {{line.name}}:
-                        | {{line.msg}}
-                        span.time [{{line.time | date:'HH:mm'}}]
-                    .input(style='padding-right: 5px; height: 25px;')
-                      form(ng:submit='sendMsg()')
-                        input.fullwidth(name='message')
-              td(width='50%')
-                .company_stream
-                  .header Company stream
-                  .content(style='height: 200px;')
-                    div(style='height: 100%; background: white; padding-left: 2px;')
-                      | You are subscribed to the Sales Order and Sales Department stream
-                      span.time [2 mins ago]
-                      i Chris
-                      | sent out RFQs.
-                      br
-                      span.time [8 mins ago]
-                      i Mon
-                      | mapped suppliers for
-                      a(href='href') RFQ#1234.
-                      br
-                      span.time [9 mins ago]
-                      i Derrick
-                      | mapped inventory for
-                      a(href='href') RFQ#1234.
-                      br
-                      span.time [15 mins ago]
-                      i Chris
-                      | processed an incoming fax.
-                      br
+                    //
+                       row for VSM 
+                    td(colspan='2')
+                      table#vsm(ng:show='false && lanes.length > 0')
+                        colgroup
+                          col(width="{{colsLane.width}}",ng-repeat='colsLane in colsFromLanes')
+                        
+                        tr
+                          td(class="{{tdLane.klass}}", ng-repeat='tdLane in tdFromLanes')
+                            |{{tdLane.label}}
+                table.page.fullwidth(style='margin-top: 8px;display:none')
+                  tr
+                    //
+                       row for chat and company stream 
+                    td(width='50%')
+                      .chat
+                        .header Chat
+                        .content(style='height: 200px;')
+                          #chat_window(style='height: 175px; background: white; padding-left: 2px; overflow-y: auto;')
+                            div(ng:repeat='line in chat_lines', ng:class='getClassForMsg(line)')
+                              i(ng:show='line.name') {{line.name}}:
+                              | {{line.msg}}
+                              span.time [{{line.time | date:'HH:mm'}}]
+                          .input(style='padding-right: 5px; height: 25px;')
+                            form(ng:submit='sendMsg()')
+                              input.fullwidth(name='message')
+                    td(width='50%')
+                      .company_stream
+                        .header Company stream
+                        .content(style='height: 200px;')
+                          div(style='height: 100%; background: white; padding-left: 2px;')
+                            | You are subscribed to the Sales Order and Sales Department stream
+                            span.time [2 mins ago]
+                            i Chris
+                            | sent out RFQs.
+                            br
+                            span.time [8 mins ago]
+                            i Mon
+                            | mapped suppliers for
+                            a(href='href') RFQ#1234.
+                            br
+                            span.time [9 mins ago]
+                            i Derrick
+                            | mapped inventory for
+                            a(href='href') RFQ#1234.
+                            br
+                            span.time [15 mins ago]
+                            i Chris
+                            | processed an incoming fax.
+                            br
 
-div(style='text-align: center; display: none;', ng:show='currentUser == null')
-  p Loading...
+      div(style='text-align: center; display: none;', ng:show='currentUser == null')
+        p Loading...
 
+.row(style="position:absolute;bottom:0px;height:200px")
+  .container-fluid
+    .span6
+      h2 Actions
+      .top-button-row(style='margin-bottom:20px')
+        button.btn.btn-primary.btn-large.center(style="white-space:nowrap;",ng:click='nextTask()') Next Action
+        .clearfix
+      .bottom-button-row
+      button.btn(ng:click='toBoards()') To Boards
+      button.btn(ng:click='createTask()') Create Task
+
+    .span6
+      h2.center Status
 

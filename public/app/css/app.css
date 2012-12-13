@@ -9,7 +9,7 @@ body > table > tbody > tr { vertical-align: top }
 table.item { background: #bae0ed; color: black }
 table.item:hover { background: #ECEDBA; cursor: pointer }
 td.item img { width: 80px }
-a { color: #0000EE }
+
 
 .register { background: white; color: black; display: inline-block;
 	padding: 0px 10px 10px 10px; margin: 0px 10px 10px 0px }
@@ -76,7 +76,7 @@ td.rightcolumn { padding-left: 4px !important }
 
 .right { text-align: right }
 td, th { padding-left: 0.3em; padding-right: 0.3em; padding-top: 3px; padding-bottom: 3px }
-button { width: 110px; font-size: 15px }
+
 input { font-size: 12px; }
 input.qty, input.price { text-align: right }
 
@@ -151,4 +151,14 @@ table.discussion:first-child { margin-top: 0px }
 	width: 0;
 }
 .help { display: none }
+
+h1,h2,h3,h4,h5,h6,p,ul,a,li {
+font-family: 'Lato', sans-serif !important;
+}
+
+h2 {
+font-family: 'Lato', sans-serif;
+font-weight: 400;
+font-size:18px;
+}
 
