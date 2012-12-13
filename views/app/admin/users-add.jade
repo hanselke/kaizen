@@ -1,7 +1,23 @@
-.container
-  .row
-    .span6
-      h1 Add a New User
+.row(style="position:absolute;top:0px;bottom:200px;")
+  .container-fluid
+    .span3(style="margin-top:40px")
+      .well
+        ul.nav.nav-list
+          li.nav-header
+            |Users
+          li
+            a(href="#/admin/users") Overview
+          li.active
+            |Add a new one
+      .well
+        ul.nav.nav-list
+          li.nav-header
+            |More Admin
+          li
+            a(href="#/admin/process-definitions") Process Definitions
+
+    .span9
+      h2 Add a New User
 
       form
         fieldset
