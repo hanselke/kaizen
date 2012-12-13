@@ -59,10 +59,10 @@ class window.MainController
       lane = lanes2[k]
       res.push 
         klass : "value"
-        label : moment.duration(lane.beforeTime).humanize()
+        label : moment.duration(lane.executionTime).humanize()
       res.push 
         klass : "wait" 
-        label : moment.duration(lane.afterTime).humanize()
+        label : moment.duration(lane.waitingTime).humanize()
     res
 
 

@@ -40,8 +40,8 @@ describe 'WHEN testing the route api tasks', ->
       lane.should.have.property "id", ""
       lane.should.have.property "totalTime",0
       lane.should.have.property "totalCost",0
-      lane.should.have.property "beforeTime",0
-      lane.should.have.property "afterTime",0
+      lane.should.have.property "executionTime",0
+      lane.should.have.property "waitingTime",0
       lane.should.have.property "activityDefinitions"
       lane.should.have.property "cards"
       lane.activityDefinitions.should.have.lengthOf 2
@@ -57,8 +57,8 @@ describe 'WHEN testing the route api tasks', ->
       card0.should.have.property "activityDefinitionUUID","QA_Data_Entry--1.51--Assign_enter_floor_data"
       card0.should.have.property "totalTime",0
       card0.should.have.property "totalCost",0
-      card0.should.have.property "beforeTime",0
-      card0.should.have.property "afterTime",0
+      card0.should.have.property "executionTime",0
+      card0.should.have.property "waitingTime",0
 
       card1 = lane.cards[1]
       should.exist card1
@@ -70,8 +70,8 @@ describe 'WHEN testing the route api tasks', ->
       card1.should.have.property "activityDefinitionUUID","QA_Data_Entry--1.51--Assign_enter_floor_data"
       card1.should.have.property "totalTime",0
       card1.should.have.property "totalCost",0
-      card1.should.have.property "beforeTime",0
-      card1.should.have.property "afterTime",0
+      card1.should.have.property "executionTime",0
+      card1.should.have.property "waitingTime",0
 
 
 
@@ -84,8 +84,8 @@ describe 'WHEN testing the route api tasks', ->
       lane.should.have.property "id", "QA_Data_Entry--1.51--_1_Enter_Floor_Data"
       lane.should.have.property "totalTime",0
       lane.should.have.property "totalCost",0
-      lane.should.have.property "beforeTime",0
-      lane.should.have.property "afterTime",0
+      lane.should.have.property "executionTime",0
+      lane.should.have.property "waitingTime",0
       lane.should.have.property "activityDefinitions"
       lane.should.have.property "cards"
       lane.activityDefinitions.should.have.lengthOf 2
@@ -100,8 +100,8 @@ describe 'WHEN testing the route api tasks', ->
       lane.should.have.property "id", "QA_Data_Entry--1.51--_2_Approve1"
       lane.should.have.property "totalTime",0
       lane.should.have.property "totalCost",0
-      lane.should.have.property "beforeTime",0
-      lane.should.have.property "afterTime",0
+      lane.should.have.property "executionTime",0
+      lane.should.have.property "waitingTime",0
       lane.should.have.property "activityDefinitions"
       lane.should.have.property "cards"
       lane.activityDefinitions.should.have.lengthOf 2
@@ -116,8 +116,8 @@ describe 'WHEN testing the route api tasks', ->
       lane.should.have.property "id", "QA_Data_Entry--1.51--_3_Approve2"
       lane.should.have.property "totalTime",0
       lane.should.have.property "totalCost",0
-      lane.should.have.property "beforeTime",0
-      lane.should.have.property "afterTime",0
+      lane.should.have.property "executionTime",0
+      lane.should.have.property "waitingTime",0
       lane.should.have.property "activityDefinitions"
       lane.should.have.property "cards"
       lane.activityDefinitions.should.have.lengthOf 2

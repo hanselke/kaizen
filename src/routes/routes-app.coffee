@@ -21,7 +21,7 @@ module.exports = class RoutesOther
     @app.get '/app/admin/users/add',@getAdminUsersAdd
 
   getApp: (req,res,next) =>
-    res.render 'app/index.ejs',
+    res.render 'app/index', #.ejs
           pretty: true
 
 

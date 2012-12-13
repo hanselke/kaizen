@@ -44,8 +44,8 @@ module.exports = (processDefinition,processInstances) ->
         id: ''
         totalTime : 0
         totalCost: 0
-        beforeTime : 0
-        afterTime: 0
+        executionTime : 0
+        waitingTime: 0
         cards: []
 
   sortedActivityDefinitionsForState = _.sortBy(_.filter(activityDefinitions, (x) -> x.isState),(x) -> x.order ) 
@@ -58,8 +58,8 @@ module.exports = (processDefinition,processInstances) ->
         id: activityDefinition.id
         totalTime : 0
         totalCost: 0
-        beforeTime : 0
-        afterTime: 0
+        executionTime : 0
+        waitingTime: 0
         activityDefinitions: [activityDefinition]
         cards: []
 
@@ -122,13 +122,13 @@ module.exports = (processDefinition,processInstances) ->
           startedDate= activity.startedDate || 0 #1354080180430
           lastUpdate = activity.lastUpdate || 0  #1354088710758
           totalTime = lastUpdate - startedDate
-          beforeTime = 0
-          afterTime = 0
+          executionTime = 0
+          waitingTime = 0
 
           if startedDate is 0 || lastUpdate is 0 || totalTime > 10000000000
             totalTime = 0
-            beforeTime = 0
-            afterTime = 0
+            executionTime = 0
+            waitingTime = 0
 
           instanceStateUpdates = activity.instanceStateUpdates
 
@@ -136,8 +136,8 @@ module.exports = (processDefinition,processInstances) ->
             instanceStateUpdates = [instanceStateUpdates.InstanceStateUpdate]
           
           if instanceStateUpdates && _.isArray instanceStateUpdates && instanceStateUpdates.length > 0
-            beforeTime = _.first(instanceStateUpdates).date - activity.startedDate
-            afterTime = activity.lastUpdate - _.first(instanceStateUpdates).date
+            executionTime = _.first(instanceStateUpdates).date - activity.startedDate
+            waitingTime = activity.lastUpdate - _.first(instanceStateUpdates).date
 
           myLane = result.lanes[0] unless myLane
 
@@ -152,15 +152,15 @@ module.exports = (processDefinition,processInstances) ->
               activityDefinitionUUID : activityDefinitionUUID
               totalTime :  totalTime
               totalCost: 0
-              beforeTime : beforeTime
-              afterTime: afterTime
+              executionTime : executionTime
+              waitingTime: waitingTime
 
     for lane in result.lanes
       for card in lane.cards
         lane.totalTime = lane.totalTime + card.totalTime
         lane.totalCost = lane.totalCost + card.totalCost
-        lane.beforeTime = lane.beforeTime + card.beforeTime
-        lane.afterTime = lane.afterTime + card.totalTime
+        lane.executionTime = lane.executionTime + card.executionTime
+        lane.waitingTime = lane.waitingTime + card.totalTime
 
 
 

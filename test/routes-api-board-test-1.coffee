@@ -32,15 +32,15 @@ describe 'WHEN testing the route api board', ->
         laneC = body.lanes[3]
 
         ###
-        {"lanes":[{"label":"Shift Manager Approval","name":"Approve1","id":"QA_Data_Entry--1.3--Approve1","totalTime":13422,"totalCost":34.2,"beforeTime":10000,"afterTime":3422,"cards":[]},{"label":"Production Manager Approval","name":"Approve2","id":"QA_Data_Entry--1.3--Approve2","totalTime":13422,"totalCost":34.2,"beforeTime":10000,"afterTime":3422,"cards":[]},{"label":"QA Checks","name":"Enter_Floor_Data","id":"QA_Data_Entry--1.3--Enter_Floor_Data","totalTime":13422,"totalCost":34.2,"beforeTime":10000,"afterTime":3422,"cards":[{"id":"QA_Data_Entry--1.3--2--Enter_Floor_Data--ita760b542-c98b-4134-829a-b73f22b7e07a--mainActivityInstance--noLoop","desc":"Enter Floor Data","ready":true,"state":"READY","processInstance":"QA_Data_Entry--1.3--2","totalTime":3522,"totalCost":4.1,"beforeTime":50,"afterTime":3472}]}]}
+        {"lanes":[{"label":"Shift Manager Approval","name":"Approve1","id":"QA_Data_Entry--1.3--Approve1","totalTime":13422,"totalCost":34.2,"executionTime":10000,"waitingTime":3422,"cards":[]},{"label":"Production Manager Approval","name":"Approve2","id":"QA_Data_Entry--1.3--Approve2","totalTime":13422,"totalCost":34.2,"executionTime":10000,"waitingTime":3422,"cards":[]},{"label":"QA Checks","name":"Enter_Floor_Data","id":"QA_Data_Entry--1.3--Enter_Floor_Data","totalTime":13422,"totalCost":34.2,"executionTime":10000,"waitingTime":3422,"cards":[{"id":"QA_Data_Entry--1.3--2--Enter_Floor_Data--ita760b542-c98b-4134-829a-b73f22b7e07a--mainActivityInstance--noLoop","desc":"Enter Floor Data","ready":true,"state":"READY","processInstance":"QA_Data_Entry--1.3--2","totalTime":3522,"totalCost":4.1,"executionTime":50,"waitingTime":3472}]}]}
         ###
         laneA.should.have.property 'label', 'Shift Manager Approval'
         laneA.should.have.property 'name', 'Approve1'
         laneA.should.have.property 'id', 'QA_Data_Entry--1.3--Approve1'
         laneA.should.have.property 'totalTime'
         laneA.should.have.property 'totalCost'
-        laneA.should.have.property 'beforeTime'
-        laneA.should.have.property 'afterTime'
+        laneA.should.have.property 'executionTime'
+        laneA.should.have.property 'waitingTime'
         laneA.should.have.property 'cards'
         laneA.cards.should.have.lengthOf 0
 
@@ -49,8 +49,8 @@ describe 'WHEN testing the route api board', ->
         laneB.should.have.property 'id', 'QA_Data_Entry--1.3--Approve2'
         laneB.should.have.property 'totalTime'
         laneB.should.have.property 'totalCost'
-        laneB.should.have.property 'beforeTime'
-        laneB.should.have.property 'afterTime'
+        laneB.should.have.property 'executionTime'
+        laneB.should.have.property 'waitingTime'
         laneB.should.have.property 'cards'
         laneB.cards.should.have.lengthOf 0
 
@@ -59,8 +59,8 @@ describe 'WHEN testing the route api board', ->
         laneC.should.have.property 'id', 'QA_Data_Entry--1.3--Enter_Floor_Data'
         laneC.should.have.property 'totalTime'
         laneC.should.have.property 'totalCost'
-        laneC.should.have.property 'beforeTime'
-        laneC.should.have.property 'afterTime'
+        laneC.should.have.property 'executionTime'
+        laneC.should.have.property 'waitingTime'
         laneC.should.have.property 'cards'
         laneC.cards.should.have.lengthOf 2
         should.exist laneC.cards[0]
@@ -74,8 +74,8 @@ describe 'WHEN testing the route api board', ->
         laneCcard0.should.have.property "processInstance","QA_Data_Entry--1.3--2"
         laneCcard0.should.have.property "totalTime"
         laneCcard0.should.have.property "totalCost"
-        laneCcard0.should.have.property "beforeTime"
-        laneCcard0.should.have.property "afterTime"
+        laneCcard0.should.have.property "executionTime"
+        laneCcard0.should.have.property "waitingTime"
 
         laneCcard1.should.have.property "id","QA_Data_Entry--1.3--4--Enter_Floor_Data--it1355b6fc-47af-47fd-86cf-62be9e552c51--mainActivityInstance--noLoop"
         laneCcard1.should.have.property "desc","Enter Floor Data"
@@ -84,7 +84,7 @@ describe 'WHEN testing the route api board', ->
         laneCcard1.should.have.property "processInstance","QA_Data_Entry--1.3--4"
         laneCcard1.should.have.property "totalTime"
         laneCcard1.should.have.property "totalCost"
-        laneCcard1.should.have.property "beforeTime"
-        laneCcard1.should.have.property "afterTime"
+        laneCcard1.should.have.property "executionTime"
+        laneCcard1.should.have.property "waitingTime"
 
         done()
