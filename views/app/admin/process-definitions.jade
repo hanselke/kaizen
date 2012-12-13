@@ -1,0 +1,38 @@
+
+.row(style="position:absolute;top:0px;bottom:200px;")
+  .container-fluid
+    .span3(style="margin-top:40px")
+      .well
+        ul.nav.nav-list
+          li.nav-header
+            |Process Definitions
+          li.active
+            |Overview
+          li
+            a(href="#/admin/process-definitions/add") Add a new one
+      .well
+        ul.nav.nav-list
+          li.nav-header
+            |More Admin
+          li
+            a(href="#/admin/users") Users
+
+    .span9
+
+      h2
+        span Process Definitions&nbsp;
+        a(href="#/admin/process-definitions/add",style="font-weight:normal;font-size:smaller") Add a new one
+
+      table.table-striped.table-hover
+        thead
+          tr
+            th Name
+            th Actions
+        tbody
+          tr(style="vertical-align:center;",ng-repeat='processDefinition in processDefinitions')
+            td
+              |{{processDefinition.name}}
+            td
+              button.btn.btn-warning(ng-click="deleteMe(processDefinition._id)") Delete
+
+        

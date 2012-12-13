@@ -19,6 +19,8 @@ module.exports = class RoutesOther
     @app.get '/app/task',@getTask
     @app.get '/app/admin/users',@getAdminUsers
     @app.get '/app/admin/users/add',@getAdminUsersAdd
+    @app.get '/app/admin/process-definitions',@getAdminProcessDefinitions
+    @app.get '/app/admin/process-definitions/add',@getAdminProcessDefinitionsAdd
 
   getApp: (req,res,next) =>
     res.render 'app/index', #.ejs
@@ -39,4 +41,13 @@ module.exports = class RoutesOther
 
   getAdminUsersAdd: (req,res,next) =>
     res.render 'app/admin/users-add',
+          pretty: true
+
+
+  getAdminProcessDefinitions: (req,res,next) =>
+    res.render 'app/admin/process-definitions',
+          pretty: true
+
+  getAdminProcessDefinitionsAdd: (req,res,next) =>
+    res.render 'app/admin/process-definitions-add',
           pretty: true
