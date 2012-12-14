@@ -1,0 +1,126 @@
+_ = require 'underscore-ext'
+PageResult = require('simple-paginator').PageResult
+PageResultInfinite = require('simple-paginator').PageResultInfinite
+errors = require 'some-errors'
+intToAlpha26String = require '../../../modules/int-to-base26'
+
+mongoose = require "mongoose"
+ObjectId = mongoose.Types.ObjectId
+
+
+#MAXCACHEDFOLLOWERS = 30
+MAXFOLLOWERSPERBUCKET = 100
+MAXCOUNTOBJECTS = 50
+
+###
+Provides methods to interact with processDefinitions.
+###
+module.exports = class ProcessDefinitionMethods
+  CREATE_FIELDS = ['_id','name','description','createdBy','bonitaProcessName']
+  UPDATE_FIELDS = ['name','description','createdBy','bonitaProcessName']
+
+  ###
+  Initializes a new instance of the @see ProcessDefinitionMethods class.
+  @param {Object} models A collection of models that can be used.
+  ###
+
+  ###
+  Initializes a new instance of the @see ProcessDefinitionMethods class.
+  @param {Object} models A collection of models that can be used.
+  ###
+  constructor:(@models) ->
+
+  all: (actor, offset = 0, count = 200, cb = ->) =>
+    # TODO: EXCLUDE DELETED
+    @models.ProcessDefinition.count  {}, (err, totalCount) =>
+      return cb err if err
+      @models.ProcessDefinition.find {}, null, { skip: offset, limit: count}, (err, items) =>
+        return cb err if err
+        cb null, new PageResult(items || [], totalCount, offset, count)
+
+  ###
+  Retrieve a single processDefinition-item through it's id
+  ###
+  get: (processDefinitionId, actor, ignoreSecurity, cb = ->) =>
+    @_getItem processDefinitionId, actor, ignoreSecurity, false, cb
+
+  ###
+  Retrieve a single processDefinition-item through it's id and ensure that we have write access.
+  ###
+  getForWrite: (processDefinitionId, actor, cb = ->) =>
+    @models.ProcessDefinition.findOneValidateWrite processDefinitionId, actor, cb
+
+
+  createOrPut :(objs = {}, actor, cb = ->) =>
+    return cb new errors.UnprocessableEntity("_id") unless objs._id
+    @_getItem objs._id, null, true, false, (err, item) =>
+      return cb err if err
+      if item
+        @put objs._id,objs,actor,true,cb
+      else
+        @create objs,actor,cb
+
+
+  ###
+  Create a new processDefinition
+  ###
+  create:(objs = {}, actor, cb = ->) =>
+    data = {}
+    data.createdBy = actor
+
+    _.extendFiltered data, CREATE_FIELDS, objs
+    return cb new errors.UnprocessableEntity("createdBy") unless data.createdBy && data.createdBy.actorId
+
+    model = new @models.ProcessDefinition(data)
+    model.save (err) =>
+      return cb err if err
+      cb(null, model,true)
+
+  delete: (processDefinitionId, actor, ignoreSecurity, cb = ->) =>
+    @_getItem processDefinitionId, actor, ignoreSecurity, true, (err, item) =>
+      return cb err if err
+      return cb(null) unless item
+      return cb null if item.isDeleted
+
+      item.isDeleted = true
+      item.deletedAt = new Date()
+      item.save (err) =>
+        return cb err if err
+        cb null
+
+  undelete: (processDefinitionId, actor, ignoreSecurity, cb = ->) =>
+    @_getItem processDefinitionId, actor, ignoreSecurity, true, (err, item) =>
+      return cb err if err
+      return cb new errors.NotFound("/processDefinitions/#{processDefinitionId}") unless item
+
+      return cb null, item unless item.isDeleted
+
+      item.isDeleted = false
+      item.deletedAt = null
+      item.save (err) =>
+        return cb err if err
+        cb null, item
+
+  patch: (processDefinitionId, obj = {}, actor, ignoreSecurity, cb = ->) =>
+    @_getItem processDefinitionId, actor, ignoreSecurity, true, (err, item) =>
+      return cb err if err
+      return cb new errors.NotFound("/processDefinitions/#{processDefinitionId}") unless item
+
+      _.extendFiltered item, UPDATE_FIELDS, obj
+      item.save (err) =>
+        return cb err if err
+        cb null, item
+
+  put: (processDefinitionId, obj = {}, actor, ignoreSecurity, cb = ->) =>
+    @_getItem processDefinitionId, actor, ignoreSecurity, true, (err, item) =>
+      return cb err if err
+      return cb new errors.NotFound("/processDefinitions/#{processDefinitionId}") unless item
+
+      item[field] = null for field in UPDATE_FIELDS
+      _.extendFiltered item, UPDATE_FIELDS, obj
+      item.save (err) =>
+        return cb err if err
+        cb null, item
+
+  _getItem: (processDefinitionId, actor, ignoreSecurity, forWrite, cb) =>
+    @models.ProcessDefinition.findOne _id : processDefinitionId, cb
