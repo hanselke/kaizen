@@ -32,6 +32,10 @@ module.exports = class RoutesApi
     @app.post '/api/admin/users/:userId/roles/:role', @addRole
     @app.delete '/api/admin/users/:userId/roles/:role', @deleteRole
 
+    @app.get '/api/admin/process-definitions', @getAdminProcessDefinitions
+    @app.post '/api/admin/process-definitions', @postAdminProcessDefinitions
+    @app.delete '/api/admin/process-definitions/:processDefinitionId', @deleteAdminProcessDefinition
+
   ###
   Retrieve the current session (e.g. the user that is currently logged in). 
   Returns a 404 if no session exists - e.g. no user is logged in.
@@ -301,4 +305,23 @@ module.exports = class RoutesApi
         return next err if err
         res.json
           processInstanceUUID : newProcess?.value
+
+
+  getAdminProcessDefinitions: (req,res,next) =>
+    return res.json {}, 401 unless req.user
+    @dbStore.processDefinitions.all 0,100, (err,result) =>
+      return next err if err
+      res.json result
+
+ 
+  postAdminProcessDefinitions: (req,res,next) =>
+    @dbStore.processDefinitions.create req.body, (err,item) =>
+      res.json item
+
+  deleteAdminProcessDefinition: (req,res,next) =>
+    processDefinitionId = req.params.processDefinitionId
+    @dbStore.processDefinitions.destroy processDefinitionId,null, (err,item) =>
+      return next err if err
+      res.json {}
+
 
