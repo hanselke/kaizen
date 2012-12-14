@@ -3,7 +3,7 @@ _ = require 'underscore'
 ProcessDefinitionSchema = require './schemas/process-definition-schema'
 
 
-ProcessDefinitionsMethods = require './methods/process-definitions-methods'
+ProcessDefinitionsMethods = require './methods/process-definition-methods'
 
 module.exports = class Store
   constructor: (@settings = {}) ->

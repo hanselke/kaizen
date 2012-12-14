@@ -2,7 +2,6 @@ _ = require 'underscore-ext'
 PageResult = require('simple-paginator').PageResult
 PageResultInfinite = require('simple-paginator').PageResultInfinite
 errors = require 'some-errors'
-intToAlpha26String = require '../../../modules/int-to-base26'
 
 mongoose = require "mongoose"
 ObjectId = mongoose.Types.ObjectId

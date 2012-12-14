@@ -4,7 +4,6 @@ pluginTimestamp = require "mongoose-plugins-timestamp"
 pluginCreatedBy = require "mongoose-plugins-created-by"
 pluginDeleteParanoid = require "mongoose-plugins-delete-paranoid"
 pluginTagsSimple = require "mongoose-plugins-tags-simple"
-pluginAccessibleBy = require "mongoose-plugins-accessible-by"
 errors = require 'some-errors'
 
 
