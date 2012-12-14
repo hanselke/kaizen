@@ -20,6 +20,7 @@ mongoose = require 'mongoose'
 bonitaClientPackage = require './modules/bonita-client'
 bonitaTransformer = require './modules/bonita-transformer'
 protectResource = require './site/protect-resource'
+dbStorePackage = require './db-store'
 
 ###
 # Setup version
@@ -166,6 +167,7 @@ module.exports = class App
     @database = mongoose.connect config.get('services:db')
     @identityStore = identityStorePackage.store(oauthProvider : config.get('provider'))
     @bonitaClient = bonitaClientPackage.client config.get('services:bonita')
+    @dbStore = dbStorePackage.store()
 
     @baseUrl = baseUrl = config.get('site:url')
 
@@ -248,6 +250,7 @@ module.exports = class App
       identityStore : @identityStore
       bonitaClient : @bonitaClient
       bonitaTransformer : bonitaTransformer
+      dbStore :@dbStore
 
     # TODO: Order might be important, and we need to check that.
     @routes =
@@ -257,6 +260,7 @@ module.exports = class App
       routesApi: new RoutesApi settings,config.get('services:bonita')
       routesApp: new RoutesApp settings
       routesProxy: new RoutesProxy settings,config.get('services:bonita')
+
 
     @app.set('views', __dirname + '/../views')
     @app.set('view engine', 'jade')
