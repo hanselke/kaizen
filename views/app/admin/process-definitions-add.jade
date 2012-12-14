@@ -1,0 +1,37 @@
+
+.row(style="position:absolute;top:0px;bottom:200px;")
+  .container-fluid
+    .span3(style="margin-top:40px")
+      .well
+        ul.nav.nav-list
+          li.nav-header
+            |Process Definitions
+          li
+            a(href="#/admin/process-definitions") Overview
+          li.active
+            |Add a new one
+      .well
+        ul.nav.nav-list
+          li.nav-header
+            |More Admin
+          li
+            a(href="#/admin/processDefinitions") Users
+
+    .span9
+      h2 Add a Process Definition
+      p Process definitions mimic the bonita process definitions. They link a form with the respective bonita process. You still need to create the bonita process.
+
+
+      form
+        fieldset
+          label Name
+          input( type="text",placeholder="3..30 characters",ng-model="processDefinition.name")
+          span.help-block Please enter a name here.
+          label Description
+          input( type="text",placeholder="0..1000 characters",ng-model="processDefinition.description")
+          span.help-block Please enter a description here.
+          label Bonita Process Name
+          input( type="text",placeholder="2..100 characters",ng-model="processDefinition.bonitaProcessName")
+          span.help-block Please enter the case sensitive name of the bonita process here.
+
+          button.btn.btn-primary( type="submit",ng-click="create(processDefinition)") Create Process Definition

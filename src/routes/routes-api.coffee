@@ -315,12 +315,12 @@ module.exports = class RoutesApi
 
  
   postAdminProcessDefinitions: (req,res,next) =>
-    @dbStore.processDefinitions.create req.body, (err,item) =>
+    @dbStore.processDefinitions.create req.body,actorId : req.user._id, (err,item) =>
       res.json item
 
   deleteAdminProcessDefinition: (req,res,next) =>
     processDefinitionId = req.params.processDefinitionId
-    @dbStore.processDefinitions.destroy processDefinitionId,null, (err,item) =>
+    @dbStore.processDefinitions.destroy processDefinitionId,null,true, (err,item) =>
       return next err if err
       res.json {}
 

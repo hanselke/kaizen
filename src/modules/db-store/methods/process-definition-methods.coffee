@@ -87,6 +87,15 @@ module.exports = class ProcessDefinitionMethods
         return cb err if err
         cb null
 
+  destroy: (processDefinitionId, actor, ignoreSecurity, cb = ->) =>
+    @_getItem processDefinitionId, actor, ignoreSecurity, true, (err, item) =>
+      return cb err if err
+      return cb(null) unless item
+
+      item.remove (err) =>
+        return cb err if err
+        cb null
+
   undelete: (processDefinitionId, actor, ignoreSecurity, cb = ->) =>
     @_getItem processDefinitionId, actor, ignoreSecurity, true, (err, item) =>
       return cb err if err

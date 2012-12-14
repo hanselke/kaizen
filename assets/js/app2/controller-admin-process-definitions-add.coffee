@@ -3,11 +3,11 @@ class window.AdminProcessDefinitionsAddController
     @$scope.processDefinition = {}
     @$scope.create = @create
 
-  create: (user) =>
-    request = @$http.post "/api/admin/process-definitions",user
+  create: (processDefinition) =>
+    request = @$http.post "/api/admin/process-definitions",processDefinition
     request.error @$scope.errorHandler
     request.success (data, status, headers, config) =>
-      #@$scope.users = data.items
+      #@$scope.processDefinitions = data.items
       @$location.path '/admin/process-definitions'
       @$scope.flashMessage "New Process Definition Created"
 

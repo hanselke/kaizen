@@ -13,7 +13,7 @@ class window.AdminProcessDefinitionsController
       @$scope.processDefinitions = data.items
 
   deleteMe: (processDefinitionId) =>
-    request = @$http.delete "/api/admin/process-definition/#{processDefinitionId}"
+    request = @$http.delete "/api/admin/process-definitions/#{processDefinitionId}"
     request.error @$scope.errorHandler
     request.success (data, status, headers, config) =>
       @refresh()
