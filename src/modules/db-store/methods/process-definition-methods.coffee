@@ -16,7 +16,7 @@ Provides methods to interact with processDefinitions.
 ###
 module.exports = class ProcessDefinitionMethods
   CREATE_FIELDS = ['_id','name','description','createdBy','bonitaProcessName']
-  UPDATE_FIELDS = ['name','description','createdBy','bonitaProcessName']
+  UPDATE_FIELDS = ['name','description','createdBy','bonitaProcessName','sourceXlsx','sourceSize','sourceFilename','sourceType']
 
   ###
   Initializes a new instance of the @see ProcessDefinitionMethods class.

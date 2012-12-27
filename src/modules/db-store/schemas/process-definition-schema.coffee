@@ -23,6 +23,14 @@ module.exports = ProcessDefinitionSchema = new mongoose.Schema
         trim: true
         match: /.{2,100}/
         required: true
+      sourceXlsx:
+        type: String
+      sourceSize:
+        type: Number
+      sourceFilename:
+        type: String
+      sourceType:
+        type: String
 
 
     , strict: true

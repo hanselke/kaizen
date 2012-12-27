@@ -21,6 +21,7 @@ module.exports = class RoutesOther
     @app.get '/app/admin/users/add',@getAdminUsersAdd
     @app.get '/app/admin/process-definitions',@getAdminProcessDefinitions
     @app.get '/app/admin/process-definitions/add',@getAdminProcessDefinitionsAdd
+    @app.get '/app/admin/process-definitions/form',@getAdminProcessDefinitionsForm
 
   getApp: (req,res,next) =>
     res.render 'app/index', #.ejs
@@ -50,4 +51,8 @@ module.exports = class RoutesOther
 
   getAdminProcessDefinitionsAdd: (req,res,next) =>
     res.render 'app/admin/process-definitions-add',
+          pretty: true
+
+  getAdminProcessDefinitionsForm: (req,res,next) =>
+    res.render 'app/admin/process-definitions-form',
           pretty: true

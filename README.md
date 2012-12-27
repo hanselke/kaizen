@@ -1,3 +1,19 @@
+Tasks:
+
+Save excel in the database / replace if necessary.
+Download button to download excel
+show excel already uploaded.
+
+--
+Show sample form based on excel
+--
+Create Task: Pick from process defintions, clone the excel sheet, create task in bonita
+edit form
+save user state
+
+
+
+
 How to install and start on the server:
 Precon: mongodb installed locally
 

@@ -2,6 +2,8 @@ _ = require 'underscore'
 async = require 'async'
 winston = require 'winston'
 errors = require 'some-errors'
+fs = require 'fs'
+XLSX = require 'xlsx'
 
 module.exports = class RoutesApi
 
@@ -35,6 +37,8 @@ module.exports = class RoutesApi
     @app.get '/api/admin/process-definitions', @getAdminProcessDefinitions
     @app.post '/api/admin/process-definitions', @postAdminProcessDefinitions
     @app.delete '/api/admin/process-definitions/:processDefinitionId', @deleteAdminProcessDefinition
+    @app.get '/api/admin/process-definitions/:processDefinitionId', @getAdminProcessDefinition
+    @app.post '/api/admin/process-definitions/:processDefinitionId', @uploadAdminProcessDefinition
 
   ###
   Retrieve the current session (e.g. the user that is currently logged in). 
@@ -324,4 +328,42 @@ module.exports = class RoutesApi
       return next err if err
       res.json {}
 
+
+  getAdminProcessDefinition: (req,res,next) =>
+    processDefinitionId = req.params.processDefinitionId
+    @dbStore.processDefinitions.get processDefinitionId,null,true, (err,item) =>
+      return next err if err
+
+      delete item.sourceXlsx
+      res.json item
+
+  uploadAdminProcessDefinition: (req,res,next) =>
+    processDefinitionId = req.params.processDefinitionId
+
+    file = req.files.file
+    return next new Error("No file present") unless file
+
+    xlsx = XLSX.readFile(file.path)
+    console.log "SHEETNAME: #{xlsx.SheetNames[0]}"
+
+    console.log JSON.stringify(xlsx.Sheets[xlsx.SheetNames[0]])
+    ###
+    for z of xlsx.SheetNames[0]
+      continue  if z[0] is "!"
+      console.log y + "!" + z + "=" + JSON.stringify(zip.Sheets[y][z].v)
+    ###
+
+    fs.readFile file.path, 'utf8', (err, content) =>
+      return next err if err
+
+      base64Content = new Buffer(content).toString('base64')
+
+      data = 
+        sourceXlsx: base64Content
+        sourceSize: file.size
+        sourceFilename: file.name
+        sourceType: file.type
+      @dbStore.processDefinitions.patch processDefinitionId,data ,null,true, (err,item) =>
+        return next err if err
+        res.json {}
 

@@ -1,6 +1,7 @@
 class window.AdminProcessDefinitionsController
-  constructor: (@$scope,@$http) ->
+  constructor: (@$scope,@$http,@$location) ->
     @$scope.deleteMe = @deleteMe
+    @$scope.editForm = @editForm
 
     @$scope.processDefinitions = []
     @refresh()
@@ -18,4 +19,6 @@ class window.AdminProcessDefinitionsController
     request.success (data, status, headers, config) =>
       @refresh()
 
-window.AdminProcessDefinitionsController.$inject = ['$scope',"$http"]
+  editForm: (processDefinitionId) =>
+    @$location.path "/admin/process-definitions/#{processDefinitionId}/form"
+window.AdminProcessDefinitionsController.$inject = ['$scope',"$http","$location"]
