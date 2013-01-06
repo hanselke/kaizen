@@ -35,7 +35,7 @@ class Helper
     _.defaults obj, { }
     config.file file: path.join(__dirname, '../../config/env/test.json')
 
-    @mongo = mongoskin.db(config.get('services:db'))
+    @mongo = mongoskin.db(config.get('services:db'), safe: true)
     @openBusinessApp =  @openBusinessApp || new App {}
     
 

@@ -1,0 +1,224 @@
+Sub test()
+    Dim rwIndex As Integer
+    Dim colIndex As Integer
+    
+    Dim minRow As Integer
+    Dim maxRow As Integer
+    Dim minCol As Integer
+    Dim maxCol As Integer
+    Dim cell As Range
+    Dim borderLeft As Border
+    Dim borderRight As Border
+    Dim borderTop As Border
+    Dim borderBottom As Border
+    
+    minRow = ActiveSheet.UsedRange.Row
+    minCol = ActiveSheet.UsedRange.Column
+    maxRow = minRow + ActiveSheet.UsedRange.Rows.Count
+    maxCol = minCol + ActiveSheet.UsedRange.Columns.Count
+    
+    Rem MyFile1 = Application.GetSaveAsFilename("converted-form.json", "JSON Files (*.json), *.json", 0)
+    
+    MyFile1 = "outputFromExcel1.json"
+    fnum1 = FreeFile()
+    Open MyFile1 For Output As fnum1
+    
+    Print #fnum1, "{"
+    Print #fnum1, """dimensions"" : {"
+    Print #fnum1, """minRow"": " + Str(minRow - 1)
+    Print #fnum1, ",""minCol"": " + Str(minCol - 1)
+    Print #fnum1, ",""maxRow"": " + Str(maxRow - 1)
+    Print #fnum1, ",""maxCol"": " + Str(maxCol - 1)
+    Print #fnum1, "}"
+    
+    Print #fnum1, ",""rowHeights"" : ["
+    For rwIndex = minRow To maxRow
+        If rwIndex > minRow Then _
+            Print #fnum1, ","
+        Print #fnum1, Str(ActiveSheet.Rows(rwIndex).Height)
+                
+    Next rwIndex
+    
+    Print #fnum1, "]"
+    Print #fnum1, ",""colWidths"" : ["
+    For colIndex = minCol To maxCol
+        If colIndex > minCol Then _
+            Print #fnum1, ","
+        Print #fnum1, Str(ActiveSheet.Columns(colIndex).Width)
+                
+    Next colIndex
+    
+    Print #fnum1, "]"
+        
+    Print #fnum1, ",""rows"": ["
+    For rwIndex = minRow To maxRow
+            If rwIndex > minRow Then _
+                Print #fnum1, ","
+            Print #fnum1, "{"
+            Print #fnum1, " ""row"": " + Str(rwIndex - 1)
+            Print #fnum1, ", ""cells"": ["
+            
+            For colIndex = minCol To maxCol
+                If colIndex > minCol Then _
+                    Print #fnum1, ","
+                Print #fnum1, "{"
+                Print #fnum1, " ""col"": " + Str(colIndex - 1)
+
+                
+                Set cell = Cells(rwIndex, colIndex)
+                
+                If Not IsNull(cell) Then
+                
+                Print #fnum1, ",""backgroundColor"": "
+                Print #fnum1, cell.Interior.Color
+                
+                Rem escape the following
+                Print #fnum1, ",""text"": "
+                Print #fnum1, """" & cell.Text & """"
+                
+                Print #fnum1, ",""value"": "
+                Print #fnum1, """" & cell.Value & """"
+                Rem end escape the following
+                
+                If Not IsNull(cell.Font) Then
+                    If Not IsNull(cell.Font.Color) Then
+                       Print #fnum1, ",""fontColor"": "
+                       Print #fnum1, cell.Font.Color
+                   End If
+                   
+                   If Not IsNull(cell.Font.Size) Then
+                        Print #fnum1, ",""fontSize"": "
+                       Print #fnum1, cell.Font.Size
+                    End If
+                    
+                    If Not IsNull(cell.Font.Bold) Then
+                        Print #fnum1, ",""fontBold"": "
+                        Print #fnum1, BoolToString(cell.Font.Bold)
+                    End If
+                    
+                    If Not IsNull(cell.Font.Italic) Then
+                       Print #fnum1, ",""fontItalic"": "
+                       Print #fnum1, BoolToString(cell.Font.Italic)
+                    End If
+                    
+                    If Not IsNull(cell.Font.Name) Then
+                        Print #fnum1, ",""fontName"": "
+                        Print #fnum1, """" & cell.Font.Name & """"
+                    End If
+                    
+                    If Not IsNull(cell.Font.Underline) Then
+                        Print #fnum1, ",""fontUnderline"": "
+                        Print #fnum1, BoolToString(cell.Font.Underline)
+                    End If
+                End If
+                
+                Print #fnum1, ",""locked"": "
+                Print #fnum1, BoolToString(cell.Locked)
+                
+                Print #fnum1, ",""horizontalAlignment"": "
+                
+                If cell.HorizontalAlignment = xlLeft Then
+                     Print #fnum1, """left"""
+                Else
+                  
+                       If cell.HorizontalAlignment = xlCenter Then
+                             Print #fnum1, """center"""
+                        Else
+                       If cell.HorizontalAlignment = xlRight Then
+                             Print #fnum1, """right"""
+                        Else
+                             Print #fnum1, """justify"""
+                   
+                        End If
+                   
+                        End If
+                
+                End If
+                
+                If Not IsNull(cell.Borders) Then
+                
+                  Set borderLeft = cell.Borders(xlEdgeLeft)
+                  Set borderRight = cell.Borders(xlEdgeRight)
+                  Set borderTop = cell.Borders(xlEdgeTop)
+                  Set borderBottom = cell.Borders(xlEdgeBottom)
+                 
+                If Not IsNull(borderLeft) Then
+                    Print #fnum1, ",""borderLeft"": { "
+                    
+                    Print #fnum1, """color"":" & borderLeft.Color
+                    Print #fnum1, ",""lineStyle"":" & borderLeft.LineStyle
+                    Print #fnum1, ",""weight"":" & borderLeft.Weight
+                    Print #fnum1, "}"
+                End If
+                
+                If Not IsNull(borderRight) Then
+                    Print #fnum1, ",""borderRight"": { "
+                    
+                    Print #fnum1, """color"":" & Str(borderRight.Color)
+                    Print #fnum1, ",""lineStyle"":" & Str(borderRight.LineStyle)
+                    Print #fnum1, ",""weight"":" & Str(borderRight.Weight)
+                    Print #fnum1, "}"
+                End If
+
+                If Not IsNull(borderTop) Then
+                    Print #fnum1, ",""borderTop"": { "
+                    
+                    Print #fnum1, """color"":" & Str(borderTop.Color)
+                    Print #fnum1, ",""lineStyle"":" & Str(borderTop.LineStyle)
+                    Print #fnum1, ",""weight"":" & Str(borderTop.Weight)
+                    Print #fnum1, "}"
+                End If
+                
+                If Not IsNull(borderBottom) Then
+                    Print #fnum1, ",""borderBottom"": { "
+                    
+                    Print #fnum1, """color"":" & borderBottom.Color
+                    Print #fnum1, ",""lineStyle"":" & borderBottom.LineStyle
+                    Print #fnum1, ",""weight"":" & borderBottom.Weight
+                    Print #fnum1, "}"
+                End If
+    
+
+                End If
+                
+                   
+                   If Not IsNull(cell.MergeCells) And cell.MergeCells Then
+                             Print #fnum1, ",""mergedCell"": { "
+                             
+                             
+                             Print #fnum1, """cols"":" & Str(cell.MergeArea.Columns.Count)
+                             Print #fnum1, ",""rows"":" & Str(cell.MergeArea.Rows.Count)
+                             Print #fnum1, ",""col"":" & Str(cell.MergeArea.Column - 1)
+                             Print #fnum1, ",""row"":" & Str(cell.MergeArea.Row - 1)
+
+                             
+                             Print #fnum1, "}"
+
+                   End If
+                
+                End If
+                
+                Print #fnum1, "}"
+            Next colIndex
+            Print #fnum1, "]"
+            Print #fnum1, "}"
+    Next rwIndex
+    
+    Print #fnum1, "]"
+    
+    Print #fnum1, "}"
+    Close #fnum1
+    
+    MsgBox "Export complete. Now import the generated file."
+End Sub
+
+
+Function BoolToString(ws As Boolean) As String
+        If ws Then
+            BoolToString = "true"
+        Else
+            BoolToString = "false"
+        End If
+End Function
+
+    
