@@ -54,14 +54,9 @@ class window.AppController
       # SHould invoke refresh here / ah well
 
   nextTask: (cb) =>
-
-    # Remove this in production
-    ###
-    @$scope.currentTask = 
-      taskFormURL : "http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita?mode=app&task=QA_Data_Entry--1.3--2--Enter_Floor_Data--ita760b542-c98b-4134-829a-b73f22b7e07a--mainActivityInstance--noLoop"
-      taskUUID : "QA_Data_Entry--1.3--2--Enter_Floor_Data--ita760b542-c98b-4134-829a-b73f22b7e07a--mainActivityInstance--noLoop"
+    # Dummy for now.
     @$location.path "/task"
-    return 
+
     ###
 
     request = @$http.get "/api/tasks"
@@ -75,22 +70,6 @@ class window.AppController
         @$location.path "/task"
       else
         @$scope.flashMessage "Nothing to do at the moment"
-
-    ###
-    processInstanceUUID = null
-
-    for lane in window.lanesBoard || []
-      for card in lane.card || []
-        processInstanceUUID = card.processInstance if!processInstanceUUID
-
-    if processInstanceUUID
-      request = @$http.get "/api/tasks?procInstUUID=#{processInstanceUUID}"
-      request.success (data, status, headers, config) =>
-        @$scope.currentTask = data
-        @$location.path "/task"
-
-    else
-      alert "There is nothing to do at the moment"
     ###
 
   flashMessage: (msg) =>

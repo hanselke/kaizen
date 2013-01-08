@@ -1,7 +1,6 @@
 HTML: Width/Height
 HTML: Input
 HTML: Merge Cells
-HTML: Add Cell Info Data
 
 Show form for user
 Edit values in form

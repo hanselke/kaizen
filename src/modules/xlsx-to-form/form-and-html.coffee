@@ -3,10 +3,11 @@ HtmlWriter=  require './html-writer'
 class FormAndHmtl
 
   createCss: (form) =>
+    cssPrefix = ".xlsl-form-container "
     result = ""
     for cssClass in form.cssClasses || []
-      result += " .#{cssClass.name} {"
-      result += "font-name:\"#{cssClass.fontName}\";" if cssClass.fontName && cssClass.fontName.length > 0
+      result += " #{cssPrefix} .#{cssClass.name} {"
+      result += "font-family:\"#{cssClass.fontName}\";" if cssClass.fontName && cssClass.fontName.length > 0
       result += "font-size:#{cssClass.fontSize};" if cssClass.fontSize
       result += "font-weight:#{cssClass.fontWeight};" if cssClass.fontWeight
       result += "font-style:#{cssClass.fontStyle};" if cssClass.fontStyle && cssClass.fontStyle.length > 0
