@@ -46,7 +46,7 @@ class window.AppController
     @$scope.getItem "#{@$scope.currentUser.name}-task", null
 
   createTask: (cb) =>
-    request = @$http.post "/api/tasks", {}
+    request = @$http.post "/api/tasks", processDefinitionId : "50d22f260b75ca1d9000000c"
     request.error (data, status, headers, config) =>
       @$scope.flashMessage "Failed to create task"
     request.success (data, status, headers, config) =>

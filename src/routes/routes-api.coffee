@@ -303,7 +303,9 @@ module.exports = class RoutesApi
         res.json {}
 
   createTask: (req,res,next) =>
-    return res.json {}, 401 unless req.user
+    return res.json 401,{} unless req.user
+    return res.json 422,{} unless req.body.processDefinitionId
+
     @bonitaClient.queryDefinition.getLastProcess @servicesBonita.processName, "admin",{},(err,process) =>
       return next err if err
 
@@ -312,12 +314,24 @@ module.exports = class RoutesApi
 
       @bonitaClient.runtime.instantiateProcess processUUID, req.user.username,{},(err,newProcess) =>
         return next err if err
-        res.json
-          processInstanceUUID : newProcess?.value
+
+        processInstanceUUID = newProcess?.value
+
+        return res.json 500,{} unless processInstanceUUID
+
+
+        payload =
+          processInstanceUUID: processInstanceUUID
+          processDefinitionId: req.body.processDefinitionId
+          checkedOutByUserId: req.user._id
+
+        @dbStore.tasks.create payload,actorId : req.user._id, (err,item) =>
+          res.json item
+
 
 
   getAdminProcessDefinitions: (req,res,next) =>
-    return res.json {}, 401 unless req.user
+    return res.json 401,{} unless req.user
     @dbStore.processDefinitions.all null,0,200, (err,result) =>
       return next err if err
       res.json result

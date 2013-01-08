@@ -41,6 +41,8 @@ class FormAndHmtl
 
     writer.pushTag "table"
     writer.addAttribute "cellspacing", "0"
+    #writer.addAttribute "style", "border-style:none 0px transparent;background-color:transparent;background:transparent;"
+
     totalWidth = 0
     totalWidth += x for x in form.colWidths || []
     writer.addAttribute "width","#{totalWidth}"
