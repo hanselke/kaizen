@@ -1,16 +1,16 @@
-Tasks:
+HTML: Width/Height
+HTML: Input
+HTML: Merge Cells
+HTML: Add Cell Info Data
 
-Save excel in the database / replace if necessary.
-Download button to download excel
-show excel already uploaded.
-
---
-Show sample form based on excel
---
-Create Task: Pick from process defintions, clone the excel sheet, create task in bonita
-edit form
-save user state
-
+Show form for user
+Edit values in form
+load form data from db
+Save form to db
+Download form as complete xls
+Link with tasks in bonita
+Store active task for user
+add time tracking information
 
 
 

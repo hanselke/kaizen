@@ -14,7 +14,7 @@ describe 'WHEN testing the home page', ->
     helper.stop done
 
   describe 'form', ->
-    it 'should load', (done) ->
+    it '1. should load', (done) ->
       xlsxToForm.loadAndConvert form1Path, (err,html) =>
         return done err if err
 
@@ -28,8 +28,20 @@ describe 'WHEN testing the home page', ->
       xlsxToForm.loadAndConvertVba layout1Path, (err,converted) =>
         return done err if err
 
-        console.log ""
-        console.log JSON.stringify(converted)
+        #console.log ""
+        #console.log JSON.stringify(converted)
         done null
+
+  describe 'layout', ->
+    it 'should load', (done) ->
+      xlsxToForm.loadAndConvertVba layout1Path, (err,converted) =>
+        return done err if err
+        xlsxToForm.createHtmlFromLayoutForm converted,(err,html) =>
+          return done err if err
+
+          console.log ""
+          console.log JSON.stringify(html)
+          done null
+
 
         

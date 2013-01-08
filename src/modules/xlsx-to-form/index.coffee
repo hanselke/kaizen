@@ -10,10 +10,7 @@ module.exports =
   loadAndConvert: (path,cb) ->
     form = new XlsxForm()
     form.loadFromPath path, (err) =>
-      
-      form = {}
-      html = formAndHtml.createHtml(form)
-      cb null,html
+        cb null,form
 
   loadAndConvertVba: (pathToJson,cb) =>
     lf = new LayoutForm()
@@ -21,3 +18,10 @@ module.exports =
     lf.loadVbaOutputFromPath pathToJson, (err,converted) =>
       cb err, converted
 
+  createHtmlFromLayoutForm: (layoutForm,cb) =>
+      html = formAndHtml.createHtml(layoutForm)
+      cb null,html
+
+  createCssFromLayoutForm: (layoutForm,cb) =>
+      css = formAndHtml.createCss(layoutForm)
+      cb null,css

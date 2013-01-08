@@ -42,6 +42,33 @@ class FixVba
 
     "#{col.backgroundColor}-#{col.horizontalAlignment}-#{col.borderLeft.color}-#{col.borderLeft.lineStyle}-#{col.borderLeft.weight}-#{col.borderRight.color}-#{col.borderRight.lineStyle}-#{col.borderRight.weight}-#{col.borderTop.color}-#{col.borderTop.lineStyle}-#{col.borderTop.weight}-#{col.borderBottom.color}-#{col.borderBottom.lineStyle}-#{col.borderBottom.weight}"
 
+  _toBorderCss: (border) =>
+    return "" unless border
+    border.weight = 0 unless border.weight && border.weight >= 0
+    border.weight = 20 if border.weight > 20
+
+    border.color = "" unless border.color
+
+    borderLineStyle = @_borderLineStyle(border.lineStyle)
+    if borderLineStyle is "none"
+      borderLineStyle = "solid"
+      border.color = "#eee" unless border.color
+      border.weight = 1 unless border.weight > 0
+
+    "#{borderLineStyle} #{border.weight}px  #{border.color}"
+
+  _borderLineStyle:(ls) =>
+    switch ls
+      when 1 then return "solid"
+      when -4115 then return 'dashed'
+      when 4 then return 'dashed'
+      when 5 then return 'dashed'
+      when -4142 then return 'none'
+      when -4118 then return "dotted"
+      when -4119 then return "double"
+      when 13 then return "dashed"
+
+    return "none"
 
   _fixBorderAndCellStyles: =>
     styleCount = 0
@@ -58,13 +85,12 @@ class FixVba
           styleCache[hash] = cssClassName
           @vba.cssClasses.push 
             name : cssClassName
-            horizontalAlignment: col.horizontalAlignment
+            textAlign: col.horizontalAlignment
             backgroundColor: col.backgroundColor
-            borderLeft: col.borderLeft
-            borderRight: col.borderRight
-            borderTop: col.borderTop
-            borderBottom: col.borderBottom
-            # FIX THIS
+            borderLeft: @_toBorderCss(col.borderLeft)
+            borderRight: @_toBorderCss(col.borderRight)
+            borderTop: @_toBorderCss(col.borderTop)
+            borderBottom: @_toBorderCss(col.borderBottom)
 
         col.cellCssClass = styleCache[hash]
         delete col.horizontalAlignment

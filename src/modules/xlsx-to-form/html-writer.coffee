@@ -1,4 +1,4 @@
-
+_ = require 'underscore'
 
 module.exports =  class HtmlWriter
 
@@ -15,6 +15,14 @@ module.exports =  class HtmlWriter
     @tagStack.push tag
     @htmlBuffer += "<#{tag}"
     @needClosing = true
+
+  addAttribute: (key,val) =>
+    @htmlBuffer += " #{key}=\"#{val}\" "
+
+
+  writeText: (txt) =>
+    @_handleNeedClosing()
+    @htmlBuffer += _.escape(txt)
 
 
   popTag: =>

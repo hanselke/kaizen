@@ -4,6 +4,8 @@ winston = require 'winston'
 errors = require 'some-errors'
 fs = require 'fs'
 XLSX = require 'xlsx'
+xlsxToForm = require '../modules/xlsx-to-form'
+
 
 module.exports = class RoutesApi
 
@@ -39,6 +41,9 @@ module.exports = class RoutesApi
     @app.delete '/api/admin/process-definitions/:processDefinitionId', @deleteAdminProcessDefinition
     @app.get '/api/admin/process-definitions/:processDefinitionId', @getAdminProcessDefinition
     @app.post '/api/admin/process-definitions/:processDefinitionId', @uploadAdminProcessDefinition
+    @app.get '/api/process-definitions/:processDefinitionId/form-css', @getProcessDefintionCss
+    @app.get '/api/process-definitions/:processDefinitionId/form-html', @getProcessDefintionHtml
+
 
   ###
   Retrieve the current session (e.g. the user that is currently logged in). 
@@ -367,3 +372,41 @@ module.exports = class RoutesApi
         return next err if err
         res.json {}
 
+  ###
+  http://localhost:8001/api/process-definitions/50d22f260b75ca1d9000000c/form-css
+  ###
+  getProcessDefintionCss: (req,res,next) =>
+    processDefinitionId = req.params.processDefinitionId
+    @dbStore.processDefinitions.get processDefinitionId,null,true, (err,item) =>
+      return next err if err
+
+      layout1Path = "#{__dirname}/../../test/fixtures/form1-layout-raw.json"
+
+      xlsxToForm.loadAndConvertVba layout1Path, (err,converted) =>
+        return done err if err
+        xlsxToForm.createCssFromLayoutForm converted,(err,css) =>
+          return done err if err
+
+          res.setHeader 'Content-Type', 'text/css'
+          res.send css
+
+
+  ###
+  http://localhost:8001/api/process-definitions/50d22f260b75ca1d9000000c/form-html
+  ###
+  getProcessDefintionHtml: (req,res,next) =>
+    processDefinitionId = req.params.processDefinitionId
+    @dbStore.processDefinitions.get processDefinitionId,null,true, (err,item) =>
+      return next err if err
+
+      layout1Path = "#{__dirname}/../../test/fixtures/form1-layout-raw.json"
+
+      xlsxToForm.loadAndConvertVba layout1Path, (err,converted) =>
+        return done err if err
+        xlsxToForm.createHtmlFromLayoutForm converted,(err,html) =>
+          return done err if err
+
+#<link rel="stylesheet" type="text/css" href="https://mailfoogae.appspot.com/build/combined-5.0.css">
+
+          html = "<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"http://localhost:8001/api/process-definitions/50d22f260b75ca1d9000000c/form-css\" /></head><body> #{html}</body></html>"
+          res.send html
