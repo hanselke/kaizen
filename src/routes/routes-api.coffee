@@ -26,6 +26,8 @@ module.exports = class RoutesApi
     @app.get '/api/board', @getBoard
     @app.get '/api/tasks', @getTasks
     @app.post '/api/tasks', @createTask
+    @app.post '/api/tasks/:taskId/complete', @completeTask
+
     @app.get '/api/admin/users', @getAdminUsers
     @app.post '/api/admin/users', @postAdminUsers
     @app.delete '/api/admin/users/:userId', @deleteAdminUser
@@ -53,7 +55,15 @@ module.exports = class RoutesApi
     return res.json {}, 404 unless req.user
 
     #console.log "CURRENT USER #{JSON.stringify(req.user.toRest(@baseUrl))}"
-    res.json req.user.toRest(@baseUrl)
+    @dbStore.tasks.getActiveTask req.user._id,{}, (err,item) =>
+      return next err if err
+
+      user = req.user.toRest(@baseUrl)
+      user.activeTask = null
+      if item
+        user.activeTask = item.toRest @baseUrl
+
+      res.json user
 
   getBoard: (req,res,next) =>
     return res.json {},401 unless req.user
@@ -301,6 +311,14 @@ module.exports = class RoutesApi
           res.json {}
       else
         res.json {}
+
+
+  completeTask: (req,res,next) =>
+    return res.json 401,{} unless req.user
+
+    @dbStore.tasks.patch req.params.taskId, {state: 'complete'}, {}, (err,item) =>
+      res.json item
+
 
   createTask: (req,res,next) =>
     return res.json 401,{} unless req.user

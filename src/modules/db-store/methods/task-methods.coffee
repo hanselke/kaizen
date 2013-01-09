@@ -46,4 +46,15 @@ module.exports = class TaskMethods
       return cb err if err
       cb null, item
 
+  patch: (taskId, obj = {}, options={}, cb = ->) =>
+    @models.Task.findOne _id : taskId, (err,item) =>
+      return cb err if err
+      return cb new errors.NotFound("/tasks/#{taskId}") unless item
+
+      _.extendFiltered item, UPDATE_FIELDS, obj
+      item.save (err) =>
+        return cb err if err
+        cb null, item
+
+
 

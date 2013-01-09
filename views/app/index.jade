@@ -25,6 +25,8 @@ html(xmlns:ng='http://angularjs.org/', ng:app='myModule')
           a.brand(href="/")
             |Open Business Solutions
 
+          button.btn.btn-primary.action-task-step-done(ng:click='taskCompleted()')
+            |Step Completed
           ul.nav.pull-right
             li.dropdown(ng:show='currentUser')
               a.dropdown-toggle(href="#", data-toggle="dropdown")
@@ -32,6 +34,8 @@ html(xmlns:ng='http://angularjs.org/', ng:app='myModule')
                   img(alt='{{currentUser.username}}',ng:src='{{currentUser.primaryEmail | gravatar}}',style="width:20px;height:20px")
                 span {{currentUser.username}}
                 b.caret
+
+
               ul.dropdown-menu
                 li
                   a(href='') Edit Profile

@@ -9,12 +9,29 @@ class window.AppController
     @$scope.getItem = @getItem
     @$scope.setItem = @setItem
     @$scope.getCurrentTask = @getCurrentTask
+    @$scope.taskCompleted = @taskCompleted
+
 
     @$http.defaults.headers.post['Content-Type']='application/json'
 
     @$scope.currentUser = undefined
     @chat_socket = io.connect '/'
     @loadCurrentUser()
+
+  taskCompleted: () =>
+
+    if @$scope.activeTask
+      taskId = @$scope.activeTask.id
+
+      request = @$http.post "/api/tasks/#{taskId}/complete", {}
+      request.error (data, status, headers, config) =>
+        @$scope.flashMessage "Failed to complete task - please try again"
+      request.success (data, status, headers, config) =>
+        # FLASH here
+        @$scope.activeTask = null
+        @$location.path "/"
+
+
 
   loadCurrentUser: () =>
     request = @$http.get('/api/session')
@@ -31,8 +48,12 @@ class window.AppController
   setCurrentUser: (user) =>
     
     @$scope.currentUser = user
+    @$scope.activeTask = user.activeTask
     
     @chat_socket.emit("nick", nick: user.name) if user and user.name
+
+    if @$scope.activeTask
+      @$location.path "/task/#{@$scope.activeTask.id}"
 
   isInRole: (role) =>
     return false unless @$scope.currentUser
