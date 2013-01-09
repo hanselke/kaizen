@@ -28,3 +28,22 @@ module.exports = class TaskMethods
     model.save (err) =>
       return cb err if err
       cb(null, model,true)
+
+  ###
+  Retrieves the currently active task, if any, for a user.
+  ###
+  getActiveTask: (userId,options = {}, cb) =>
+    userId = userId.toString()
+    @models.Task.findOne {checkedOutByUserId : userId,state: 'active'}, (err,item) =>
+      return cb err if err
+      cb null, item
+
+  ###
+  Retrieve a single processDefinition-item through it's id
+  ###
+  get: (taskId,options = {}, cb = ->) =>
+    @models.Task.findOne _id : taskId, (err,item) =>
+      return cb err if err
+      cb null, item
+
+
