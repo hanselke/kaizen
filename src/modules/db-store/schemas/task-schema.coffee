@@ -17,6 +17,10 @@ module.exports = TaskSchema = new mongoose.Schema
         type: String
         default: 'active'
         required: true
+      data:
+        type: mongoose.Schema.Types.Mixed
+        default: () -> {}
+
       processInstanceUUID:
         type: String
     , strict: true
