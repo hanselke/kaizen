@@ -1,6 +1,7 @@
-save data
-load data
-refresh on create task
+1 save data
+2 load data
+3 refresh on create task
+4 Show add task button based on loaded sheets
 
 
 HTML: Width/Height
@@ -9,8 +10,6 @@ HTML: Merge Cells
 
 Show form for user
 Edit values in form
-load form data from db
-Save form to db
 Download form as complete xls
 Link with tasks in bonita
 Store active task for user

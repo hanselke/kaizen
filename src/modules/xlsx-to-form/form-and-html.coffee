@@ -71,6 +71,7 @@ class FormAndHmtl
           writer.addAttribute "style","width:100%;height:100%;border:none;background-color:#f4f4f4"
           writer.addAttribute "data-row", r
           writer.addAttribute "data-cell", c
+          writer.addAttribute "class", "r-#{r} c-#{c}"
 
           writer.popTag()
 

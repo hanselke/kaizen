@@ -16,9 +16,32 @@ class window.TaskController
 
     loadCssFile "/api/process-definitions/50d22f260b75ca1d9000000c/form-css"
     $(".xlsl-form-container").load "/api/process-definitions/50d22f260b75ca1d9000000c/form-html", () =>
-      $(".xlsl-form-container input").focusout () =>
-        #
+      $(".xlsl-form-container input").focusout @onFocusout
+      @loadFormData()
 
+  loadFormData: =>
+    request = @$http.get "/api/tasks/#{@$routeParams.taskId}/data"
+    request.error @$scope.errorHandler
+    request.success (data, status, headers, config) =>
+      for row in data
+        $("input.r-#{row.r}.c-#{row.c}").val(row.v)
+
+
+  onFocusout: (e) =>
+    $target = $(e.target)
+
+    payload = [
+      r: $target.data('row')
+      c: $target.data('cell')
+      v: $target.val()
+    ]
+
+    request = @$http.post "/api/tasks/#{@$routeParams.taskId}/data", payload
+    #request.error @$scope.errorHandler
+    #request.success (data, status, headers, config) =>
+
+
+    #alert "focusout #{$(e.target).val()}"
 
 window.TaskController.$inject = ['$scope',"$http",'$routeParams']
 

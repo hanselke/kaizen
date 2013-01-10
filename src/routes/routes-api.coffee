@@ -27,6 +27,8 @@ module.exports = class RoutesApi
     @app.get '/api/tasks', @getTasks
     @app.post '/api/tasks', @createTask
     @app.post '/api/tasks/:taskId/complete', @completeTask
+    @app.post '/api/tasks/:taskId/data', @saveTaskData
+    @app.get '/api/tasks/:taskId/data', @getTaskData
 
     @app.get '/api/admin/users', @getAdminUsers
     @app.post '/api/admin/users', @postAdminUsers
@@ -442,3 +444,35 @@ module.exports = class RoutesApi
 
           html = "<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"http://localhost:8001/api/process-definitions/50d22f260b75ca1d9000000c/form-css\" /></head><body> #{html}</body></html>"
           res.send html
+
+  ###
+  Save the task data. Format: [ {r: 0,c:0, v: 'value' }]
+  ###
+  saveTaskData: (req,res,next) =>
+    @dbStore.tasks.get req.params.taskId, {}, (err,item) =>
+      return next err if err
+
+      for dataRow in req.body
+        item.data["#{dataRow.r}-#{dataRow.c}"] = dataRow.v
+
+      item.markModified 'data'
+      item.save (err) =>
+        return next err if err
+        res.json 201,{}
+
+
+  getTaskData: (req,res,next) =>
+    @dbStore.tasks.get req.params.taskId, {}, (err,item) =>
+      return next err if err
+
+      result = []
+      for key,v of item.data
+        rc = key.split('-')
+        result.push 
+          r : rc[0]
+          c : rc[1]
+          v : v
+
+      res.json result
+
+
