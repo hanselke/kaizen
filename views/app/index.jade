@@ -25,7 +25,9 @@ html(xmlns:ng='http://angularjs.org/', ng:app='myModule')
           a.brand(href="/")
             |Open Business Solutions
 
-          button.btn.btn-primary.action-task-step-done(ng:click='taskCompleted()')
+          button.btn.btn-primary.action-next-task(style="white-space:nowrap;",ng:click='nextTask()',ng-show='isBoardStateActive')
+            |Next Action
+          button.btn.btn-primary.action-task-step-done(ng:click='taskCompleted()',ng-show='isFormStateActive')
             |Step Completed
           ul.nav.pull-right
             li.dropdown(ng:show='currentUser')

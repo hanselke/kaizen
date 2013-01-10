@@ -1,20 +1,12 @@
-1 save data
-2 load data
-3 refresh on create task
-4 Show add task button based on loaded sheets
-
-
-HTML: Width/Height
-HTML: Input
-HTML: Merge Cells
-
-Show form for user
-Edit values in form
-Download form as complete xls
-Link with tasks in bonita
-Store active task for user
-add time tracking information
-
+2. Show add task button based on loaded sheets
+1. refresh on create task
+3. upload + instructions in admin for process
+4. HTML: Merge Cells
+5. fix cell styling
+6. Download form as complete xls
+7. Link with tasks in bonita
+8. add time tracking information
+9. state on top
 
 
 How to install and start on the server:

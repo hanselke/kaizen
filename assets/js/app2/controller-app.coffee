@@ -11,29 +11,16 @@ class window.AppController
     @$scope.getCurrentTask = @getCurrentTask
     @$scope.taskCompleted = @taskCompleted
 
+    @$scope.isBoardStateActive = false
+    @$scope.isFormStateActive = false
 
     @$http.defaults.headers.post['Content-Type']='application/json'
 
     @$scope.currentUser = undefined
     @chat_socket = io.connect '/'
-    @loadCurrentUser()
+    @loadSession()
 
-  taskCompleted: () =>
-
-    if @$scope.activeTask
-      taskId = @$scope.activeTask.id
-
-      request = @$http.post "/api/tasks/#{taskId}/complete", {}
-      request.error (data, status, headers, config) =>
-        @$scope.flashMessage "Failed to complete task - please try again"
-      request.success (data, status, headers, config) =>
-        # FLASH here
-        @$scope.activeTask = null
-        @$location.path "/"
-
-
-
-  loadCurrentUser: () =>
+  loadSession: () =>
     request = @$http.get('/api/session')
     request.success (data, status, headers, config) =>
         @setCurrentUser data
@@ -42,18 +29,38 @@ class window.AppController
     request.error (data, status, headers, config) =>
         @setCurrentUser null
 
-        #if (code != 404) that.errorHandler(code, res)
-        #else that.$location.path('signin')})
-
-  setCurrentUser: (user) =>
-    
+  setCurrentUser: (user) =>    
     @$scope.currentUser = user
-    @$scope.activeTask = user.activeTask
+    @updateActiveTask user.activeTask
     
     @chat_socket.emit("nick", nick: user.name) if user and user.name
 
     if @$scope.activeTask
       @$location.path "/task/#{@$scope.activeTask.id}"
+    ###
+    else 
+      @$location.path "/"
+    ###
+
+  updateActiveTask: (activeTask) =>
+    @$scope.activeTask = activeTask
+    @$scope.isBoardStateActive = !@$scope.activeTask
+    @$scope.isFormStateActive = !!@$scope.activeTask
+
+  taskCompleted: () =>
+    if @$scope.activeTask
+      taskId = @$scope.activeTask.id
+
+      request = @$http.post "/api/tasks/#{taskId}/complete", {}
+      request.error (data, status, headers, config) =>
+        @$scope.flashMessage "Failed to complete task - please try again"
+      request.success (data, status, headers, config) =>
+        @updateActiveTask null
+        @$location.path "/"
+        # Flash here
+
+
+
 
   isInRole: (role) =>
     return false unless @$scope.currentUser
