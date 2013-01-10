@@ -1,5 +1,6 @@
-1. upload + instructions in admin for process
+1. instructions in admin for process
 2. Download form as complete xls
+3. Use correct xlsx converter for working with file
 --
 4. HTML: Merge Cells
 5. fix cell styling

@@ -460,17 +460,20 @@ module.exports = class RoutesApi
     @dbStore.processDefinitions.get processDefinitionId,null,true, (err,item) =>
       return next err if err
 
+      ###
       layout1Path = "#{__dirname}/../../test/fixtures/form1-layout-raw.json"
 
       xlsxToForm.loadAndConvertVba layout1Path, (err,converted) =>
         return done err if err
-        xlsxToForm.createHtmlFromLayoutForm converted,(err,html) =>
-          return done err if err
+      ###
+
+      xlsxToForm.createHtmlFromLayoutForm item.layout,(err,html) =>
+        return done err if err
 
 #<link rel="stylesheet" type="text/css" href="https://mailfoogae.appspot.com/build/combined-5.0.css">
 
-          html = "<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"http://localhost:8001/api/process-definitions/50d22f260b75ca1d9000000c/form-css\" /></head><body> #{html}</body></html>"
-          res.send html
+        html = "<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"http://localhost:8001/api/process-definitions/#{processDefinitionId}/form-css\" /></head><body> #{html}</body></html>"
+        res.send html
 
   ###
   Save the task data. Format: [ {r: 0,c:0, v: 'value' }]
