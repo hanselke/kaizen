@@ -25,3 +25,7 @@ module.exports =
   createCssFromLayoutForm: (layoutForm,cb) =>
       css = formAndHtml.createCss(layoutForm)
       cb null,css
+
+  loadVbaOutput: (raw,cb) =>
+    lf = new LayoutForm()
+    lf.loadVbaOutput raw,cb

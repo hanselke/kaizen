@@ -4,6 +4,7 @@ class window.AdminProcessDefinitionsFormController
     @$scope.create = @create
     @$scope.processDefinition.name = "(loading...)"
     @$scope.uploadFiles = @uploadFiles
+    @$scope.uploadFilesLayout = @uploadFilesLayout
     @load @$routeParams.processDefinitionId
 
 
@@ -32,15 +33,46 @@ class window.AdminProcessDefinitionsFormController
 
     @$scope.uploader.init()
 
+    # Layout
+    @$scope.uploaderLayout = new plupload.Uploader
+      runtimes: "html5,flash,silverlight,html4"
+      browse_button: "pickfilesLayout"
+      container: "uploadContainerLayout"
+      multi_selection : false
+      multipart : true
+      chunk_size : '1mb'
+      max_file_size: "10mb"
+      drop_element: 'dropAreaLayout'
+      url: "http://#{document.location.host}/api/admin/process-definitions/#{@$routeParams.processDefinitionId}/layout"
+      flash_swf_url: "/lib/plupload/Moxie.swf"
+      silverlight_xap_url: "/lib/plupload/Moxie.xap"
+      filters: [ {title: "Exported Layout Files",extensions: "json"}]
+
+    @$scope.uploaderLayout.bind "FilesAdded", (up, files) =>
+      @$scope.$apply()
+    @$scope.uploaderLayout.bind "QueueChanged", (up, files) =>
+      @$scope.$apply()
+
+
+    @$scope.uploaderLayout.bind "UploadProgress", (up, file) =>
+      #$(file.id).getElementsByTagName("b")[0].innerHTML = "<span>" + file.percent + "%</span>"
+
+    @$scope.uploaderLayout.init()
+
+
   uploadFiles: () =>
     @$scope.uploader.start()
+    false
+
+  uploadFilesLayout: () =>
+    @$scope.uploaderLayout.start()
     false
 
   load: (processDefinitionId) =>
     request = @$http.get "/api/admin/process-definitions/#{processDefinitionId}"
     request.error @$scope.errorHandler
     request.success (data, status, headers, config) =>
-      _.extend @$scope.processDefinition,data      
+      _.extend @$scope.processDefinition,data
 
 
   update: (processDefinition) =>

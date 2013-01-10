@@ -137,3 +137,15 @@ module.exports = class ProcessDefinitionMethods
 
   _getItem: (processDefinitionId, actor, ignoreSecurity, forWrite, cb) =>
     @models.ProcessDefinition.findOne _id : processDefinitionId, cb
+
+  saveLayout: (processDefinitionId,layout,cb) =>
+    @_getItem processDefinitionId, null, true, true, (err, item) =>
+      return cb err if err
+      return cb new errors.NotFound("/processDefinitions/#{processDefinitionId}") unless item
+
+      item.layout = layout
+      item.markModified 'layout'
+      item.save (err) =>
+        return cb err if err
+        cb null, item
+

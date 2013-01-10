@@ -1,16 +1,13 @@
 1. upload + instructions in admin for process
 2. Download form as complete xls
-
 --
-
 4. HTML: Merge Cells
 5. fix cell styling
-
 --
-
 7. Link with tasks in bonita
 8. add time tracking information
-
+9. clean up everything
+10. add docs online.
 --
 Add some help
 

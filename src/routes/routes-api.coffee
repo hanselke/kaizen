@@ -45,6 +45,7 @@ module.exports = class RoutesApi
     @app.delete '/api/admin/process-definitions/:processDefinitionId', @deleteAdminProcessDefinition
     @app.get '/api/admin/process-definitions/:processDefinitionId', @getAdminProcessDefinition
     @app.post '/api/admin/process-definitions/:processDefinitionId', @uploadAdminProcessDefinition
+    @app.post '/api/admin/process-definitions/:processDefinitionId/layout', @uploadAdminProcessDefinitionLayout
     @app.get '/api/process-definitions/:processDefinitionId/form-css', @getProcessDefintionCss
     @app.get '/api/process-definitions/:processDefinitionId/form-html', @getProcessDefintionHtml
 
@@ -409,6 +410,28 @@ module.exports = class RoutesApi
       @dbStore.processDefinitions.patch processDefinitionId,data ,null,true, (err,item) =>
         return next err if err
         res.json {}
+
+  uploadAdminProcessDefinitionLayout: (req,res,next) =>
+    processDefinitionId = req.params.processDefinitionId
+
+    file = req.files.file
+    return next new Error("No file present") unless file
+
+    fs.readFile file.path, 'utf8', (err, content) =>
+      return next err if err
+
+      parsedJson = null
+      try
+        parsedJson= JSON.parse content
+      catch e
+        return next new Error('Invalid JSON') unless parsedJson
+      
+      xlsxToForm.loadVbaOutput parsedJson, (err,converted) =>
+        return next err if err
+
+        @dbStore.processDefinitions.saveLayout processDefinitionId,converted, (err,item) =>
+          return next err if err
+          res.json {}
 
   ###
   http://localhost:8001/api/process-definitions/50d22f260b75ca1d9000000c/form-css

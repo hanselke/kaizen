@@ -145,8 +145,13 @@ module.exports = class LayoutForm
 
     @formData = JSON.parse(file)
 
+    @loadVbaOutput @formData, cb
+
+
+  loadVbaOutput: (obj,cb) =>
+    @formData = obj
+
     fixVba = new FixVba(@formData)
     fixVba.fix()
 
     cb null, @formData
-

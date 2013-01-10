@@ -32,6 +32,9 @@ module.exports = ProcessDefinitionSchema = new mongoose.Schema
       sourceType:
         type: String
 
+      layout:
+        type: mongoose.Schema.Types.Mixed
+
 
     , strict: true
 
