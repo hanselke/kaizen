@@ -29,13 +29,18 @@ module.exports = class ProcessDefinitionMethods
   ###
   constructor:(@models) ->
 
-  all: (actor, offset = 0, count = 200, cb = ->) =>
+  all: (options = {},cb = ->) =>
     # TODO: EXCLUDE DELETED
+
     @models.ProcessDefinition.count  {}, (err, totalCount) =>
       return cb err if err
-      @models.ProcessDefinition.find {}, null, { skip: offset, limit: count}, (err, items) =>
+
+      query = @models.ProcessDefinition.find({})
+      query.select(options.select || '_id name description bonitaProcessName')
+      query.setOptions { skip: options.offset, limit: options.count}
+      query.exec (err, items) =>
         return cb err if err
-        cb null, new PageResult(items || [], totalCount, offset, count)
+        cb null, new PageResult(items || [], totalCount, options.offset, options.count)
 
   ###
   Retrieve a single processDefinition-item through it's id

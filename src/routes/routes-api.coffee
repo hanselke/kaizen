@@ -352,7 +352,7 @@ module.exports = class RoutesApi
 
   getAdminProcessDefinitions: (req,res,next) =>
     return res.json 401,{} unless req.user
-    @dbStore.processDefinitions.all null,0,200, (err,result) =>
+    @dbStore.processDefinitions.all {actor:null, offset: 0, count: 200}, (err,result) =>
       return next err if err
       res.json result
 

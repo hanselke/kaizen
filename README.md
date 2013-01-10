@@ -1,12 +1,13 @@
-2. Show add task button based on loaded sheets
-1. refresh on create task
-3. upload + instructions in admin for process
+0. task buttons rendered (trough session info)
+1. upload + instructions in admin for process
+2. Download form as complete xls
+
 4. HTML: Merge Cells
 5. fix cell styling
-6. Download form as complete xls
+
 7. Link with tasks in bonita
 8. add time tracking information
-9. state on top
+1. refresh on create task
 
 
 How to install and start on the server:
