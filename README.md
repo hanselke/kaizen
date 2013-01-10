@@ -1,14 +1,18 @@
-0. task buttons rendered (trough session info)
 1. upload + instructions in admin for process
 2. Download form as complete xls
+
+--
 
 4. HTML: Merge Cells
 5. fix cell styling
 
+--
+
 7. Link with tasks in bonita
 8. add time tracking information
-1. refresh on create task
 
+--
+Add some help
 
 How to install and start on the server:
 Precon: mongodb installed locally

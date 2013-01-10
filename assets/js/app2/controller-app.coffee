@@ -31,7 +31,8 @@ class window.AppController
 
   setCurrentUser: (user) =>    
     @$scope.currentUser = user
-    @updateActiveTask user.activeTask
+    @updateActiveTask if user then user.activeTask else null
+    @$scope.createableTasks = if user then user.createableTasks || [] else []
     
     @chat_socket.emit("nick", nick: user.name) if user and user.name
 
@@ -73,13 +74,16 @@ class window.AppController
   getCurrentTask: () =>
     @$scope.getItem "#{@$scope.currentUser.name}-task", null
 
-  createTask: (cb) =>
-    request = @$http.post "/api/tasks", processDefinitionId : "50d22f260b75ca1d9000000c"
+  createTask: (processDefinitionId) =>
+    request = @$http.post "/api/tasks", processDefinitionId : processDefinitionId
     request.error (data, status, headers, config) =>
       @$scope.flashMessage "Failed to create task"
     request.success (data, status, headers, config) =>
-      @$scope.flashMessage "Task created"
-      # SHould invoke refresh here / ah well
+      @$scope.flashMessage "Task created #{JSON.stringify(data)}"
+
+      data.id = data._id unless data.id
+      @updateActiveTask data
+      @$location.path "/task/#{@$scope.activeTask.id}"
 
   nextTask: (cb) =>
     # Dummy for now.

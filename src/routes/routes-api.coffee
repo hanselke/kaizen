@@ -65,7 +65,13 @@ module.exports = class RoutesApi
       if item
         user.activeTask = item.toRest @baseUrl
 
-      res.json user
+
+      @dbStore.processDefinitions.all {actor:null, offset: 0, count: 200}, (err,result) =>
+        return next err if err
+
+        user.createableTasks = _.map result.items, (x) -> {_id: x._id,name: x.name, description : x.description }
+
+        res.json user
 
   getBoard: (req,res,next) =>
     return res.json {},401 unless req.user
@@ -337,15 +343,13 @@ module.exports = class RoutesApi
 
         processInstanceUUID = newProcess?.value
 
-        return res.json 500,{} unless processInstanceUUID
-
-
         payload =
           processInstanceUUID: processInstanceUUID
           processDefinitionId: req.body.processDefinitionId
           checkedOutByUserId: req.user._id
 
         @dbStore.tasks.create payload,actorId : req.user._id, (err,item) =>
+          item.id = item._id
           res.json item
 
 

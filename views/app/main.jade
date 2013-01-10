@@ -90,7 +90,7 @@
     .span6
       h2 Actions
       .bottom-button-row
-      button.btn(ng:click='createTask()') Create Task
+        button.btn(ng:click='createTask(item._id)',ng:repeat='item in createableTasks') Create {{item.name}} Task
 
     .span6
       h2.center Status
