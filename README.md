@@ -1,9 +1,11 @@
-1. instructions in admin for process
-2. Download form as complete xls
-3. Use correct xlsx converter for working with file
+1. Download form as complete xls
+
+2. update form to show active forms
+3. instructions in admin for process
 --
 4. HTML: Merge Cells
 5. fix cell styling
+6. remove unused css when unloading form?
 --
 7. Link with tasks in bonita
 8. add time tracking information

@@ -29,3 +29,9 @@ module.exports =
   loadVbaOutput: (raw,cb) =>
     lf = new LayoutForm()
     lf.loadVbaOutput raw,cb
+
+  mergeDataIntoForm: (sourceXlsx, formdata ,cb) =>
+    form = new XlsxForm()
+    form.mergeDataIntoForm sourceXlsx,formdata, (err,merged) =>
+      cb null,merged
+

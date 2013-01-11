@@ -3,7 +3,6 @@ async = require 'async'
 winston = require 'winston'
 errors = require 'some-errors'
 fs = require 'fs'
-XLSX = require 'xlsx'
 xlsxToForm = require '../modules/xlsx-to-form'
 
 
@@ -29,6 +28,7 @@ module.exports = class RoutesApi
     @app.post '/api/tasks/:taskId/complete', @completeTask
     @app.post '/api/tasks/:taskId/data', @saveTaskData
     @app.get '/api/tasks/:taskId/data', @getTaskData
+    @app.get '/api/tasks/:taskId/excel', @getExcel
 
     @app.get '/api/admin/users', @getAdminUsers
     @app.post '/api/admin/users', @postAdminUsers
@@ -387,15 +387,6 @@ module.exports = class RoutesApi
     file = req.files.file
     return next new Error("No file present") unless file
 
-    xlsx = XLSX.readFile(file.path)
-    console.log "SHEETNAME: #{xlsx.SheetNames[0]}"
-
-    console.log JSON.stringify(xlsx.Sheets[xlsx.SheetNames[0]])
-    ###
-    for z of xlsx.SheetNames[0]
-      continue  if z[0] is "!"
-      console.log y + "!" + z + "=" + JSON.stringify(zip.Sheets[y][z].v)
-    ###
 
     fs.readFile file.path, 'utf8', (err, content) =>
       return next err if err
@@ -504,5 +495,29 @@ module.exports = class RoutesApi
           v : v
 
       res.json result
+
+  ###
+  http://localhost:8001/api/tasks/50eef7d3728817e63500000d/excel
+  ###
+  getExcel: (req,res,next) =>
+    return res.json 401,{} unless req.user
+
+    @dbStore.tasks.get req.params.taskId,{}, (err,task) =>
+      return res.json 404, {} unless task
+
+      @dbStore.processDefinitions.get task.processDefinitionId,null,true, (err,processDefinition) =>
+        return next err if err
+        return res.json 404, {} unless processDefinition
+
+        xlsxToForm.mergeDataIntoForm processDefinition.sourceXlsx,task.data ,(err,data) =>
+
+          res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+          res.setHeader 'Content-Disposition','fileName="' + processDefinition.sourceFilename + '"'
+          res.setHeader 'Content-Transfer-Encoding', 'binary'
+          res.setHeader 'Accept-Ranges','bytes'
+
+          res.send data
+
+
 
 

@@ -40,6 +40,7 @@ class FormAndHmtl
     writer = new HtmlWriter()
 
     writer.pushTag "table"
+    writer.addAttribute "class", "xslx-table"
     writer.addAttribute "cellspacing", "0"
     #writer.addAttribute "style", "border-style:none 0px transparent;background-color:transparent;background:transparent;"
 
@@ -60,7 +61,7 @@ class FormAndHmtl
         width = form.colWidths[c] || 0
         writer.addAttribute "width","#{width}"
         writer.addAttribute "style","width:#{width}px;"
-       
+     
         writer.addAttribute "class","#{cell.cellCssClass || ''} #{cell.fontCssClass || ''}"
         if cell.text && cell.text.length > 0
           writer.writeText cell.text

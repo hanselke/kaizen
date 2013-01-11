@@ -101,5 +101,9 @@ module.exports = class XlsxForm
     ###
     cb null
 
+  mergeDataIntoForm: (base64Source,data,cb) =>
+    @xlsx = xlsxParser(base64Source)
+
+    cb null,  @xlsx.base64
 
 

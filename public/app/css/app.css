@@ -162,3 +162,13 @@ font-weight: 400;
 font-size:18px;
 }
 
+
+table.xslx-table{
+	border-collapse: inherit;
+	border-spacing: 0px;
+}
+
+table.xslx-table td {
+	padding: 0px;
+
+}

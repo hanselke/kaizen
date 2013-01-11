@@ -1,5 +1,7 @@
 should = require 'should'
 helper = require './support/helper'
+fs = require 'fs'
+xlsxParser = require '../lib/modules/stephen-hardy/xlsx'
 xlsxToForm = require '../lib/modules/xlsx-to-form'
 
 form1Path = "#{__dirname}/./fixtures/form1.xlsx"
@@ -42,6 +44,26 @@ describe 'WHEN testing the home page', ->
           console.log ""
           console.log JSON.stringify(html)
           done null
+
+  describe 'xlst', ->
+    it 'should load and save', (done) ->
+
+      file = fs.readFileSync(form1Path).toString('base64')
+
+      console.log "$$$$$"
+      console.log file
+      xlsx = xlsxParser(file)
+
+      result = xlsx.base64
+      console.log ""
+      console.log ""
+      console.log ""
+      console.log ""
+      console.log ""
+      console.log ""
+      console.log result
+      done()
+
 
 
         
