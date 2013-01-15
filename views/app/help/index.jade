@@ -1,0 +1,26 @@
+
+.row(style="position:absolute;top:0px;bottom:200px;")
+  .container-fluid
+    .span3(style="margin-top:40px")
+      include help-menu
+    .span9
+
+      h2
+        span Help
+      p Welcome to Open Business. This app allows you to manage workflows in a simple and easy to use way. You work with well-known tools like Microsoft Excel but still retain a minimalist interface.
+      h4 Let's get started!
+      p 
+        | Working with Open Business requires that you set up at least one form and a corresponding process. 
+      ol
+        li
+          |Go to the 
+          a(href="#/admin/process-definitions") Process Definition 
+          | admin interface and add a process definition. Choose a short name as the name will appear in the "Create Task" buttons.
+        li
+          | Upload your Excel form. The form needs to be in xlsx format, and must contain the data in the first worksheet.
+        li
+          | Create a layout file from your Excel sheet. To do this you install this macro in your excel and invoke the create command. It will take some time (minutes, maybe half an hour) and give you a message when completed. Excel might seem unrespronsive, that is to be excpected. Once finished it creates a file in the folder where your document has been stored. 
+        li
+          | Upload the file that you created in the previous step into the process definition.
+        li
+          | Create a corresponding process in bonita. 

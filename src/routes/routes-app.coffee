@@ -22,6 +22,20 @@ module.exports = class RoutesOther
     @app.get '/app/admin/process-definitions',@getAdminProcessDefinitions
     @app.get '/app/admin/process-definitions/add',@getAdminProcessDefinitionsAdd
     @app.get '/app/admin/process-definitions/form',@getAdminProcessDefinitionsForm
+    @app.get '/app/help',@getHelp
+    @app.get '/app/help/terms',@getHelpTerms
+    @app.get '/app/help/setup',@getHelpSetup
+
+  getHelp: (req,res,next) =>
+    res.render 'app/help/index', #.ejs
+          pretty: true
+  getHelpSetup: (req,res,next) =>
+    res.render 'app/help/setup', #.ejs
+          pretty: true
+  getHelpTerms: (req,res,next) =>
+    res.render 'app/help/terms', #.ejs
+          pretty: true
+
 
   getApp: (req,res,next) =>
     res.render 'app/index', #.ejs
