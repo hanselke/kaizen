@@ -1,15 +1,16 @@
-0. client manage state correctly
-1. move tasks in line at the bottom
-3. help should always be accessible
-4. do not show start lane.
+1. do not show start lane.
+2. show errors/status as flash
+
+2. client manage state correctly
 5. HTML: Merge Cells
 6. fix cell styling
 7. Download form as complete "",''
 8. add time tracking information
-9. clean up everything
 10. show loading
 11. admin show all tasks (process instances)
-12. show errors/status as flash
+13. store excel macro on server with download link
+14. admin interface for process definition: Show uploaded file
+15. fix flash of image
 
 --
 Add some help

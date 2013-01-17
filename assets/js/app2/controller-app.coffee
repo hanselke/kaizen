@@ -1,5 +1,7 @@
 class window.AppController
   constructor: (@$route, @$location, @$window,@$scope,@$http) ->
+
+    # Functions
     @$scope.nextTask = @nextTask
     @$scope.createTask = @createTask
     @$scope.flashMessage = @flashMessage
@@ -8,7 +10,6 @@ class window.AppController
     @$scope.toBoards = @toBoards
     @$scope.getItem = @getItem
     @$scope.setItem = @setItem
-    @$scope.getCurrentTask = @getCurrentTask
     @$scope.taskCompleted = @taskCompleted
 
     @$scope.isBoardStateActive = false
@@ -20,11 +21,13 @@ class window.AppController
     @chat_socket = io.connect '/'
     @loadSession()
 
+  ###
+  On startup loads the current session, and if available the active task for the logged in user.
+  ###
   loadSession: () =>
     request = @$http.get('/api/session')
     request.success (data, status, headers, config) =>
         @setCurrentUser data
-        @$scope.currentTask = @getCurrentTask()
 
     request.error (data, status, headers, config) =>
         @setCurrentUser null
@@ -35,13 +38,18 @@ class window.AppController
     @$scope.createableTasks = if user then user.createableTasks || [] else []
     
     @chat_socket.emit("nick", nick: user.name) if user and user.name
+    @ensureCorrectScreen()
 
-    if @$scope.activeTask
-      @$location.path "/task/#{@$scope.activeTask.id}"
-    ###
-    else 
-      @$location.path "/"
-    ###
+  ensureCorrectScreen: =>
+    if @$location.path() is "/" or @isPathSegment('/task/')
+      if @$scope.isFormStateActive
+        @$location.path "/task/#{@$scope.activeTask.id}"
+      else
+        @$location.path "/"
+
+  isPathSegment: (pathRoot) =>
+    p = @$location.path()
+    return p.toLowerCase().substring(0, pathRoot.length) is pathRoot.toLowerCase()
 
   updateActiveTask: (activeTask) =>
     @$scope.activeTask = activeTask
@@ -71,8 +79,6 @@ class window.AppController
   toBoards: (cb) =>
     @$location.path "/"
 
-  getCurrentTask: () =>
-    @$scope.getItem "#{@$scope.currentUser.name}-task", null
 
   createTask: (processDefinitionId) =>
     request = @$http.post "/api/tasks", processDefinitionId : processDefinitionId
@@ -81,18 +87,15 @@ class window.AppController
     request.success (data, status, headers, config) =>
       @$scope.flashMessage "Task created #{JSON.stringify(data)}"
 
-      data.id = data._id unless data.id
-      @updateActiveTask data
-      @$location.path "/task/#{@$scope.activeTask.id}"
-
+      @ensureCorrectScreen()
+      @$window.location.reload() 
+  
   nextTask: (cb) =>
     request = @$http.get "/api/tasks"
     request.error (data, status, headers, config) =>
       @$scope.flashMessage "Nothing to do at the moment"
     request.success (data, status, headers, config) =>
-      @$scope.currentTask = data
-      # remove current task and shit
-      @$scope.setItem "#{@$scope.currentUser.name}-task", @$scope.currentTask
+
       @updateActiveTask data.activeTask
       if data.activeTask
         @$location.path "/task/#{@$data.activeTask.id}"

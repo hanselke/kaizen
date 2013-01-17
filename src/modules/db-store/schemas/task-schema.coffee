@@ -13,8 +13,8 @@ module.exports = TaskSchema = new mongoose.Schema
         required: true
       checkedOutByUserId:
         type: String
-        unique: true
-        sparse: true
+        #unique: true
+        #sparse: true
       state: 
         type: String
         default: 'active'
