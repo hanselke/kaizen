@@ -1,13 +1,15 @@
-2. show errors/status as flash
-5. HTML: Merge Cells
-6. fix cell styling
-7. Download form as complete csv
-8. add time tracking information
+1. admin interface for process definition: Show uploaded file
+2. store excel macro on server with download link
+
+3. show errors/status as flash
+4. HTML: Merge Cells
+5. fix cell styling
+6. Download form as complete csv
+7. add time tracking information
+8. show loading screen for board
+9. fix flash of image
+10. Make sure state transitions work
 11. admin show all tasks (process instances)
-13. store excel macro on server with download link
-14. admin interface for process definition: Show uploaded file
-15. fix flash of image
-16. show loading screen for board
 
 --
 Add some help
