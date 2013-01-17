@@ -1,16 +1,16 @@
-1. Download form as complete xls
-
-2. update form to show active forms
-3. instructions in admin for process
---
-4. HTML: Merge Cells
-5. fix cell styling
-6. remove unused css when unloading form?
---
-7. Link with tasks in bonita
+0. client manage state correctly
+1. move tasks in line at the bottom
+3. help should always be accessible
+4. do not show start lane.
+5. HTML: Merge Cells
+6. fix cell styling
+7. Download form as complete "",''
 8. add time tracking information
 9. clean up everything
-10. add docs online.
+10. show loading
+11. admin show all tasks (process instances)
+12. show errors/status as flash
+
 --
 Add some help
 

@@ -389,8 +389,20 @@ module.exports = class RoutesApi
   completeTask: (req,res,next) =>
     return res.json 401,{} unless req.user
 
-    @dbStore.tasks.patch req.params.taskId, {state: 'complete'}, {}, (err,item) =>
-      res.json item
+    @dbStore.tasks.get req.params.taskId, {}, (err,item) =>
+      return next err if err
+      return new Error('task not found') unless item
+      @bonitaClient.runtime.executeTask item.activeTaskUUID,true, req.user.username,{},(err) =>
+        return next err if err
+
+        data = 
+          activeTaskUUID : null
+          checkedOutByUserId: null
+          state: 'complete'
+
+        @dbStore.tasks.patch req.params.taskId, data, {}, (err,item) =>
+          return next err if err
+          res.json item
 
 
   createTask: (req,res,next) =>

@@ -1,5 +1,5 @@
 
-.row(style="position:absolute;top:0px;bottom:200px;")
+.row(style="position:absolute;top:0px;bottom:200px;width:100%")
   .container-fluid
     .span12
       table(ng:show='currentUser', style='display: none;')
@@ -85,13 +85,10 @@
       div(style='text-align: center; display: none;', ng:show='currentUser == null')
         p Loading...
 
-.row(style="position:absolute;bottom:0px;height:200px")
+.row(style="position:absolute;bottom:0px;height:36px;background:#ddd;padding-top:8px;width:100%;margin:0")
   .container-fluid
-    .span6
-      h2 Actions
-      .bottom-button-row
+    .span12
+      .bottom-button-row(style="vertical-align:center")
+        span(style='font-size:16px') Actions:
         button.btn(ng:click='createTask(item._id)',ng:repeat='item in createableTasks') Create {{item.name}} Task
-
-    .span6
-      h2.center Status
 
