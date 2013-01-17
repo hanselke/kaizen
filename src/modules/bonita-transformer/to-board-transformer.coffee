@@ -27,6 +27,9 @@ module.exports = (processDefinition,processInstances) ->
   result =
     lanes: []
 
+  console.log 'LLLLL 0 '
+  #console.log "JSON #{JSON.stringify(processDefinition)}"
+
   ###
   Here is what needs to happen now:
   1. We need to build the lanes
@@ -35,6 +38,8 @@ module.exports = (processDefinition,processInstances) ->
 
   activityDefinitions = _.map(processDefinition.activities?.ActivityDefinition,activityDefinitionTransformer)
   adMap = {}
+
+  console.log 'LLLLL 1 '
 
   result.lanes.push
         label: "Start"
@@ -50,6 +55,8 @@ module.exports = (processDefinition,processInstances) ->
 
   sortedActivityDefinitionsForState = _.sortBy(_.filter(activityDefinitions, (x) -> x.isState),(x) -> x.order ) 
 
+  console.log 'LLLLL 2 '
+
   for activityDefinition in sortedActivityDefinitionsForState
     result.lanes.push
         label: activityDefinition.description || ""
@@ -63,11 +70,15 @@ module.exports = (processDefinition,processInstances) ->
         activityDefinitions: [activityDefinition]
         cards: []
 
+  console.log 'LLLLL 3 '
+
   ###
   2. We need to assign activityDefinition's to the right lanes,starting wiht start and end.
   ###
   _.first(result.lanes).activityDefinitions.push _.find(activityDefinitions,(x) -> x.isStart)
   _.last(result.lanes).activityDefinitions.push _.find(activityDefinitions,(x) -> x.isEnd)
+
+  console.log 'LLLLL 4 '
 
   ###
   3. And now the fun part, we go from element 1 to n and find the matching assign+group,
@@ -79,81 +90,86 @@ module.exports = (processDefinition,processInstances) ->
     activityDefinitionForGroup = _.find(activityDefinitions,(x) -> x.isAssign and x.group is group)
     result.lanes[i - 1].activityDefinitions.push activityDefinitionForGroup
 
+  console.log 'LLLLL 5 '
+
   ###
   4. Now we assign it to the map
   ###
   for lane in result.lanes
-    for activityDefinition in lane.activityDefinitions
+
+    for activityDefinition in lane.activityDefinitions || [] when activityDefinition
       adMap[activityDefinition.id] = lane
 
+  console.log 'LLLLL 6'
   ###
   5. Now we work with process instances.
   ###
   pp = []
-  if _.isArray processInstances.ProcessInstance
-    pp = processInstances.ProcessInstance
-  else if processInstances.ProcessInstance
-    pp = [processInstances.ProcessInstance]
+  if processInstances
+    if _.isArray processInstances.ProcessInstance
+      pp = processInstances.ProcessInstance
+    else if processInstances.ProcessInstance
+      pp = [processInstances.ProcessInstance]
 
-  for instance in pp
+    for instance in pp
 
-    activity = null
-    aaXX = instance.activities?.ActivityInstance
-    if aaXX && _.isArray(aaXX)
-      dd = (d for d in aaXX when d.state != "FINISHED")
-      activity = _.last(dd)
-    else if aaXX
-      activity = aaXX
+      activity = null
+      aaXX = instance.activities?.ActivityInstance
+      if aaXX && _.isArray(aaXX)
+        dd = (d for d in aaXX when d.state != "FINISHED")
+        activity = _.last(dd)
+      else if aaXX
+        activity = aaXX
 
-    #for activity in instance.activities?.ActivityInstance
-    if activity
-        activityDefinitionUUID = activity.activityDefinitionUUID?.value
-        if true #activity.state isnt "FINISHED"
-          myLane = adMap[activityDefinitionUUID] # || _.last( result.lanes)
+      #for activity in instance.activities?.ActivityInstance
+      if activity
+          activityDefinitionUUID = activity.activityDefinitionUUID?.value
+          if true #activity.state isnt "FINISHED"
+            myLane = adMap[activityDefinitionUUID] # || _.last( result.lanes)
 
 
-          #use moment here
-          ###
-                    startedDate= moment( activity.startedDate || 0) #1354080180430
-          lastUpdate = moment(activity.lastUpdate || 0)   #1354088710758
+            #use moment here
+            ###
+                      startedDate= moment( activity.startedDate || 0) #1354080180430
+            lastUpdate = moment(activity.lastUpdate || 0)   #1354088710758
 
-          ###
+            ###
 
-          startedDate= activity.startedDate || 0 #1354080180430
-          lastUpdate = activity.lastUpdate || 0  #1354088710758
-          totalTime = lastUpdate - startedDate
-          executionTime = 0
-          waitingTime = 0
-
-          if startedDate is 0 || lastUpdate is 0 || totalTime > 10000000000
-            totalTime = 0
+            startedDate= activity.startedDate || 0 #1354080180430
+            lastUpdate = activity.lastUpdate || 0  #1354088710758
+            totalTime = lastUpdate - startedDate
             executionTime = 0
             waitingTime = 0
 
-          instanceStateUpdates = activity.instanceStateUpdates
+            if startedDate is 0 || lastUpdate is 0 || totalTime > 10000000000
+              totalTime = 0
+              executionTime = 0
+              waitingTime = 0
 
-          if _.isObject( instanceStateUpdates) && _.keys(instanceStateUpdates).length > 0
-            instanceStateUpdates = [instanceStateUpdates.InstanceStateUpdate]
-          
-          if instanceStateUpdates && _.isArray instanceStateUpdates && instanceStateUpdates.length > 0
-            executionTime = _.first(instanceStateUpdates).date - activity.startedDate
-            waitingTime = activity.lastUpdate - _.first(instanceStateUpdates).date
+            instanceStateUpdates = activity.instanceStateUpdates
 
-          myLane = result.lanes[0] unless myLane
+            if _.isObject( instanceStateUpdates) && _.keys(instanceStateUpdates).length > 0
+              instanceStateUpdates = [instanceStateUpdates.InstanceStateUpdate]
+            
+            if instanceStateUpdates && _.isArray instanceStateUpdates && instanceStateUpdates.length > 0
+              executionTime = _.first(instanceStateUpdates).date - activity.startedDate
+              waitingTime = activity.lastUpdate - _.first(instanceStateUpdates).date
 
-          if myLane
-            myLane.cards.push
-              id : activity.uuid?.value
-              desc : cleanDesc( activity.label)
-              #html : activity.description
-              ready : isInReadyState(activity.uuid?.value,activityDefinitions) # activity.state?.toUpperCase() is "READY" 
-              state : activity.state
-              processInstance : instance.instanceUUID.value
-              activityDefinitionUUID : activityDefinitionUUID
-              totalTime :  totalTime
-              totalCost: 0
-              executionTime : executionTime
-              waitingTime: waitingTime
+            myLane = result.lanes[0] unless myLane
+
+            if myLane
+              myLane.cards.push
+                id : activity.uuid?.value
+                desc : cleanDesc( activity.label)
+                #html : activity.description
+                ready : isInReadyState(activity.uuid?.value,activityDefinitions) # activity.state?.toUpperCase() is "READY" 
+                state : activity.state
+                processInstance : instance.instanceUUID.value
+                activityDefinitionUUID : activityDefinitionUUID
+                totalTime :  totalTime
+                totalCost: 0
+                executionTime : executionTime
+                waitingTime: waitingTime
 
     for lane in result.lanes
       for card in lane.cards

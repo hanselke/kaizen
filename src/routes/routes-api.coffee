@@ -99,9 +99,9 @@ module.exports = class RoutesApi
       #console.log "PICKED ProcessInstance: #{processUUID}"
 
       @bonitaClient.queryRuntime.getProcessInstances processUUID,req.user.username,null, (err,processInstances) =>
-        console.log "*************"
+        console.log "****1*********"
         console.log "#{JSON.stringify(processInstances)}"
-        console.log "*************"
+        console.log "*****2********"
         return next err if err
         return res.json {message: "processInstances not available from getProcessInstances."},500 unless processInstances
         board = @bonitaTransformer.toBoard processDefinition,processInstances
