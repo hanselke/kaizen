@@ -1,6 +1,4 @@
 1. admin interface for process definition: Show uploaded file
-2. store excel macro on server with download link
-
 3. show errors/status as flash
 4. HTML: Merge Cells
 5. fix cell styling
@@ -10,6 +8,7 @@
 9. fix flash of image
 10. Make sure state transitions work
 11. admin show all tasks (process instances)
+12. Make help scrollable
 
 --
 Add some help
