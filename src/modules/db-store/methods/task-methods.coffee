@@ -34,7 +34,8 @@ module.exports = class TaskMethods
   ###
   getActiveTask: (userId,options = {}, cb) =>
     userId = userId.toString()
-    @models.Task.findOne {checkedOutByUserId : userId,state: 'active'}, (err,item) =>
+    # ,state: 'active'
+    @models.Task.findOne {checkedOutByUserId : userId}, (err,item) =>
       return cb err if err
       cb null, item
 

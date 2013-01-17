@@ -122,6 +122,7 @@ module.exports = class RoutesApi
 
   getTasks: (req,res,next) =>
     return res.json {},401 unless req.user
+    console.log "Retrieving task for #{req.user._id}"
 
     @dbStore.tasks.getActiveTask req.user.id || req.user._id,{}, (err,task) =>
       return next err if err
@@ -163,6 +164,7 @@ module.exports = class RoutesApi
                 checkedOutByUserId: req.user.id || req.user._id
                 activeTaskUUID: firstTaskUUID 
 
+              console.log "Patching by process instance ID: #{processInstanceUUID}"
               @dbStore.tasks.patchByProcessInstanceUUID processInstanceUUID,data, {},  (err,item) =>
                 return next err if err
                 console.log "UPDATED #{JSON.stringify(item)}"

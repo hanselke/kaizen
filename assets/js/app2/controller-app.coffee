@@ -43,7 +43,7 @@ class window.AppController
   ensureCorrectScreen: =>
     if @$location.path() is "/" or @isPathSegment('/task/')
       if @$scope.isFormStateActive
-        @$location.path "/task/#{@$scope.activeTask.id}"
+        @$location.path "/task/#{@$scope.activeTaskId}"
       else
         @$location.path "/"
 
@@ -53,12 +53,17 @@ class window.AppController
 
   updateActiveTask: (activeTask) =>
     @$scope.activeTask = activeTask
-    @$scope.isBoardStateActive = !@$scope.activeTask
-    @$scope.isFormStateActive = !!@$scope.activeTask
+    if activeTask
+      @$scope.activeTaskId = activeTask.id
+    else 
+      @$scope.activeTaskId = null
+
+    @$scope.isBoardStateActive = !@$scope.activeTaskId
+    @$scope.isFormStateActive = !!@$scope.activeTaskId
 
   taskCompleted: () =>
-    if @$scope.activeTask
-      taskId = @$scope.activeTask.id
+    if @$scope.activeTaskId
+      taskId = @$scope.activeTaskId
 
       request = @$http.post "/api/tasks/#{taskId}/complete", {}
       request.error (data, status, headers, config) =>
@@ -93,12 +98,20 @@ class window.AppController
   nextTask: (cb) =>
     request = @$http.get "/api/tasks"
     request.error (data, status, headers, config) =>
+      #alert "GOT: #{JSON.stringify(data)}"
       @$scope.flashMessage "Nothing to do at the moment"
     request.success (data, status, headers, config) =>
 
-      @updateActiveTask data.activeTask
-      if data.activeTask
-        @$location.path "/task/#{@$data.activeTask.id}"
+      if data.taskId
+        @$scope.activeTaskId = data.taskId
+      else
+        @$scope.activeTaskId = null
+
+      @$scope.isBoardStateActive = !@$scope.activeTaskId
+      @$scope.isFormStateActive = !!@$scope.activeTaskId
+
+      if @$scope.isFormStateActive
+        @$location.path "/task/#{@$scope.activeTaskId}"
       else
         @$scope.flashMessage "Nothing to do at the moment"
 
