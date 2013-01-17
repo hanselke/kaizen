@@ -27,9 +27,6 @@ module.exports = (processDefinition,processInstances) ->
   result =
     lanes: []
 
-  console.log 'LLLLL 0 '
-  #console.log "JSON #{JSON.stringify(processDefinition)}"
-
   ###
   Here is what needs to happen now:
   1. We need to build the lanes
@@ -39,7 +36,6 @@ module.exports = (processDefinition,processInstances) ->
   activityDefinitions = _.map(processDefinition.activities?.ActivityDefinition,activityDefinitionTransformer)
   adMap = {}
 
-  console.log 'LLLLL 1 '
 
   result.lanes.push
         label: "Start"
@@ -55,8 +51,6 @@ module.exports = (processDefinition,processInstances) ->
 
   sortedActivityDefinitionsForState = _.sortBy(_.filter(activityDefinitions, (x) -> x.isState),(x) -> x.order ) 
 
-  console.log 'LLLLL 2 '
-
   for activityDefinition in sortedActivityDefinitionsForState
     result.lanes.push
         label: activityDefinition.description || ""
@@ -70,15 +64,12 @@ module.exports = (processDefinition,processInstances) ->
         activityDefinitions: [activityDefinition]
         cards: []
 
-  console.log 'LLLLL 3 '
 
   ###
   2. We need to assign activityDefinition's to the right lanes,starting wiht start and end.
   ###
   _.first(result.lanes).activityDefinitions.push _.find(activityDefinitions,(x) -> x.isStart)
   _.last(result.lanes).activityDefinitions.push _.find(activityDefinitions,(x) -> x.isEnd)
-
-  console.log 'LLLLL 4 '
 
   ###
   3. And now the fun part, we go from element 1 to n and find the matching assign+group,
@@ -90,7 +81,6 @@ module.exports = (processDefinition,processInstances) ->
     activityDefinitionForGroup = _.find(activityDefinitions,(x) -> x.isAssign and x.group is group)
     result.lanes[i - 1].activityDefinitions.push activityDefinitionForGroup
 
-  console.log 'LLLLL 5 '
 
   ###
   4. Now we assign it to the map
@@ -100,7 +90,6 @@ module.exports = (processDefinition,processInstances) ->
     for activityDefinition in lane.activityDefinitions || [] when activityDefinition
       adMap[activityDefinition.id] = lane
 
-  console.log 'LLLLL 6'
   ###
   5. Now we work with process instances.
   ###
@@ -179,6 +168,7 @@ module.exports = (processDefinition,processInstances) ->
         lane.waitingTime = lane.waitingTime + card.totalTime
 
 
+  result.lanes.splice 0,1
 
   result
 

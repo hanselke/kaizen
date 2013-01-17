@@ -1,8 +1,7 @@
-1. do not show start lane.
 2. show errors/status as flash
 5. HTML: Merge Cells
 6. fix cell styling
-7. Download form as complete "",''
+7. Download form as complete csv
 8. add time tracking information
 11. admin show all tasks (process instances)
 13. store excel macro on server with download link
