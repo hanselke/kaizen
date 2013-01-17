@@ -13,6 +13,8 @@ module.exports = TaskSchema = new mongoose.Schema
         required: true
       checkedOutByUserId:
         type: String
+        unique: true
+        sparse: true
       state: 
         type: String
         default: 'active'
@@ -23,7 +25,11 @@ module.exports = TaskSchema = new mongoose.Schema
 
       processInstanceUUID:
         type: String
+        unique: true
+      activeTaskUUID:
+        type: String
     , strict: true
+
 
 TaskSchema.plugin pluginTimestamp.timestamps
 TaskSchema.plugin pluginCreatedBy.createdBy, isRequired : true

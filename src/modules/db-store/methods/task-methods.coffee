@@ -8,8 +8,8 @@ ObjectId = mongoose.Types.ObjectId
 
 
 module.exports = class TaskMethods
-  CREATE_FIELDS = ['_id','processDefinitionId','checkedOutByUserId','createdBy','state','processInstanceUUID']
-  UPDATE_FIELDS = ['processDefinitionId','checkedOutByUserId','state']
+  CREATE_FIELDS = ['_id','processDefinitionId','checkedOutByUserId','createdBy','state','activeTaskUUID','processInstanceUUID']
+  UPDATE_FIELDS = ['processDefinitionId','checkedOutByUserId','state','activeTaskUUID']
 
   constructor:(@models) ->
 
@@ -56,5 +56,15 @@ module.exports = class TaskMethods
         return cb err if err
         cb null, item
 
+
+  patchByProcessInstanceUUID: (processInstanceUUID, obj = {}, options={}, cb = ->) =>
+    @models.Task.findOne processInstanceUUID : processInstanceUUID, (err,item) =>
+      return cb err if err
+      return cb new errors.NotFound("/tasks/byProcessInstance#{processInstanceUUID}") unless item
+
+      _.extendFiltered item, UPDATE_FIELDS, obj
+      item.save (err) =>
+        return cb err if err
+        cb null, item
 
 

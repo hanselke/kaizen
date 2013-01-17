@@ -123,6 +123,70 @@ module.exports = class RoutesApi
   getTasks: (req,res,next) =>
     return res.json {},401 unless req.user
 
+    @dbStore.tasks.getActiveTask req.user.id || req.user._id,{}, (err,task) =>
+      return next err if err
+      if task
+        task.id = task._id
+        res.json 
+          bonitaTaskUUID: task.activeTaskUUID 
+          processInstanceUUID: task.processInstanceUUID
+          taskId : task._id
+          activeTask : task
+        console.log "Task already active - returned"
+        return
+
+
+      #TODO: Check if user has an active task, if so, return that.
+
+      ###
+      Obtain one eligible task
+      ###
+      console.log "------1 .. get one task in ready state"
+      @bonitaClient.queryRuntime.getOneTask "READY",req.user.username,null, (err,taskList) =>
+        return next err if err
+        #console.log JSON.stringify(taskList)      
+        firstTaskUUID = taskList?.value
+        
+        if firstTaskUUID
+
+          console.log "------2 .. get the task info"
+          @bonitaClient.queryRuntime.getTask firstTaskUUID,req.user.username,{}, (err,t) =>
+            return next err if err
+
+            processInstanceUUID = t?.instanceUUID?.value
+
+            console.log "------3 .. Assign that task"
+            @bonitaClient.runtime.assignTask firstTaskUUID,req.user.username,req.user.username,{}, (err) =>
+              return next err if err
+
+              data =
+                checkedOutByUserId: req.user.id || req.user._id
+                activeTaskUUID: firstTaskUUID 
+
+              @dbStore.tasks.patchByProcessInstanceUUID processInstanceUUID,data, {},  (err,item) =>
+                return next err if err
+                console.log "UPDATED #{JSON.stringify(item)}"
+
+                # Now we need to update the data store, where processInstanceID = X
+                # and set the active user to the current userid,
+                # and set the active task to the current task id,
+                # and we need to return our own task id (which is actually the process id)
+                # we also need to register the time here.
+                result = @bonitaTransformer.toNextAction firstTaskUUID,@servicesBonita.baseUrl
+                item.id = item._id
+                res.json 
+                  bonitaTaskUUID: firstTaskUUID 
+                  processInstanceUUID: processInstanceUUID
+                  taskId : item._id
+                  activeTask : item
+
+        else
+          res.json {}
+
+
+  getTasksXXX: (req,res,next) =>
+    return res.json {},401 unless req.user
+
     ###
     Obtain one eligible task
     ###
@@ -347,9 +411,10 @@ module.exports = class RoutesApi
         payload =
           processInstanceUUID: processInstanceUUID
           processDefinitionId: req.body.processDefinitionId
-          checkedOutByUserId: req.user._id
+          #checkedOutByUserId: req.user._id
 
         @dbStore.tasks.create payload,actorId : req.user._id, (err,item) =>
+          return next err if err
           item.id = item._id
           res.json item
 

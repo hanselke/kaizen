@@ -86,23 +86,18 @@ class window.AppController
       @$location.path "/task/#{@$scope.activeTask.id}"
 
   nextTask: (cb) =>
-    # Dummy for now.
-    @$location.path "/task"
-
-    ###
-
     request = @$http.get "/api/tasks"
     request.error (data, status, headers, config) =>
       @$scope.flashMessage "Nothing to do at the moment"
     request.success (data, status, headers, config) =>
       @$scope.currentTask = data
+      # remove current task and shit
       @$scope.setItem "#{@$scope.currentUser.name}-task", @$scope.currentTask
-
-      if @$scope.currentTask
-        @$location.path "/task"
+      @updateActiveTask data.activeTask
+      if data.activeTask
+        @$location.path "/task/#{@$data.activeTask.id}"
       else
         @$scope.flashMessage "Nothing to do at the moment"
-    ###
 
   flashMessage: (msg) =>
     alert "#{msg}"
