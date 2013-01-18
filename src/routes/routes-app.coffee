@@ -22,6 +22,7 @@ module.exports = class RoutesOther
     @app.get '/app/admin/process-definitions',@getAdminProcessDefinitions
     @app.get '/app/admin/process-definitions/add',@getAdminProcessDefinitionsAdd
     @app.get '/app/admin/process-definitions/form',@getAdminProcessDefinitionsForm
+    @app.get '/app/admin/tasks',@getAdminTasks
     @app.get '/app/help',@getHelp
     @app.get '/app/help/terms',@getHelpTerms
     @app.get '/app/help/setup',@getHelpSetup
@@ -48,6 +49,10 @@ module.exports = class RoutesOther
 
   getTask: (req,res,next) =>
     res.render 'app/task',
+          pretty: true
+
+  getAdminTasks: (req,res,next) =>
+    res.render 'app/admin/tasks',
           pretty: true
 
   getAdminUsers: (req,res,next) =>

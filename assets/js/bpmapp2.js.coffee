@@ -8,5 +8,6 @@
 #= require app2/controller-admin-process-definitions-add
 #= require app2/controller-admin-process-definitions-form
 #= require app2/controller-admin-process-definitions
+#= require app2/controller-admin-tasks
 #= require app2/controller-help
 #= require app2/services

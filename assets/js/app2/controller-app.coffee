@@ -97,7 +97,7 @@ class window.AppController
       @$window.location.reload() 
   
   nextTask: (cb) =>
-    request = @$http.get "/api/tasks"
+    request = @$http.get "/api/tasks/next-task"
     request.error (data, status, headers, config) =>
       #alert "GOT: #{JSON.stringify(data)}"
       @$scope.flashMessage "Nothing to do at the moment"

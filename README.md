@@ -1,11 +1,9 @@
-1. HTML: Merge Cells
-2. fix cell styling
---
-3. Download form as complete csv
+1. controller -tasks needs fixing
+2. HTML: Merge Cells
+3. fix cell styling
 4. add time tracking information
 --
 7. Make sure state transitions work
-
 = Cleanup 2 hours max
 1. Make help scrollable
 2. show errors/status as flash

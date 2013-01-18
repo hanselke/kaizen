@@ -14,6 +14,21 @@ module.exports = class TaskMethods
   constructor:(@models) ->
 
 
+  all: (options = {},cb = ->) =>
+    # TODO: EXCLUDE DELETED
+
+    @models.Task.count  {}, (err, totalCount) =>
+      return cb err if err
+
+      query = @models.Task.find({})
+      query.sort('-createdAt')
+      query.select(options.select || '_id processDefinitionId processInstanceUUID state createdAt activeTaskUUID checkedOutByUserId')
+      query.setOptions { skip: options.offset, limit: options.count}
+      query.exec (err, items) =>
+        return cb err if err
+        cb null, new PageResult(items || [], totalCount, options.offset, options.count)
+
+
   ###
   Create a new processDefinition
   ###

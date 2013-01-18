@@ -1,0 +1,37 @@
+
+.row(style="position:absolute;top:0px;bottom:50px;")
+  .container-fluid
+    .span3(style="margin-top:40px")
+      .well
+        ul.nav.nav-list
+          li.nav-header
+            |Tasks
+          li.active
+            |Overview
+      .well
+        ul.nav.nav-list
+          li.nav-header
+            |More Admin
+          li
+            a(href="#/admin/users") Users
+          li
+            a(href="#/admin/process-definitions") Process Definitions
+
+    .span9
+
+      h2
+        span Tasks
+
+      table.table-striped.table-hover
+        thead
+          tr
+            th Name
+            th Actions
+        tbody
+          tr(style="vertical-align:center;",ng-repeat='task in tasks')
+            td
+              |{{task.createdAt}}
+            td
+              a.btn(href="/api/tasks/{{task._id}}/excel") Download Excel
+
+        

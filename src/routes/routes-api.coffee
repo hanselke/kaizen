@@ -23,13 +23,14 @@ module.exports = class RoutesApi
 
     # TODO: Ensure that we have a user here
     @app.get '/api/board', @getBoard
-    @app.get '/api/tasks', @getTasks
+    @app.get '/api/tasks/next-task', @getNextTask
     @app.post '/api/tasks', @createTask
     @app.post '/api/tasks/:taskId/complete', @completeTask
     @app.post '/api/tasks/:taskId/data', @saveTaskData
     @app.get '/api/tasks/:taskId/data', @getTaskData
     @app.get '/api/tasks/:taskId/excel', @getExcel
 
+    @app.get '/api/admin/tasks', @getAdminTasks
     @app.get '/api/admin/users', @getAdminUsers
     @app.post '/api/admin/users', @postAdminUsers
     @app.delete '/api/admin/users/:userId', @deleteAdminUser
@@ -120,7 +121,7 @@ module.exports = class RoutesApi
 
   ###
 
-  getTasks: (req,res,next) =>
+  getNextTask: (req,res,next) =>
     return res.json {},401 unless req.user
     console.log "Retrieving task for #{req.user._id}"
 
@@ -434,6 +435,12 @@ module.exports = class RoutesApi
 
 
 
+  getAdminTasks: (req,res,next) =>
+    return res.json 401,{} unless req.user
+    @dbStore.tasks.all {actor:null, offset: 0, count: 200}, (err,result) =>
+      return next err if err
+      res.json result
+
   getAdminProcessDefinitions: (req,res,next) =>
     return res.json 401,{} unless req.user
     @dbStore.processDefinitions.all {actor:null, offset: 0, count: 200}, (err,result) =>
@@ -585,18 +592,39 @@ module.exports = class RoutesApi
       res.json result
 
   ###
-  http://localhost:8001/api/tasks/50eef7d3728817e63500000d/excel
+  http://localhost:8001/api/tasks/50f9893de7d3a46cb000000b/excel
   ###
   getExcel: (req,res,next) =>
-    return res.json 401,{} unless req.user
+    return res.send 401,"Login required" unless req.user
 
     @dbStore.tasks.get req.params.taskId,{}, (err,task) =>
-      return res.json 404, {} unless task
+      return res.send 404, "Task not found" unless task
 
       @dbStore.processDefinitions.get task.processDefinitionId,null,true, (err,processDefinition) =>
         return next err if err
-        return res.json 404, {} unless processDefinition
+        return res.send 404, "Process Definition not found" unless processDefinition
 
+        res.setHeader('Content-Type', 'text/csv')
+        res.setHeader 'Content-Disposition','fileName="' + processDefinition.sourceFilename + '.csv"'
+
+        dimensions = processDefinition.layout.dimensions
+        data = task.data || {}
+
+        buffer = ""
+        for row in [dimensions.minRow .. dimensions.maxRow]
+          for col in [dimensions.minCol .. dimensions.maxCol]
+            buffer += "," if col > dimensions.minCol
+            buffer += '"'
+            v = data["#{row}-#{col}"]
+            buffer += "#{v}" if v
+
+            buffer += '"'
+
+          buffer += "\r\n"
+
+        res.send buffer
+
+        ###
         xlsxToForm.mergeDataIntoForm processDefinition.sourceXlsx,task.data ,(err,data) =>
 
           res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
@@ -606,6 +634,7 @@ module.exports = class RoutesApi
 
           res.send data
 
+        ###
 
 
 
