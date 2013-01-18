@@ -57,26 +57,39 @@ class FormAndHmtl
       writer.addAttribute "style","height:#{height}px;"
 
       for cell,c in row.cells
-        writer.pushTag "td"
-        width = form.colWidths[c] || 0
-        writer.addAttribute "width","#{width}"
-        writer.addAttribute "style","width:#{width}px;"
-     
-        writer.addAttribute "class","#{cell.cellCssClass || ''} #{cell.fontCssClass || ''}"
-        if cell.text && cell.text.length > 0
-          writer.writeText cell.text
-        else
-          # Note: This is a hack right now. We need to make sure people lock forms and stuff
-          writer.pushTag "input" 
-          writer.addAttribute "type","text"
-          writer.addAttribute "style","width:100%;height:100%;border:none;background-color:#f4f4f4"
-          writer.addAttribute "data-row", r
-          writer.addAttribute "data-cell", c
-          writer.addAttribute "class", "r-#{r} c-#{c}"
+        skipCell = false
+        if cell.mergedCell && cell.mergedCell.cols
+          skipCell = true if cell.mergedCell.col != c || cell.mergedCell.row != r
+          # We only render cells that are not merged in, or the first ones that are merged
 
-          writer.popTag()
 
-        writer.popTag()
+        if !skipCell
+          writer.pushTag "td"
+          if cell.mergedCell && cell.mergedCell.cols
+            if cell.mergedCell.cols > 1
+              writer.addAttribute "colspan", cell.mergedCell.cols 
+            if cell.mergedCell.rows > 1
+              writer.addAttribute "rowspan", cell.mergedCell.rows
+                      
+          width = form.colWidths[c] || 0
+          writer.addAttribute "width","#{width}"
+          writer.addAttribute "style","width:#{width}px;"
+       
+          writer.addAttribute "class","#{cell.cellCssClass || ''} #{cell.fontCssClass || ''}"
+          if cell.text && cell.text.length > 0
+            writer.writeText cell.text
+          else
+            # Note: This is a hack right now. We need to make sure people lock forms and stuff
+            writer.pushTag "input" 
+            writer.addAttribute "type","text"
+            writer.addAttribute "style","width:100%;height:100%;border:none;background-color:#f4f4f4"
+            writer.addAttribute "data-row", r
+            writer.addAttribute "data-cell", c
+            writer.addAttribute "class", "r-#{r} c-#{c}"
+
+            writer.popTag()
+
+          writer.popTag() #td
 
       writer.popTag()
 

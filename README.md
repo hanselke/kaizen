@@ -1,4 +1,3 @@
-1. HTML: Merge Cells
 2. fix cell styling
 --
 7. Make sure state transitions work
