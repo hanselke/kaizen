@@ -1,21 +1,17 @@
-1. admin interface for process definition: Show uploaded file
-2. show errors/status as flash
+1. HTML: Merge Cells
+2. fix cell styling
 --
-3. HTML: Merge Cells
-4. fix cell styling
-8. Make help scrollable
---
-5. Download form as complete csv
-6. add time tracking information
+3. Download form as complete csv
+4. add time tracking information
 --
 7. Make sure state transitions work
-=
-8. show loading screen for board
-9. fix flash of image
-11. admin show all tasks (process instances)
 
---
-Add some help
+= Cleanup 2 hours max
+1. Make help scrollable
+2. show errors/status as flash
+3. show loading screen for board
+4. fix flash of image
+
 
 How to install and start on the server:
 Precon: mongodb installed locally

@@ -46,8 +46,8 @@ module.exports = class RoutesApi
     @app.get '/api/admin/process-definitions/:processDefinitionId', @getAdminProcessDefinition
     @app.post '/api/admin/process-definitions/:processDefinitionId', @uploadAdminProcessDefinition
     @app.post '/api/admin/process-definitions/:processDefinitionId/layout', @uploadAdminProcessDefinitionLayout
-    @app.get '/api/process-definitions/:processDefinitionId/form-css', @getProcessDefintionCss
-    @app.get '/api/process-definitions/:processDefinitionId/form-html', @getProcessDefintionHtml
+    @app.get '/api/process-definitions/:processDefinitionId/form-css', @getProcessDefinitionCss
+    @app.get '/api/process-definitions/:processDefinitionId/form-html', @getProcessDefinitionHtml
 
 
   ###
@@ -460,6 +460,7 @@ module.exports = class RoutesApi
       hasSource = item.sourceXlsx && item.sourceXlsx.length >0
       hasLayout = item.layout && _.keys(item.layout).length > 0
       delete item.sourceXlsx
+      delete item.layout
 
       item = item.toJSON()
       item.hasSource = hasSource
@@ -513,7 +514,7 @@ module.exports = class RoutesApi
   ###
   http://localhost:8001/api/process-definitions/50d22f260b75ca1d9000000c/form-css
   ###
-  getProcessDefintionCss: (req,res,next) =>
+  getProcessDefinitionCss: (req,res,next) =>
     processDefinitionId = req.params.processDefinitionId
     @dbStore.processDefinitions.get processDefinitionId,null,true, (err,item) =>
       return next err if err
@@ -532,7 +533,7 @@ module.exports = class RoutesApi
   ###
   http://localhost:8001/api/process-definitions/50d22f260b75ca1d9000000c/form-html
   ###
-  getProcessDefintionHtml: (req,res,next) =>
+  getProcessDefinitionHtml: (req,res,next) =>
     processDefinitionId = req.params.processDefinitionId
     @dbStore.processDefinitions.get processDefinitionId,null,true, (err,item) =>
       return next err if err
@@ -549,7 +550,8 @@ module.exports = class RoutesApi
 
 #<link rel="stylesheet" type="text/css" href="https://mailfoogae.appspot.com/build/combined-5.0.css">
 
-        html = "<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"http://localhost:8001/api/process-definitions/#{processDefinitionId}/form-css\" /></head><body> #{html}</body></html>"
+        #html = "<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"http://localhost:8001/api/process-definitions/#{processDefinitionId}/form-css\" /></head><body> #{html}</body></html>"
+        html = "#{html}"
         res.send html
 
   ###
