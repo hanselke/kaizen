@@ -164,6 +164,7 @@ module.exports = class RoutesApi
               data =
                 checkedOutByUserId: req.user.id || req.user._id
                 activeTaskUUID: firstTaskUUID 
+                checkedOutDate: new Date()
 
               console.log "Patching by process instance ID: #{processInstanceUUID}"
               @dbStore.tasks.patchByProcessInstanceUUID processInstanceUUID,data, actor : {actorId : req.user._id || req.user.id},  (err,item) =>
@@ -398,14 +399,28 @@ module.exports = class RoutesApi
       @bonitaClient.runtime.executeTask item.activeTaskUUID,true, req.user.username,{},(err) =>
         return next err if err
 
-        data = 
-          activeTaskUUID : null
-          checkedOutByUserId: null
-          state: 'complete'
-
-        @dbStore.tasks.patch req.params.taskId, data, {}, (err,item) =>
+        @dbStore.tasks.get req.params.taskId, {}, (err,oldTask) =>
           return next err if err
-          res.json item
+          totalTimeSpent =  0
+          if oldTask.totalTimeSpent
+            try
+              totalTimeSpent = oldTask.totalTimeSpent
+            catch e
+              #nop
+          
+          if oldTask.checkedOutDate
+            totalTimeSpent += new Date() - oldTask.checkedOutDate
+
+          data = 
+            activeTaskUUID : null
+            checkedOutByUserId: null
+            checkedOutDate: null
+            state: 'w'
+            totalTimeSpent: totalTimeSpent
+
+          @dbStore.tasks.patch req.params.taskId, data, {}, (err,item) =>
+            return next err if err
+            res.json item
 
 
   createTask: (req,res,next) =>

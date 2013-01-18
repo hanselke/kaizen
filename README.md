@@ -1,6 +1,5 @@
 1. HTML: Merge Cells
 2. fix cell styling
-3. add time tracking information
 --
 7. Make sure state transitions work
 = Cleanup 2 hours max
