@@ -14,17 +14,17 @@ class window.TaskController
 
     @$scope.taskChanges = {}
 
-    loadCssFile "/api/process-definitions/50d22f260b75ca1d9000000c/form-css"
-    $(".xlsl-form-container").load "/api/process-definitions/50d22f260b75ca1d9000000c/form-html", () =>
-      $(".xlsl-form-container input").focusout @onFocusout
-      @loadFormData()
+    @loadFormData()
 
   loadFormData: =>
     request = @$http.get "/api/tasks/#{@$routeParams.taskId}/data"
     request.error @$scope.errorHandler
-    request.success (data, status, headers, config) =>
-      for row in data
-        $("input.r-#{row.r}.c-#{row.c}").val(row.v)
+    request.success (result, status, headers, config) =>
+      loadCssFile "/api/process-definitions/#{result.processDefinitionId}/form-css"
+      $(".xlsl-form-container").load "/api/process-definitions/#{result.processDefinitionId}/form-html", () =>
+        $(".xlsl-form-container input").focusout @onFocusout
+        for row in result.items
+          $("input.r-#{row.r}.c-#{row.c}").val(row.v)
 
 
   onFocusout: (e) =>

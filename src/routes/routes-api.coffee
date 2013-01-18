@@ -581,14 +581,16 @@ module.exports = class RoutesApi
     @dbStore.tasks.get req.params.taskId, {}, (err,item) =>
       return next err if err
 
-      result = []
+      result = {}
+      result.items = []
       for key,v of item.data
         rc = key.split('-')
-        result.push 
+        result.items.push 
           r : rc[0]
           c : rc[1]
           v : v
 
+      result.processDefinitionId = item.processDefinitionId
       res.json result
 
   ###
