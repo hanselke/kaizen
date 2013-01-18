@@ -1,14 +1,19 @@
+{ "__v" : 0, "_id" : ObjectId("50d22f260b75ca1d9000000c"), "QA_Data_Entry--2.0" : "test", "createdAt" : ISODate("2012-12-19T21:18:30.686Z"), "createdBy" : { "actorId" : ObjectId("50b99e36ad8199000000000c") }, "deletedAt" : null, "description" : "test", "isDeleted" : false, "updatedAt" : ISODate("2013-01-10T17:57:15.072Z","name" : "QA_Data_Entry--2.0"  }
+
+
 1. admin interface for process definition: Show uploaded file
-3. show errors/status as flash
-4. HTML: Merge Cells
-5. fix cell styling
-6. Download form as complete csv
-7. add time tracking information
+2. show errors/status as flash
+3. HTML: Merge Cells
+4. fix cell styling
+5. Download form as complete csv
+6. add time tracking information
+7. Make sure state transitions work
+8. Make help scrollable
+
+=
 8. show loading screen for board
 9. fix flash of image
-10. Make sure state transitions work
 11. admin show all tasks (process instances)
-12. Make help scrollable
 
 --
 Add some help

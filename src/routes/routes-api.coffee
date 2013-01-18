@@ -165,7 +165,7 @@ module.exports = class RoutesApi
                 activeTaskUUID: firstTaskUUID 
 
               console.log "Patching by process instance ID: #{processInstanceUUID}"
-              @dbStore.tasks.patchByProcessInstanceUUID processInstanceUUID,data, {},  (err,item) =>
+              @dbStore.tasks.patchByProcessInstanceUUID processInstanceUUID,data, actor : {actorId : req.user._id || req.user.id},  (err,item) =>
                 return next err if err
                 console.log "UPDATED #{JSON.stringify(item)}"
 

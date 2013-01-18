@@ -61,11 +61,24 @@ module.exports = class TaskMethods
   patchByProcessInstanceUUID: (processInstanceUUID, obj = {}, options={}, cb = ->) =>
     @models.Task.findOne processInstanceUUID : processInstanceUUID, (err,item) =>
       return cb err if err
-      return cb new errors.NotFound("/tasks/byProcessInstance#{processInstanceUUID}") unless item
+      if !item 
+        @models.ProcessDefinition.find({}).select('_id bonitaProcessName').exec (err,items) =>
+          processDefinitionId = _.first(items)._id
+          for xx in items
+            if processInstanceUUID.substr(0,xx.bonitaProcessName.length) is xx.bonitaProcessName
+              processDefinitionId = xx._id
 
-      _.extendFiltered item, UPDATE_FIELDS, obj
-      item.save (err) =>
-        return cb err if err
-        cb null, item
+          item = new @models.Task
+              processInstanceUUID : processInstanceUUID
+              createdBy : options.actor
+              processDefinitionId : processDefinitionId
 
-
+          _.extendFiltered item, UPDATE_FIELDS, obj
+          item.save (err) =>
+            return cb err if err
+            cb null, item
+      else
+        _.extendFiltered item, UPDATE_FIELDS, obj
+        item.save (err) =>
+          return cb err if err
+          cb null, item
