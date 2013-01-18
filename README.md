@@ -1,11 +1,10 @@
-2. fix cell styling
---
-7. Make sure state transitions work
+3. show loading screen for board
+
 = Cleanup 2 hours max
 1. Make help scrollable
 2. show errors/status as flash
-3. show loading screen for board
 4. fix flash of image
+5. Make sure state transitions work
 
 
 How to install and start on the server:

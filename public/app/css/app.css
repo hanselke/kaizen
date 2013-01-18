@@ -164,7 +164,17 @@ font-size:18px;
 
 
 table.xslx-table{
-	border-collapse: inherit;
+	border-collapse: collapse;
+	border-spacing: 0px;
+}
+
+table.xslx-table tr {
+	border-collapse: collapse;
+	border-spacing: 0px;
+}
+
+table.xslx-table tr td{
+	border-collapse: collapse;
 	border-spacing: 0px;
 }
 
@@ -172,3 +182,16 @@ table.xslx-table td {
 	padding: 0px;
 
 }
+
+
+input.excel-input {
+	margin:0px;
+	padding:2px;
+	background-color: :transparent;
+	border: none 0px transparent;
+	-webkit-box-shadow: 0px 0px 0px 0px ;
+	box-shadow: 0px 0px 0px 0px ;
+	border-radius: 0px;
+	-webkit-border-radius: 0px;
+}
+

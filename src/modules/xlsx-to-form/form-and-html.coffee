@@ -11,7 +11,7 @@ class FormAndHmtl
       result += "font-size:#{cssClass.fontSize};" if cssClass.fontSize
       result += "font-weight:#{cssClass.fontWeight};" if cssClass.fontWeight
       result += "font-style:#{cssClass.fontStyle};" if cssClass.fontStyle && cssClass.fontStyle.length > 0
-      result += "text-decoration:#{cssClass.textDecoration};" if cssClass.textDecoration && cssClass.textDecoration.length > 0
+      #result += "text-decoration:#{cssClass.textDecoration};" if cssClass.textDecoration && cssClass.textDecoration.length > 0
 
       result += "color:#{cssClass.fontColor};" if cssClass.fontColor && cssClass.fontColor.length > 0
       result += "text-align:#{cssClass.horizontalAlignment};" if cssClass.horizontalAlignment && cssClass.horizontalAlignment.length > 0
@@ -70,7 +70,7 @@ class FormAndHmtl
               writer.addAttribute "colspan", cell.mergedCell.cols 
             if cell.mergedCell.rows > 1
               writer.addAttribute "rowspan", cell.mergedCell.rows
-                      
+
           width = form.colWidths[c] || 0
           writer.addAttribute "width","#{width}"
           writer.addAttribute "style","width:#{width}px;"
@@ -85,7 +85,7 @@ class FormAndHmtl
             writer.addAttribute "style","width:100%;height:100%;border:none;background-color:#f4f4f4"
             writer.addAttribute "data-row", r
             writer.addAttribute "data-cell", c
-            writer.addAttribute "class", "r-#{r} c-#{c}"
+            writer.addAttribute "class", "r-#{r} c-#{c} excel-input"
 
             writer.popTag()
 
