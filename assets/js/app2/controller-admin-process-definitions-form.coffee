@@ -5,6 +5,7 @@ class window.AdminProcessDefinitionsFormController
     @$scope.processDefinition.name = "(loading...)"
     @$scope.uploadFiles = @uploadFiles
     @$scope.uploadFilesLayout = @uploadFilesLayout
+
     @load @$routeParams.processDefinitionId
 
 
@@ -29,6 +30,7 @@ class window.AdminProcessDefinitionsFormController
 
 
     @$scope.uploader.bind "UploadProgress", (up, file) =>
+      @$scope.$apply()
       #$(file.id).getElementsByTagName("b")[0].innerHTML = "<span>" + file.percent + "%</span>"
 
     @$scope.uploader.init()
@@ -55,6 +57,7 @@ class window.AdminProcessDefinitionsFormController
 
 
     @$scope.uploaderLayout.bind "UploadProgress", (up, file) =>
+      @$scope.$apply()
       #$(file.id).getElementsByTagName("b")[0].innerHTML = "<span>" + file.percent + "%</span>"
 
     @$scope.uploaderLayout.init()

@@ -19,10 +19,14 @@
       h2 
         |Form for&nbsp;
         span {{processDefinition.name}}
-      p No Excel form has been uploaded yet. Each process definition is associated with an Excel form (in xslx format) that acts as the blue print.
+
+      p.alert.alert-block.alert-success(ng:show="processDefinition.hasSource")
+        | Excel file has been uploaded.
+
+      p.alert.alert-block(ng:show="!processDefinition.hasSource")
+        |No Excel form has been uploaded yet. Each process definition is associated with an Excel form (in xslx format) that acts as the blue print.
+      
       p Either drop a file into the area below, or press the Select Files button. Then press Upload Files.
-
-
       form
         fieldset
           #uploadContainer
@@ -36,7 +40,12 @@
             button.btn.btn-small#uploadfiles( ng-click="uploadFiles()") Upload Files
 
 
-      p.warning No layout file has been uploaded yet.
+      p.alert.alert-block.alert-success(ng:show="processDefinition.hasLayout")
+        | Layout file has been uploaded.
+
+      p.alert.alert-block(ng:show="!processDefinition.hasLayout")
+        |No Layout form has been uploaded yet. Each process definition is associated with an Excel form (in xslx format) that acts as the blue print.
+
       p Either drop a file into the area below, or press the Select Files button. Then press Upload Files.
       form
         fieldset

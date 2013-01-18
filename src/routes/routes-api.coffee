@@ -457,7 +457,14 @@ module.exports = class RoutesApi
     @dbStore.processDefinitions.get processDefinitionId,null,true, (err,item) =>
       return next err if err
 
+      hasSource = item.sourceXlsx && item.sourceXlsx.length >0
+      hasLayout = item.layout && _.keys(item.layout).length > 0
       delete item.sourceXlsx
+
+      item = item.toJSON()
+      item.hasSource = hasSource
+      item.hasLayout = hasLayout
+
       res.json item
 
   uploadAdminProcessDefinition: (req,res,next) =>
