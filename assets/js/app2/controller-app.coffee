@@ -27,7 +27,6 @@ class window.AppController
   loadSession: () =>
     request = @$http.get('/api/session')
     request.success (data, status, headers, config) =>
-        @$flash.notify "error","Hey,some error occured", null
         @setCurrentUser data
 
     request.error (data, status, headers, config) =>

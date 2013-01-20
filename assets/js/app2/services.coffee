@@ -2,33 +2,8 @@
 App service which is responsible for the main configuration of the app.
 ###
 
-angular.module("Notification", []).factory("$flash", ($rootScope) ->
-  service = notify: (level, message, element, callback) ->
-    notification =
-      level: level
-      message: message
-      element: (element or "default")
-      callback: callback
 
-    $rootScope.$emit "event:ngNotification", notification
-
-  service
-).directive "ngNotice", ($rootScope) ->
-  noticeObject =
-    replace: false
-    transclude: false
-    link: (scope, element, attr) ->
-      $rootScope.$on "event:ngNotification", (event, notification) ->
-        if attr.ngNotice is notification.element
-          element.html "<span class=\"" + notification.level + "\">" + notification.message + "</span>"
-          notification.callback()  if typeof notification.callback is "function"
-
-      element.attr "ng-notice", (attr.ngNotice or "default")
-
-  noticeObject
-
-
-myModule = angular.module("myModule", [window.myFilters,'Notification'])
+myModule = angular.module("myModule", [window.myFilters])
 
 rpFn = ($routeProvider) ->
   $routeProvider.when("/", {templateUrl: "main", controller: MainController})
@@ -44,4 +19,4 @@ rpFn = ($routeProvider) ->
                 .when("/help/terms", {templateUrl: "help/terms",controller: HelpController})
                 .otherwise redirectTo: "/"
 
-angular.module("myModule", ['myFilters','Notification']).config ["$routeProvider", rpFn]
+angular.module("myModule", ['myFilters']).config ["$routeProvider", rpFn]
