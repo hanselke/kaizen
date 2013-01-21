@@ -88,4 +88,4 @@ class window.AdminProcessDefinitionsFormController
       @$scope.flashMessage "New Process Definition Created"
     ###
 
-window.AdminProcessDefinitionsAddController.$inject = ['$scope',"$http","$location","$routeParams"]
+window.AdminProcessDefinitionsFormController.$inject = ['$scope',"$http","$location","$routeParams"]
