@@ -1,5 +1,5 @@
 class window.AppController
-  constructor: (@$route, @$location, @$window,@$scope,@$http,@$flash) ->
+  constructor: (@$route, @$location, @$window,@$scope,@$http) ->
 
     # Functions
     @$scope.nextTask = @nextTask
@@ -130,5 +130,5 @@ class window.AppController
     if localStorage && typeof(localStorage.setItem) is 'function'
       localStorage.setItem name, value
 
-window.AppController.$inject = ['$route', '$location', '$window','$scope',"$http","$flash"]
+window.AppController.$inject = ['$route', '$location', '$window','$scope',"$http"]
 
