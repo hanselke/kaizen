@@ -48,7 +48,7 @@ module.exports = class RoutesApi
     @app.post '/api/admin/process-definitions/:processDefinitionId', @uploadAdminProcessDefinition
     @app.post '/api/admin/process-definitions/:processDefinitionId/layout', @uploadAdminProcessDefinitionLayout
     @app.get '/api/process-definitions/:processDefinitionId/form-css', @getProcessDefinitionCss
-    @app.get '/api/process-definitions/:processDefinitionId/form-html', @getProcessDefinitionHtml
+    @app.get '/api/process-definitions/:processDefinitionId/:taskId/form-html', @getProcessDefinitionHtml
 
 
   ###
@@ -155,6 +155,10 @@ module.exports = class RoutesApi
           @bonitaClient.queryRuntime.getTask firstTaskUUID,req.user.username,{}, (err,t) =>
             return next err if err
 
+            console.log "GET TASK RETURNED"
+            console.log JSON.stringify(t)
+            console.log "GET TASK RETURNED END"
+
             processInstanceUUID = t?.instanceUUID?.value
 
             console.log "------3 .. Assign that task"
@@ -164,6 +168,7 @@ module.exports = class RoutesApi
               data =
                 checkedOutByUserId: req.user.id || req.user._id
                 activeTaskUUID: firstTaskUUID 
+                activeActivityName: t.name
                 checkedOutDate: new Date()
 
               console.log "Patching by process instance ID: #{processInstanceUUID}"
@@ -553,30 +558,6 @@ module.exports = class RoutesApi
 
 
   ###
-  http://localhost:8001/api/process-definitions/50d22f260b75ca1d9000000c/form-html
-  ###
-  getProcessDefinitionHtml: (req,res,next) =>
-    processDefinitionId = req.params.processDefinitionId
-    @dbStore.processDefinitions.get processDefinitionId,null,true, (err,item) =>
-      return next err if err
-
-      ###
-      layout1Path = "#{__dirname}/../../test/fixtures/form1-layout-raw.json"
-
-      xlsxToForm.loadAndConvertVba layout1Path, (err,converted) =>
-        return done err if err
-      ###
-
-      xlsxToForm.createHtmlFromLayoutForm item.layout,(err,html) =>
-        return done err if err
-
-#<link rel="stylesheet" type="text/css" href="https://mailfoogae.appspot.com/build/combined-5.0.css">
-
-        #html = "<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"http://localhost:8001/api/process-definitions/#{processDefinitionId}/form-css\" /></head><body> #{html}</body></html>"
-        html = "#{html}"
-        res.send html
-
-  ###
   Save the task data. Format: [ {r: 0,c:0, v: 'value' }]
   ###
   saveTaskData: (req,res,next) =>
@@ -654,4 +635,50 @@ module.exports = class RoutesApi
         ###
 
 
+
+  ###
+  http://localhost:8001/api/process-definitions/50d22f260b75ca1d9000000c/taskIdhere/form-html
+  ###
+  getProcessDefinitionHtml: (req,res,next) =>
+    processDefinitionId = req.params.processDefinitionId
+    taskId = req.params.taskId
+    @dbStore.processDefinitions.get processDefinitionId,null,true, (err,item) =>
+      return next err if err
+
+      @dbStore.tasks.get taskId, {}, (err,task) =>
+        return next err if err
+
+        console.log "TASK NAME: #{task.activeActivityName}"
+
+        ###
+        task.activeActivityName == '_1_Enter_Floor_Data'
+        ###
+        currentTaskState = 'undefined'
+
+        if task.activeActivityName is '_1_Enter_Floor_Data'
+          currentTaskState = "floor"
+        else if task.activeActivityName is '_1_Enter_Floor_Data'
+          currentTaskState = "shift manager"
+        else if task.activeActivityName is '_1_Enter_Floor_Data'
+          currentTaskState = "production manager"
+
+
+
+        options = 
+          isActiveInputCell : (cell) => 
+            return false unless cell.text && cell.text.length > 0
+            return false unless cell.text is 'floor' or cell.text is 'shift manager' or cell.text is 'production manager'
+            true
+
+          isActiveInputCellCurrent : (cell) => 
+            return false unless cell.text && cell.text.length > 0
+            return false unless cell.text is currentTaskState
+            true
+
+
+        xlsxToForm.createHtmlFromLayoutForm item.layout,options,(err,html) =>
+          return done err if err
+
+          html = "#{html}"
+          res.send html
 

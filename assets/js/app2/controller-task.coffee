@@ -21,7 +21,7 @@ class window.TaskController
     request.error @$scope.errorHandler
     request.success (result, status, headers, config) =>
       loadCssFile "/api/process-definitions/#{result.processDefinitionId}/form-css"
-      $(".xlsl-form-container").load "/api/process-definitions/#{result.processDefinitionId}/form-html", () =>
+      $(".xlsl-form-container").load "/api/process-definitions/#{result.processDefinitionId}/#{@$routeParams.taskId}/form-html", () =>
         $(".xlsl-form-container input").focusout @onFocusout
         for row in result.items
           $("input.r-#{row.r}.c-#{row.c}").val(row.v)

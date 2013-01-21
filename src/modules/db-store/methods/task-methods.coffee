@@ -8,8 +8,8 @@ ObjectId = mongoose.Types.ObjectId
 
 
 module.exports = class TaskMethods
-  CREATE_FIELDS = ['_id','processDefinitionId','checkedOutByUserId','createdBy','state','activeTaskUUID','processInstanceUUID','checkedOutDate','totalAbsoluteTimeSpent','totalTimeSpent']
-  UPDATE_FIELDS = ['processDefinitionId','checkedOutByUserId','state','activeTaskUUID','checkedOutDate','totalAbsoluteTimeSpent','totalTimeSpent']
+  CREATE_FIELDS = ['_id','processDefinitionId','checkedOutByUserId','createdBy','state','activeTaskUUID','processInstanceUUID','checkedOutDate','totalAbsoluteTimeSpent','totalTimeSpent','activeActivityName']
+  UPDATE_FIELDS = ['processDefinitionId','checkedOutByUserId','state','activeTaskUUID','checkedOutDate','totalAbsoluteTimeSpent','totalTimeSpent','activeActivityName']
 
   constructor:(@models) ->
 

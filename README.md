@@ -1,11 +1,10 @@
-3. show loading screen for board
 
-= Cleanup 2 hours max
-1. Make help scrollable
-2. show errors/status as flash
-4. fix flash of image
-5. Make sure state transitions work
+4. execute correctly
+5. extract config into uploadable json
+6. style the form better
 
+http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita
+ssh -i ~/Documents/bitnami-hosting.pem ubuntu@ec2-54-251-65-125.ap-southeast-1.compute.amazonaws.com
 
 How to install and start on the server:
 Precon: mongodb installed locally

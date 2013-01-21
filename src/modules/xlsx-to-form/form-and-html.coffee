@@ -36,7 +36,14 @@ class FormAndHmtl
 
     return result
 
-  createHtml: (form) =>
+  createHtml: (form,options = {}) =>
+
+
+    unless options.isActiveInputCell
+      options.isActiveInputCell = (cell) -> !(cell.text && cell.text.length > 0) 
+    unless options.isActiveInputCellCurrent
+      options.isActiveInputCellCurrent = (cell) -> !(cell.text && cell.text.length > 0) 
+
     writer = new HtmlWriter()
 
     writer.pushTag "table"
@@ -76,8 +83,11 @@ class FormAndHmtl
           writer.addAttribute "style","width:#{width}px;"
        
           writer.addAttribute "class","#{cell.cellCssClass || ''} #{cell.fontCssClass || ''}"
-          if cell.text && cell.text.length > 0
-            writer.writeText cell.text
+          if !options.isActiveInputCellCurrent(cell) 
+            if options.isActiveInputCell(cell)
+              writer.writeText ""
+            else
+              writer.writeText cell.text
           else
             # Note: This is a hack right now. We need to make sure people lock forms and stuff
             writer.pushTag "input" 

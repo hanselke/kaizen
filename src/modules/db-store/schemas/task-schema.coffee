@@ -28,6 +28,8 @@ module.exports = TaskSchema = new mongoose.Schema
         unique: true
       activeTaskUUID:
         type: String
+      activeActivityName:
+        type: String
       totalAbsoluteTimeSpent:
         type: Number
         default: 0

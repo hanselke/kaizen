@@ -18,8 +18,8 @@ module.exports =
     lf.loadVbaOutputFromPath pathToJson, (err,converted) =>
       cb err, converted
 
-  createHtmlFromLayoutForm: (layoutForm,cb) =>
-      html = formAndHtml.createHtml(layoutForm)
+  createHtmlFromLayoutForm: (layoutForm,options,cb) =>
+      html = formAndHtml.createHtml(layoutForm,options)
       cb null,html
 
   createCssFromLayoutForm: (layoutForm,cb) =>

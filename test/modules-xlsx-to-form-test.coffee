@@ -38,7 +38,8 @@ describe 'WHEN testing the home page', ->
     it 'should load', (done) ->
       xlsxToForm.loadAndConvertVba layout1Path, (err,converted) =>
         return done err if err
-        xlsxToForm.createHtmlFromLayoutForm converted,(err,html) =>
+
+        xlsxToForm.createHtmlFromLayoutForm converted,{},(err,html) =>
           return done err if err
 
           console.log ""
