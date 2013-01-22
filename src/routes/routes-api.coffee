@@ -650,16 +650,14 @@ module.exports = class RoutesApi
 
         console.log "TASK NAME: #{task.activeActivityName}"
 
-        ###
-        task.activeActivityName == '_1_Enter_Floor_Data'
-        ###
+
         currentTaskState = 'undefined'
 
         if task.activeActivityName is '_1_Enter_Floor_Data'
           currentTaskState = "floor"
-        else if task.activeActivityName is '_1_Enter_Floor_Data'
+        else if task.activeActivityName is '2_Approve1'
           currentTaskState = "shift manager"
-        else if task.activeActivityName is '_1_Enter_Floor_Data'
+        else if task.activeActivityName is '3_Approve2'
           currentTaskState = "production manager"
 
 
