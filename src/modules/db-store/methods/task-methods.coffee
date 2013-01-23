@@ -8,8 +8,8 @@ ObjectId = mongoose.Types.ObjectId
 
 
 module.exports = class TaskMethods
-  CREATE_FIELDS = ['_id','processDefinitionId','checkedOutByUserId','createdBy','state','activeTaskUUID','processInstanceUUID','checkedOutDate','totalAbsoluteTimeSpent','totalTimeSpent','activeActivityName','stateCompleted','nextState','name','taskEnded']
-  UPDATE_FIELDS = ['processDefinitionId','checkedOutByUserId','state','activeTaskUUID','checkedOutDate','totalAbsoluteTimeSpent','totalTimeSpent','activeActivityName','stateCompleted','nextState','name','taskEnded']
+  CREATE_FIELDS = ['_id','processDefinitionId','checkedOutByUserId','createdBy','state','checkedOutDate','totalWaitingTime','totalActiveTime','activeActivityName','stateCompleted','nextState','name','taskEnded','checkedInDate']
+  UPDATE_FIELDS = ['processDefinitionId','checkedOutByUserId','state','checkedOutDate','totalWaitingTime','totalActiveTime','activeActivityName','stateCompleted','nextState','name','taskEnded','checkedInDate']
 
   constructor:(@models) ->
 
@@ -41,7 +41,7 @@ module.exports = class TaskMethods
       # processDefinitionId : processDefinitionId,
       query = @models.Task.find( {taskEnded : false})
       query.sort('-createdAt')
-      #query.select(options.select || '_id processDefinitionId processInstanceUUID state createdAt activeTaskUUID checkedOutByUserId')
+
       query.setOptions { skip: options.offset , limit: options.count}
       query.exec (err, items) =>
         return cb err if err
@@ -56,7 +56,7 @@ module.exports = class TaskMethods
 
       query = @models.Task.find({})
       query.sort('-createdAt')
-      query.select(options.select || '_id processDefinitionId processInstanceUUID state createdAt activeTaskUUID checkedOutByUserId')
+      query.select(options.select || '_id processDefinitionId state createdAt checkedOutByUserId')
       query.setOptions { skip: options.offset, limit: options.count}
       query.exec (err, items) =>
         return cb err if err

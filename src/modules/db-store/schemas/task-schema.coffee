@@ -19,24 +19,16 @@ module.exports = TaskSchema = new mongoose.Schema
         type: mongoose.Schema.Types.Mixed
         default: () -> {}
 
-      # Remove the next three
-      processInstanceUUID:
-        type: String
-        unique: true
-        default: -> new Date().toString()
-      activeTaskUUID:
-        type: String
-      activeActivityName:
-        type: String
-
-
-      totalAbsoluteTimeSpent:
+      totalActiveTime:
         type: Number
         default: 0
-      totalTimeSpent:
+      totalWaitingTime:
         type: Number
         default: 0
+
       checkedOutDate:
+        type: Date
+      checkedInDate:
         type: Date
 
       state: 
@@ -69,7 +61,6 @@ TaskSchema.methods.toRest = (baseUrl, actor) ->
     createdBy : @createdBy
     createdAt : @createdAt
     updatedAt : @updatedAt
-    processInstanceUUID : @processInstanceUUID
   res
 
 

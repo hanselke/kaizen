@@ -380,9 +380,6 @@ module.exports = class RoutesApi
         @dbStore.tasks.get taskId, {}, (err,task) =>
           return next err if err
 
-          console.log "TASK NAME: #{task.activeActivityName}"
-
-
           currentTaskState = sm.getExcelFieldFromState( task.state) || 'undefined' 
 
           options = 
@@ -510,15 +507,19 @@ module.exports = class RoutesApi
 
         sm.getNextStateName oldTask.state,data, (err,nextState) =>
           return next err if err
-          totalTimeSpent =  0
-          if oldTask.totalTimeSpent
+
+          # the activeTime is whats added to the time between the last checkOutDate and now.
+          totalActiveTime =  0
+          if oldTask.totalActiveTime
             try
-              totalTimeSpent = oldTask.totalTimeSpent
+              totalActiveTime = oldTask.totalActiveTime
             catch e
               #nop
           
           if oldTask.checkedOutDate
-            totalTimeSpent += new Date() - oldTask.checkedOutDate
+            totalActiveTime += new Date() - oldTask.checkedOutDate
+          else if oldTask.createdAt
+            totalActiveTime += new Date() - oldTask.createdAt
 
           
 
@@ -526,10 +527,11 @@ module.exports = class RoutesApi
             activeTaskUUID : null # to be deleted
             checkedOutByUserId: null
             checkedOutDate: null
+            checkedInDate : new Date()
             #state: is left alone
             stateCompleted: true
             nextState: nextState
-            totalTimeSpent: totalTimeSpent
+            totalActiveTime: totalActiveTime
 
           data.taskEnded = true if nextState is "end"
             
@@ -589,10 +591,10 @@ module.exports = class RoutesApi
                   state : lane.name
                   processInstance : "" # REMOVE
                   activityDefinitionUUID : "" # REMOVE
-                  totalTime :  0
+                  totalTime :  task.totalActiveTime + task.totalWaitingTime
                   totalCost: 0
-                  executionTime : 0
-                  waitingTime: 0
+                  executionTime : task.totalActiveTime
+                  waitingTime: task.totalWaitingTime
 
 
           res.json board
@@ -612,8 +614,6 @@ module.exports = class RoutesApi
       if task
         task.id = task._id
         res.json 
-          bonitaTaskUUID: task.activeTaskUUID 
-          processInstanceUUID: task.processInstanceUUID
           taskId : task._id
           activeTask : task
         console.log "Task already active - returned"
@@ -626,14 +626,22 @@ module.exports = class RoutesApi
 
           # HERE WE NEED TO TRANSFORM req.user.roles into allowed states.
           #states = ['qaChecks','shiftManagerApproval','productionManagerApproval']
-          console.log "USER ROLES: #{req.user.roles}"
           states = sm.getStatesForRoles(req.user.roles)
-          console.log "USER STATES: #{states}"
 
           @dbStore.tasks.getTaskForProcessDefinitionIdAndStates processDefinitionId,states,{}, (err,task) =>
             return next err if err
-
             return res.json {} unless task # No task found.
+
+            totalWaitingTime =  0
+            if task.totalWaitingTime
+              try
+                totalWaitingTime = task.totalWaitingTime
+              catch e
+                #nop
+            
+            if task.checkedInDate
+              totalWaitingTime += new Date() - task.checkedInDate
+
 
             data =
               checkedOutByUserId: req.user.id || req.user._id
@@ -643,6 +651,8 @@ module.exports = class RoutesApi
               nextState : null
               stateCompleted: false
               checkedOutDate: new Date()
+              checkedInDate : null
+              totalWaitingTime : totalWaitingTime
 
             @dbStore.tasks.patch task._id,data, actor : {actorId : req.user._id || req.user.id},  (err,item) =>
               return next err if err
@@ -655,8 +665,6 @@ module.exports = class RoutesApi
               # we also need to register the time here.
               item.id = item._id
               res.json 
-                bonitaTaskUUID: "" 
-                processInstanceUUID: ""
                 taskId : item._id
                 activeTask : item
 
