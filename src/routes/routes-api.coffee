@@ -541,20 +541,20 @@ module.exports = class RoutesApi
       qaChecks: 
         label: "QA Checks"
         hideFromlane: false
-        allowedRoles: ['floor']
+        allowedRoles: ['floor','admin']
         formToShow: null
         transitionToNextState: "shiftManagerApproval"
       shiftManagerApproval:
         label: "Shift Manager Approval"
         hideFromlane: false
-        allowedRoles: ['shiftManager']
+        allowedRoles: ['shiftManager','admin']
         formToShow: 'approveFloor'
         transitionToNextState:
           fn: "function(task,data,options) { return data.approvedByShiftManager ? \"productionManagerApproval\" : \"qaChecks\"};"
       productionManagerApproval:
         label: "Production Manager Approval"
         hideFromlane: false
-        allowedRoles: ['productionManager']
+        allowedRoles: ['productionManager','admin']
         formToShow: 'approveShift'
         transitionToNextState: 
           fn: "function(task,data,options) { return data.approvedByProductionManager ? \"end\" : \"qaChecks\"};"
@@ -705,7 +705,6 @@ module.exports = class RoutesApi
     return res.json {},401 unless req.user
     console.log "Retrieving task for #{req.user._id} and roles #{req.user.roles}"
 
-    processDefinitionId = "dummy"
 
     @dbStore.tasks.getActiveTask req.user.id || req.user._id,{}, (err,task) =>
       return next err if err
@@ -719,36 +718,43 @@ module.exports = class RoutesApi
         console.log "Task already active - returned"
         return
 
-      # HERE WE NEED TO TRANSFORM req.user.roles into allowed states.
-      states = ['qaChecks','shiftManagerApproval','productionManagerApproval']
-
-      @dbStore.tasks.getTaskForProcessDefinitionIdAndStates processDefinitionId,states,{}, (err,task) =>
+      processDefinitionId = "dummy"
+      @_stateMachineForProcessDefinitionId processDefinitionId, (err, sm) =>
         return next err if err
 
-        return res.json {} unless task # No task found.
+        # HERE WE NEED TO TRANSFORM req.user.roles into allowed states.
+        #states = ['qaChecks','shiftManagerApproval','productionManagerApproval']
+        console.log "USER ROLES: #{req.user.roles}"
+        states = sm.getStatesForRoles(req.user.roles)
+        console.log "USER STATES: #{states}"
 
-        data =
-          checkedOutByUserId: req.user.id || req.user._id
-          activeTaskUUID: "" 
-          activeActivityName: ""
-          state: task.nextState
-          nextState : null
-          stateCompleted: false
-          checkedOutDate: new Date()
-
-        @dbStore.tasks.patch task._id,data, actor : {actorId : req.user._id || req.user.id},  (err,item) =>
+        @dbStore.tasks.getTaskForProcessDefinitionIdAndStates processDefinitionId,states,{}, (err,task) =>
           return next err if err
-          console.log "UPDATED #{JSON.stringify(item)}"
 
-          # Now we need to update the data store, where processInstanceID = X
-          # and set the active user to the current userid,
-          # and set the active task to the current task id,
-          # and we need to return our own task id (which is actually the process id)
-          # we also need to register the time here.
-          item.id = item._id
-          res.json 
-            bonitaTaskUUID: "" 
-            processInstanceUUID: ""
-            taskId : item._id
-            activeTask : item
+          return res.json {} unless task # No task found.
+
+          data =
+            checkedOutByUserId: req.user.id || req.user._id
+            activeTaskUUID: "" 
+            activeActivityName: ""
+            state: task.nextState
+            nextState : null
+            stateCompleted: false
+            checkedOutDate: new Date()
+
+          @dbStore.tasks.patch task._id,data, actor : {actorId : req.user._id || req.user.id},  (err,item) =>
+            return next err if err
+            console.log "UPDATED #{JSON.stringify(item)}"
+
+            # Now we need to update the data store, where processInstanceID = X
+            # and set the active user to the current userid,
+            # and set the active task to the current task id,
+            # and we need to return our own task id (which is actually the process id)
+            # we also need to register the time here.
+            item.id = item._id
+            res.json 
+              bonitaTaskUUID: "" 
+              processInstanceUUID: ""
+              taskId : item._id
+              activeTask : item
 

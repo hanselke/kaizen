@@ -1,8 +1,9 @@
+2. select the right states for next action in sm and check.
+
+3. excel field mapping
 10. Only show those actions that a user can create.
-2. select the right roles for next action in sm and check.
 2a ensure next action complete.
 2b show current task name in header.
-3. excel field mapping
 4. Make it work with multiple process definitions.
 5. store state machine in process definition
 6. Show user in board and stuff
@@ -11,7 +12,7 @@
 9. Specify a running number for the task name (+ prefix from process definition)
 12. clean out client from unnecessary code.
 13. do nice error/status messages
-
+14. end state hide from board, and exclude from next.
 
 http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita
 ssh -i ~/Documents/bitnami-hosting.pem ubuntu@ec2-54-251-65-125.ap-southeast-1.compute.amazonaws.com

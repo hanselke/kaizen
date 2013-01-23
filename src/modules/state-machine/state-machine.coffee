@@ -71,3 +71,18 @@ module.exports = class StateMachine
     return null unless state
     return null unless state.formToShow && state.formToShow.length > 0
     @stateMachineData.forms[state.formToShow]
+
+  ###
+  Returns an array of states that are allower for a user with the given roles.
+  ###
+  getStatesForRoles: (roles = []) =>
+    result = []
+
+    # Dirty implementation - it's late
+    for key,val of @stateMachineData.states when val.allowedRoles && val.allowedRoles.length > 0
+      for role in roles
+        if _.contains(val.allowedRoles,role)
+          result.push key
+
+    _.uniq(result)
+
