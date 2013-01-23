@@ -1,15 +1,19 @@
-2a show task name in board 
-4  show current task name in header.
-1. Only show those actions that a role can create.
-3. clean user + stuff from bonita
-5. Make it work with multiple process definitions.
-6. store state machine in process definition
-7. Show user in board and stuff
-8. show time in board
-9. clean out client from unnecessary code.
-10. do nice error/status messages
-11. end state hide from board, and exclude from next (special tab in admin).
-12. get next task -> all states from all state machines per user
+1. validate that edit works, fix input height, and update field heights. Validate cson
+
+2. Only show those actions that a role can create.
+3. get next task -> all states from all state machines per user
+4. one bug that shows up occasionally when loading form
+5. deal with undefined process instances
+6. show current task name in header.
+7. clean user + stuff from bonita
+8. Make it work with multiple process definitions.
+9. store state machine in process definition
+--
+1. Show user in board and stuff
+2. show time in board
+3. clean out client from unnecessary code.
+4. do nice error/status messages
+5. end state hide from board, and exclude from next (special tab in admin).
 
 
 http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita

@@ -7,6 +7,7 @@
 #= require app2/controller-admin-users-add
 #= require app2/controller-admin-process-definitions-add
 #= require app2/controller-admin-process-definitions-form
+#= require app2/controller-admin-process-definition-edit
 #= require app2/controller-admin-process-definitions
 #= require app2/controller-admin-tasks
 #= require app2/controller-help

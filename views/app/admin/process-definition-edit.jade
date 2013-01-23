@@ -8,8 +8,6 @@
             |Process Definitions
           li
             a(href="#/admin/process-definitions") Overview
-          li.active
-            |Add a new one
       .well
         ul.nav.nav-list
           li.nav-header
@@ -20,9 +18,9 @@
             a(href="#/admin/tasks") Tasks
 
     .span9
-      h2 Add a Process Definition
-      p Process definitions mimic the bonita process definitions. They link a form with the respective bonita process. You still need to create the bonita process.
-
+      h2 
+        |Edit for&nbsp;
+        span {{processDefinition.name}}
 
       form
         fieldset
@@ -50,5 +48,4 @@
           input( type="text",placeholder="2..100 characters",ng-model="processDefinition.stateMachine")
           span.help-block Please input the state machine code here.
 
-          button.btn.btn-primary( type="submit",ng-click="create(processDefinition)") Create Process Definition
-          
+          button.btn.btn-primary( type="submit",ng-click="update(processDefinition)") Update Process Definition

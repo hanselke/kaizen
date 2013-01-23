@@ -13,6 +13,7 @@ rpFn = ($routeProvider) ->
                 .when("/admin/process-definitions", {templateUrl: "admin/process-definitions",controller: AdminProcessDefinitionsController})
                 .when("/admin/process-definitions/add", {templateUrl: "admin/process-definitions/add",controller: AdminProcessDefinitionsAddController})
                 .when("/admin/process-definitions/:processDefinitionId/form", {templateUrl: "admin/process-definitions/form",controller: AdminProcessDefinitionsFormController})
+                .when("/admin/process-definitions/:processDefinitionId/edit", {templateUrl: "admin/process-definitions/edit",controller: AdminProcessDefinitionEditController})
                 .when("/admin/tasks", {templateUrl: "admin/tasks",controller: AdminTasksController})
                 .when("/help", {templateUrl: "help",controller: HelpController})
                 .when("/help/setup", {templateUrl: "help/setup",controller: HelpController})

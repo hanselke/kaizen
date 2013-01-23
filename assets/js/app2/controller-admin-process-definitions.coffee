@@ -2,6 +2,7 @@ class window.AdminProcessDefinitionsController
   constructor: (@$scope,@$http,@$location) ->
     @$scope.deleteMe = @deleteMe
     @$scope.editForm = @editForm
+    @$scope.edit = @edit
 
     @$scope.processDefinitions = []
     @refresh()
@@ -21,4 +22,8 @@ class window.AdminProcessDefinitionsController
 
   editForm: (processDefinitionId) =>
     @$location.path "/admin/process-definitions/#{processDefinitionId}/form"
+
+  edit: (processDefinitionId) =>
+    @$location.path "/admin/process-definitions/#{processDefinitionId}/edit"
+
 window.AdminProcessDefinitionsController.$inject = ['$scope',"$http","$location"]

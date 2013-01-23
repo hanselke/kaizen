@@ -689,7 +689,7 @@ module.exports = class RoutesApi
           if lane
             lane.cards.push 
                 id : task._id
-                desc : task.createdAt.toString()
+                desc : task.name || 'UNNAMED'
                 #html : activity.description
                 ready : task.stateCompleted
                 state : lane.name
