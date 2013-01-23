@@ -11,7 +11,6 @@ module.exports = class RoutesApi
   constructor:(settings,@servicesBonita) ->
     _.extend @,settings
     throw new Error("app parameter is required") unless @app
-    throw new Error("bonitaClient parameter is required") unless @bonitaClient
     throw new Error("bonitaTransformer parameter is required") unless @bonitaTransformer
     throw new Error("servicesBonita parameter is required") unless @servicesBonita
     throw new Error("servicesBonita.processName parameter is required") unless @servicesBonita.processName
@@ -113,27 +112,19 @@ module.exports = class RoutesApi
 
   getAdminUsers: (req,res,next) =>
     return res.json {}, 401 unless req.user
-    #@dbStore.roles.all {}, (err,roles) =>
-
-    @bonitaClient.identity.getAllRoles  "admin",{}, (err,roles) =>
+    @dbStore.roles.all {}, (err,rolesAsPagesResult) =>
       return next err if err
-      @identityStore.users.all 0,100, (err,result) =>
+      roles = _.map rolesAsPagesResult.items || [], (x) -> x.name
+      roles.push "admin" unless _.contains(roles,'admin')
+
+      return next err if err
+      @identityStore.users.all 0,200, (err,result) =>
         return next err if err
-        result.roles = _.map roles.Role, (x) -> {name : x.name,label : x.label}
+        result.roles = _.map roles, (role) -> {name : role,label : role}
         #console.log JSON.stringify(result)
         res.json result
 
 
-  _addRolesToBonita: (username,roles = [],cb) =>
-    return cb null unless roles.length > 0
-
-    addRole = (role,cb) =>
-      winston.info "Adding role #{role} to #{username}"
-      @bonitaClient.identity.addRoleToUser username, role,"admin",{},(err) =>
-        winston.error "Failed adding role #{role} to #{username} - Check if role exists" if err
-        cb null
-
-    async.forEach roles ,addRole, cb
 
   postAdminUsers: (req,res,next) =>
     return next new errors.UnprocessableEntity("username") unless req.body.username
