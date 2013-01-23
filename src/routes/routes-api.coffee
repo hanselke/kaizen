@@ -547,13 +547,15 @@ module.exports = class RoutesApi
   getBoard: (req,res,next) =>
     return res.json {},401 unless req.user
 
+    board = 
+      lanes: []
+
     @_getActiveProcessDefinitionId (err,processDefinitionId) =>
+      res.json board if err || !processDefinitionId
+      #return next err if err
 
       @_stateMachineForProcessDefinitionId processDefinitionId, (err, sm) =>
         return next err if err
-
-        board = 
-          lanes: []
 
         for state,i in sm.getSwimlanes()
           board.lanes.push
@@ -618,6 +620,7 @@ module.exports = class RoutesApi
         return
 
       @_getActiveProcessDefinitionId (err,processDefinitionId) =>
+        return next err if err
         @_stateMachineForProcessDefinitionId processDefinitionId, (err, sm) =>
           return next err if err
 
