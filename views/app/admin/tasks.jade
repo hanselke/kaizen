@@ -31,7 +31,9 @@
             th State
             th Next State
             th Checked Out
-            th task Ended
+            th Task Ended
+            th Active
+            th Waiting
             th Actions
         tbody
           tr(style="vertical-align:center;",ng-repeat='task in tasks')
@@ -45,6 +47,11 @@
               |{{task.checkedOutByUserId}}
             td
               |{{task.taskEnded}}
+            td
+              |{{task.totalActiveTimeAsString}}
+            td
+              |{{task.totalWaitingTimeAsString}}
+
             td
               a.btn(href="/api/tasks/{{task._id}}/excel") Download Excel (CSV)
 
