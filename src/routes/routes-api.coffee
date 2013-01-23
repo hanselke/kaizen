@@ -103,7 +103,7 @@ module.exports = class RoutesApi
       return next err if err
       res.json user
 
-  deleteAdminRoles: (req,res,next) =>
+  deleteAdminRole: (req,res,next) =>
     roleId = req.params.roleId
     #console.log "DELETE USER #{userId}"
     @dbStore.roles.destroy roleId, {}, (err,item) =>

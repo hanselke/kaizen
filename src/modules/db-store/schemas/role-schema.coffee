@@ -14,7 +14,9 @@ module.exports = RoleSchema = new mongoose.Schema
 
 RoleSchema.plugin pluginTimestamp.timestamps
 
+###
 RoleSchema.pre 'save', (next) ->
   @name = (@name || '').toLowerCase()
 
   next()
+###

@@ -63,7 +63,7 @@ module.exports = class RoleMethods
         cb null, item
 
   destroy: (roleId, options = {}, cb = ->) =>
-    @_getItem processDefinitionId, options.actor, options.ignoreSecurity, true, (err, item) =>
+    @models.Role.findOne _id : roleId, (err,item) =>
       return cb err if err
       return cb(null) unless item
 
