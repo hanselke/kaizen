@@ -16,10 +16,13 @@
                     tr
                       td(ng:repeat='lane in lanes')
                         .card(ng:repeat='card in cards[lane]', ng:class='card[3]')
-                          //
-                             <span class="id">{{card.id}}</span> 
-                          span.desc {{card.desc}}
-                          span(ng:show='card.ready') ✓
+                          span.desc(style='font-weight:bold;') {{card.desc}}
+                          span(ng:show='card.ready', style="color:green") ✓
+                          
+                          p(style="clear:both")
+                            span A: {{card.totalActiveTimeAsString}}
+                            &nbsp;
+                            span W: {{card.totalWaitingTimeAsString}}
                   .help.bubble.up(style='margin-left: 400px;') This is your kanban board
                   
                   table.cycletimes.fullwidth(cellpadding='0', cellspacing='0', ng:show='false && lanes.length > 0')

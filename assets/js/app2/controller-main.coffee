@@ -1,3 +1,23 @@
+humanizeTime = (time) ->
+  seconds = Math.round(time % 60)
+  time = (time - seconds) / 60
+  minutes = Math.round(time % 60)
+  time = (time - minutes) / 60
+  hours = Math.round(time % 24)
+  time = (time - hours) / 24
+  days = Math.round(time)
+
+  if days > 0
+    return "#{days}d#{hours}h#{minutes}m#{seconds}s"
+  if hours > 0
+    return "#{hours}h#{minutes}m#{seconds}s"
+  if minutes > 0
+    return "#{minutes}m#{seconds}s"
+  if seconds > 0
+    return "#{seconds}s"
+
+  return ""
+
 class window.MainController
   constructor: (@$scope,@$http) ->
     @$scope.lane_headings = {}
@@ -19,6 +39,9 @@ class window.MainController
         @$scope.lane_headings[x.name] = x.label
         @$scope.cards[x.name] = x.cards
         
+        for card in x.cards || []
+          card.totalActiveTimeAsString = humanizeTime(card.totalActiveTime / 1000)
+          card.totalWaitingTimeAsString = humanizeTime(card.totalWaitingTime / 1000)
 
       aWidth = 0
       if data.lanes.length > 0
@@ -59,10 +82,10 @@ class window.MainController
       lane = lanes2[k]
       res.push 
         klass : "value"
-        label : moment.duration(lane.executionTime).humanize()
+        label : humanizeTime(lane.executionTime)
       res.push 
         klass : "wait" 
-        label : moment.duration(lane.waitingTime).humanize()
+        label : humanizeTime(lane.waitingTime)
     res
 
 

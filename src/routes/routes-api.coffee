@@ -589,15 +589,15 @@ module.exports = class RoutesApi
               lane.cards.push 
                   id : task._id
                   desc : task.name || 'UNNAMED'
-                  #html : activity.description
                   ready : task.stateCompleted
                   state : lane.name
-                  processInstance : "" # REMOVE
-                  activityDefinitionUUID : "" # REMOVE
-                  totalTime :  task.totalActiveTime + task.totalWaitingTime
                   totalCost: 0
-                  executionTime : task.totalActiveTime
-                  waitingTime: task.totalWaitingTime
+                  executionTime : 0 # remove
+                  waitingTime: 0 # remove
+                  totalActiveTime : task.totalActiveTime
+                  totalWaitingTime: task.totalWaitingTime
+                  totalTime :  task.totalActiveTime + task.totalWaitingTime
+
 
 
           res.json board
