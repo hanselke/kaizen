@@ -1,9 +1,4 @@
-1. store state machine in process definition
-2. get next task -> all states from all state machines per user
-3. one bug that shows up occasionally when loading form
-4. deal with undefined process instances
-6. Make it work with multiple process definitions.
-8. end state hide from board, and exclude from next (special tab in admin).
+3. Make it work with multiple process definitions.
 
 --
 1. Show user in board and stuff

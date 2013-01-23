@@ -8,8 +8,8 @@ ObjectId = mongoose.Types.ObjectId
 
 
 module.exports = class TaskMethods
-  CREATE_FIELDS = ['_id','processDefinitionId','checkedOutByUserId','createdBy','state','activeTaskUUID','processInstanceUUID','checkedOutDate','totalAbsoluteTimeSpent','totalTimeSpent','activeActivityName','stateCompleted','nextState','name']
-  UPDATE_FIELDS = ['processDefinitionId','checkedOutByUserId','state','activeTaskUUID','checkedOutDate','totalAbsoluteTimeSpent','totalTimeSpent','activeActivityName','stateCompleted','nextState','name']
+  CREATE_FIELDS = ['_id','processDefinitionId','checkedOutByUserId','createdBy','state','activeTaskUUID','processInstanceUUID','checkedOutDate','totalAbsoluteTimeSpent','totalTimeSpent','activeActivityName','stateCompleted','nextState','name','taskEnded']
+  UPDATE_FIELDS = ['processDefinitionId','checkedOutByUserId','state','activeTaskUUID','checkedOutDate','totalAbsoluteTimeSpent','totalTimeSpent','activeActivityName','stateCompleted','nextState','name','taskEnded']
 
   constructor:(@models) ->
 
@@ -17,7 +17,7 @@ module.exports = class TaskMethods
   # Not checked out by any user.
   # nextState in list of states
   getTaskForProcessDefinitionIdAndStates: (processDefinitionId,states = [],options = {},cb = ->) =>
-    query = @models.Task.findOne({stateCompleted : true, checkedOutByUserId : null})
+    query = @models.Task.findOne({stateCompleted : true, checkedOutByUserId : null, taskEnded : false})
     query.sort('-createdAt')
     query.where('nextState').in(states)
     query.exec (err, item) =>
@@ -38,7 +38,7 @@ module.exports = class TaskMethods
     @models.Task.count  {}, (err, totalCount) =>
       return cb err if err
 
-      query = @models.Task.find({})
+      query = @models.Task.find({processDefinitionId : processDefinitionId, taskEnded : false})
       query.sort('-createdAt')
       #query.select(options.select || '_id processDefinitionId processInstanceUUID state createdAt activeTaskUUID checkedOutByUserId')
       query.setOptions { skip: options.offset , limit: options.count}

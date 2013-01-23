@@ -19,6 +19,7 @@ module.exports = TaskSchema = new mongoose.Schema
         type: mongoose.Schema.Types.Mixed
         default: () -> {}
 
+      # Remove the next three
       processInstanceUUID:
         type: String
         unique: true
@@ -27,6 +28,8 @@ module.exports = TaskSchema = new mongoose.Schema
         type: String
       activeActivityName:
         type: String
+
+
       totalAbsoluteTimeSpent:
         type: Number
         default: 0
@@ -48,6 +51,9 @@ module.exports = TaskSchema = new mongoose.Schema
         default: null
       name:
         type: String
+      taskEnded: 
+        type: Boolean
+        default: false
     , strict: true
 
 

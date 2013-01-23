@@ -31,12 +31,13 @@ module.exports = class ProcessDefinitionMethods
 
   all: (options = {},cb = ->) =>
     # TODO: EXCLUDE DELETED
+    options.select or= '_id name description createableByRoles'
 
     @models.ProcessDefinition.count  {}, (err, totalCount) =>
       return cb err if err
 
       query = @models.ProcessDefinition.find({})
-      query.select(options.select || '_id name description createableByRoles')
+      query.select(options.select)
       query.setOptions { skip: options.offset, limit: options.count}
       query.exec (err, items) =>
         return cb err if err
@@ -52,7 +53,16 @@ module.exports = class ProcessDefinitionMethods
   Retrieve a single processDefinition-item through it's id
   ###
   get2: (processDefinitionId, options = {}, cb = ->) =>
-    @_getItem processDefinitionId, options.actor, options.ignoreSecurity, false, cb
+    processDefinitionId = new ObjectId(processDefinitionId.toString())
+    query = @models.ProcessDefinition.findOne _id : processDefinitionId
+    query.select(options.select) if options.select && options.select.length > 0
+    query.exec cb
+
+  firstProcessDefinition: ( options = {}, cb = ->) =>
+    query = @models.ProcessDefinition.findOne()
+    query.select(options.select) if options.select && options.select.length > 0
+    query.exec cb
+
 
   ###
   Retrieve a single processDefinition-item through it's id and ensure that we have write access.
