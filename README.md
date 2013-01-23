@@ -1,7 +1,7 @@
+2a show task name in board 
+4  show current task name in header.
 1. Only show those actions that a role can create.
-2. Specify a running number for the task name (+ prefix from process definition)
 3. clean user + stuff from bonita
-4 show current task name in header.
 5. Make it work with multiple process definitions.
 6. store state machine in process definition
 7. Show user in board and stuff

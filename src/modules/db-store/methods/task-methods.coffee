@@ -8,8 +8,8 @@ ObjectId = mongoose.Types.ObjectId
 
 
 module.exports = class TaskMethods
-  CREATE_FIELDS = ['_id','processDefinitionId','checkedOutByUserId','createdBy','state','activeTaskUUID','processInstanceUUID','checkedOutDate','totalAbsoluteTimeSpent','totalTimeSpent','activeActivityName','stateCompleted','nextState']
-  UPDATE_FIELDS = ['processDefinitionId','checkedOutByUserId','state','activeTaskUUID','checkedOutDate','totalAbsoluteTimeSpent','totalTimeSpent','activeActivityName','stateCompleted','nextState']
+  CREATE_FIELDS = ['_id','processDefinitionId','checkedOutByUserId','createdBy','state','activeTaskUUID','processInstanceUUID','checkedOutDate','totalAbsoluteTimeSpent','totalTimeSpent','activeActivityName','stateCompleted','nextState','name']
+  UPDATE_FIELDS = ['processDefinitionId','checkedOutByUserId','state','activeTaskUUID','checkedOutDate','totalAbsoluteTimeSpent','totalTimeSpent','activeActivityName','stateCompleted','nextState','name']
 
   constructor:(@models) ->
 
@@ -24,6 +24,10 @@ module.exports = class TaskMethods
       return cb err if err
       cb null, item
 
+  countTasksForProcessDefinitionId: (processDefinitionId, options = {},cb) =>
+    @models.Task.count {processDefinitionId : processDefinitionId}, (err, totalCount) =>
+      return cb err if err
+      cb null,totalCount
 
   tasksForBoard: (processDefinitionId,options = {},cb = ->) =>
     options.offset or= 0

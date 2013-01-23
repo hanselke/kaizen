@@ -40,6 +40,9 @@ module.exports = ProcessDefinitionSchema = new mongoose.Schema
         default: () -> ['admin']
       stateMachine:
         type: mongoose.Schema.Types.Mixed
+      taskNamePrefix:
+        type: String
+        default: 'TASK'
     , strict: true
 
 ProcessDefinitionSchema.plugin pluginTimestamp.timestamps

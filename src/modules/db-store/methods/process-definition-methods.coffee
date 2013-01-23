@@ -15,8 +15,8 @@ MAXCOUNTOBJECTS = 50
 Provides methods to interact with processDefinitions.
 ###
 module.exports = class ProcessDefinitionMethods
-  CREATE_FIELDS = ['_id','name','description','createdBy','bonitaProcessName','createableByRoles','stateMachine']
-  UPDATE_FIELDS = ['name','description','createdBy','bonitaProcessName','sourceXlsx','sourceSize','sourceFilename','sourceType','createableByRoles','stateMachine']
+  CREATE_FIELDS = ['_id','name','description','createdBy','bonitaProcessName','createableByRoles','stateMachine','taskNamePrefix']
+  UPDATE_FIELDS = ['name','description','createdBy','bonitaProcessName','sourceXlsx','sourceSize','sourceFilename','sourceType','createableByRoles','stateMachine','taskNamePrefix']
 
   ###
   Initializes a new instance of the @see ProcessDefinitionMethods class.
@@ -47,6 +47,12 @@ module.exports = class ProcessDefinitionMethods
   ###
   get: (processDefinitionId, actor, ignoreSecurity, cb = ->) =>
     @_getItem processDefinitionId, actor, ignoreSecurity, false, cb
+
+  ###
+  Retrieve a single processDefinition-item through it's id
+  ###
+  get2: (processDefinitionId, options = {}, cb = ->) =>
+    @_getItem processDefinitionId, options.actor, options.ignoreSecurity, false, cb
 
   ###
   Retrieve a single processDefinition-item through it's id and ensure that we have write access.

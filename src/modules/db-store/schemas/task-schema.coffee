@@ -46,7 +46,8 @@ module.exports = TaskSchema = new mongoose.Schema
       nextState:
         type: String
         default: null
-
+      name:
+        type: String
     , strict: true
 
 

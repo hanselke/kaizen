@@ -80,8 +80,6 @@ class window.AppController
     request.error (data, status, headers, config) =>
       @$scope.flashMessage "Failed to create task"
     request.success (data, status, headers, config) =>
-      @$scope.flashMessage "Task created #{JSON.stringify(data)}"
-
       @ensureCorrectScreen()
       @$window.location.reload() 
   

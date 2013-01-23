@@ -585,20 +585,30 @@ module.exports = class RoutesApi
     return res.json 422,{} unless req.body.processDefinitionId
     # TODO: Check if user is authorized to create the task.
 
-    @_stateMachineForProcessDefinitionId req.body.processDefinitionId, (err, sm) =>
+    @dbStore.processDefinitions.get2 req.body.processDefinitionId,{select: '_id,taskNamePrefix'}, (err,processDefinition) =>
       return next err if err
+      return next new Error("process defintion not found") unless processDefinition
 
-      initialState = sm.getInitialState()
-
-      payload =
-        processDefinitionId: req.body.processDefinitionId
-        state: initialState
-        checkedOutByUserId: req.user._id
-
-      @dbStore.tasks.create payload,actorId : req.user._id, (err,item) =>
+      @_stateMachineForProcessDefinitionId req.body.processDefinitionId, (err, sm) =>
         return next err if err
-        item.id = item._id
-        res.json item
+
+        @dbStore.tasks.countTasksForProcessDefinitionId req.body.processDefinitionId,{}, (err,count) =>
+          return next err if err
+          count = count + 1
+          name = "#{processDefinition.taskNamePrefix || "TASK"}#{count}"
+
+          initialState = sm.getInitialState()
+
+          payload =
+            processDefinitionId: req.body.processDefinitionId
+            state: initialState
+            checkedOutByUserId: req.user._id
+            name : name
+
+          @dbStore.tasks.create payload,actorId : req.user._id, (err,item) =>
+            return next err if err
+            item.id = item._id
+            res.json item
 
   completeTask: (req,res,next) =>
     return res.json 401,{} unless req.user
