@@ -8,10 +8,39 @@ ObjectId = mongoose.Types.ObjectId
 
 
 module.exports = class TaskMethods
-  CREATE_FIELDS = ['_id','processDefinitionId','checkedOutByUserId','createdBy','state','activeTaskUUID','processInstanceUUID','checkedOutDate','totalAbsoluteTimeSpent','totalTimeSpent','activeActivityName']
-  UPDATE_FIELDS = ['processDefinitionId','checkedOutByUserId','state','activeTaskUUID','checkedOutDate','totalAbsoluteTimeSpent','totalTimeSpent','activeActivityName']
+  CREATE_FIELDS = ['_id','processDefinitionId','checkedOutByUserId','createdBy','state','activeTaskUUID','processInstanceUUID','checkedOutDate','totalAbsoluteTimeSpent','totalTimeSpent','activeActivityName','stateCompleted','nextState']
+  UPDATE_FIELDS = ['processDefinitionId','checkedOutByUserId','state','activeTaskUUID','checkedOutDate','totalAbsoluteTimeSpent','totalTimeSpent','activeActivityName','stateCompleted','nextState']
 
   constructor:(@models) ->
+
+  # Current state has been completed
+  # Not checked out by any user.
+  # nextState in list of states
+  getTaskForProcessDefinitionIdAndStates: (processDefinitionId,states = [],options = {},cb = ->) =>
+    query = @models.Task.findOne({stateCompleted : true, checkedOutByUserId : null})
+    query.sort('-createdAt')
+    query.where('nextState').in(states)
+    query.exec (err, item) =>
+      return cb err if err
+      cb null, item
+
+
+  tasksForBoard: (processDefinitionId,options = {},cb = ->) =>
+    options.offset or= 0
+    options.count or= 200
+
+    # TODO: EXCLUDE DELETED
+
+    @models.Task.count  {}, (err, totalCount) =>
+      return cb err if err
+
+      query = @models.Task.find({})
+      query.sort('-createdAt')
+      #query.select(options.select || '_id processDefinitionId processInstanceUUID state createdAt activeTaskUUID checkedOutByUserId')
+      query.setOptions { skip: options.offset , limit: options.count}
+      query.exec (err, items) =>
+        return cb err if err
+        cb null, new PageResult(items || [], totalCount, options.offset, options.count)
 
 
   all: (options = {},cb = ->) =>

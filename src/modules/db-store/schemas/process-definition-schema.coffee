@@ -35,7 +35,11 @@ module.exports = ProcessDefinitionSchema = new mongoose.Schema
       layout:
         type: mongoose.Schema.Types.Mixed
 
-
+      createableByRoles:
+        type: [String]
+        default: () -> ['admin']
+      stateMachine:
+        type: mongoose.Schema.Types.Mixed
     , strict: true
 
 ProcessDefinitionSchema.plugin pluginTimestamp.timestamps

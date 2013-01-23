@@ -15,10 +15,6 @@ module.exports = TaskSchema = new mongoose.Schema
         type: String
         #unique: true
         #sparse: true
-      state: 
-        type: String
-        default: 'active'
-        required: true
       data:
         type: mongoose.Schema.Types.Mixed
         default: () -> {}
@@ -26,6 +22,7 @@ module.exports = TaskSchema = new mongoose.Schema
       processInstanceUUID:
         type: String
         unique: true
+        default: -> new Date().toString()
       activeTaskUUID:
         type: String
       activeActivityName:
@@ -38,6 +35,18 @@ module.exports = TaskSchema = new mongoose.Schema
         default: 0
       checkedOutDate:
         type: Date
+
+      state: 
+        type: String
+        default: ''
+        required: true
+      stateCompleted: 
+        type: Boolean
+        default: false
+      nextState:
+        type: String
+        default: null
+
     , strict: true
 
 

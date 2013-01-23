@@ -4,7 +4,7 @@ winston = require 'winston'
 errors = require 'some-errors'
 fs = require 'fs'
 xlsxToForm = require '../modules/xlsx-to-form'
-stateMachinePackage = require '../modules/state-machine'
+
 
 module.exports = class RoutesApi
 
@@ -75,6 +75,39 @@ module.exports = class RoutesApi
 
         res.json user
 
+  getBoard: (req,res,next) =>
+    return res.json {},401 unless req.user
+
+    processName = @servicesBonita.processName
+    #@bonitaClient.queryDefinition.getProcesses req.user.username,null, (err,processes) =>
+
+    @bonitaClient.queryDefinition.getLastProcess processName, req.user.username,null, (err,process) => 
+      console.log "Processes ------"
+      console.log JSON.stringify(process)
+      console.log "Processes ------"
+      return next err if err
+
+      
+      #processDefinition = _.find( processes.ProcessDefinition, (x) -> x.name is processName && x.state is "ENABLED")
+
+      #processUUID = processDefinition?.uuid?.value
+
+      processDefinition = process
+      processUUID = process.uuid?.value
+
+      return res.json {message: "processUUID not available from getProcesses."},500 unless processUUID
+
+      #console.log "PICKED ProcessInstance: #{processUUID}"
+
+      @bonitaClient.queryRuntime.getProcessInstances processUUID,req.user.username,null, (err,processInstances) =>
+        console.log "****1*********"
+        console.log "#{JSON.stringify(processInstances)}"
+        console.log "*****2********"
+        return next err if err
+        return res.json {message: "processInstances not available from getProcessInstances."},500 unless processInstances
+        board = @bonitaTransformer.toBoard processDefinition,processInstances
+        console.log "RESULT: #{JSON.stringify(board)}"
+        res.json board
 
 
   ###
@@ -88,6 +121,76 @@ module.exports = class RoutesApi
 
   ###
 
+  getNextTask: (req,res,next) =>
+    return res.json {},401 unless req.user
+    console.log "Retrieving task for #{req.user._id}"
+
+    @dbStore.tasks.getActiveTask req.user.id || req.user._id,{}, (err,task) =>
+      return next err if err
+      if task
+        task.id = task._id
+        res.json 
+          bonitaTaskUUID: task.activeTaskUUID 
+          processInstanceUUID: task.processInstanceUUID
+          taskId : task._id
+          activeTask : task
+        console.log "Task already active - returned"
+        return
+
+
+      #TODO: Check if user has an active task, if so, return that.
+
+      ###
+      Obtain one eligible task
+      ###
+      console.log "------1 .. get one task in ready state"
+      @bonitaClient.queryRuntime.getOneTask "READY",req.user.username,null, (err,taskList) =>
+        return next err if err
+        #console.log JSON.stringify(taskList)      
+        firstTaskUUID = taskList?.value
+        
+        if firstTaskUUID
+
+          console.log "------2 .. get the task info"
+          @bonitaClient.queryRuntime.getTask firstTaskUUID,req.user.username,{}, (err,t) =>
+            return next err if err
+
+            console.log "GET TASK RETURNED"
+            console.log JSON.stringify(t)
+            console.log "GET TASK RETURNED END"
+
+            processInstanceUUID = t?.instanceUUID?.value
+
+            console.log "------3 .. Assign that task"
+            @bonitaClient.runtime.assignTask firstTaskUUID,req.user.username,req.user.username,{}, (err) =>
+              return next err if err
+
+              data =
+                checkedOutByUserId: req.user.id || req.user._id
+                activeTaskUUID: firstTaskUUID 
+                activeActivityName: t.name
+                checkedOutDate: new Date()
+
+              console.log "Patching by process instance ID: #{processInstanceUUID}"
+              @dbStore.tasks.patchByProcessInstanceUUID processInstanceUUID,data, actor : {actorId : req.user._id || req.user.id},  (err,item) =>
+                return next err if err
+                console.log "UPDATED #{JSON.stringify(item)}"
+
+                # Now we need to update the data store, where processInstanceID = X
+                # and set the active user to the current userid,
+                # and set the active task to the current task id,
+                # and we need to return our own task id (which is actually the process id)
+                # we also need to register the time here.
+                result = @bonitaTransformer.toNextAction firstTaskUUID,@servicesBonita.baseUrl
+                item.id = item._id
+                res.json 
+                  bonitaTaskUUID: firstTaskUUID 
+                  processInstanceUUID: processInstanceUUID
+                  taskId : item._id
+                  activeTask : item
+
+        else
+          res.json {}
 
 
   getTasksXXX: (req,res,next) =>
@@ -292,8 +395,68 @@ module.exports = class RoutesApi
         res.json {}
 
 
+  completeTask: (req,res,next) =>
+    return res.json 401,{} unless req.user
+
+    @dbStore.tasks.get req.params.taskId, {}, (err,item) =>
+      return next err if err
+      return new Error('task not found') unless item
+
+      @bonitaClient.runtime.setProcessInstanceVariable item.processInstanceUUID,"QA_Data_Entry--2.0--shift1_Round1_Done",true, req.user.username,{}, (err) =>
+        return next err if err
+
+        # Switched form executeTask true to finishTask false
+        @bonitaClient.runtime.executeTask item.activeTaskUUID,false, req.user.username,{},(err) =>
+          return next err if err
+
+          @dbStore.tasks.get req.params.taskId, {}, (err,oldTask) =>
+            return next err if err
+            totalTimeSpent =  0
+            if oldTask.totalTimeSpent
+              try
+                totalTimeSpent = oldTask.totalTimeSpent
+              catch e
+                #nop
+            
+            if oldTask.checkedOutDate
+              totalTimeSpent += new Date() - oldTask.checkedOutDate
+
+            data = 
+              activeTaskUUID : null
+              checkedOutByUserId: null
+              checkedOutDate: null
+              state: 'w'
+              totalTimeSpent: totalTimeSpent
+
+            @dbStore.tasks.patch req.params.taskId, data, {}, (err,item) =>
+              return next err if err
+              res.json item
 
 
+  createTask: (req,res,next) =>
+    return res.json 401,{} unless req.user
+    return res.json 422,{} unless req.body.processDefinitionId
+
+    @bonitaClient.queryDefinition.getLastProcess @servicesBonita.processName, "admin",{},(err,process) =>
+      return next err if err
+
+      processUUID = process?.uuid?.value
+      return res.send {} unless processUUID
+
+      @bonitaClient.runtime.instantiateProcess processUUID, req.user.username,{},(err,newProcess) =>
+        return next err if err
+
+        processInstanceUUID = newProcess?.value
+
+        payload =
+          processInstanceUUID: processInstanceUUID
+          processDefinitionId: req.body.processDefinitionId
+          #checkedOutByUserId: req.user._id
+
+        @dbStore.tasks.create payload,actorId : req.user._id, (err,item) =>
+          return next err if err
+          item.id = item._id
+          res.json item
 
 
 
@@ -419,25 +582,17 @@ module.exports = class RoutesApi
     @dbStore.tasks.get req.params.taskId, {}, (err,item) =>
       return next err if err
 
-      @_stateMachineForProcessDefinitionId item.processDefinitionId, (err, sm) =>
-        return next err if err
+      result = {}
+      result.items = []
+      for key,v of item.data
+        rc = key.split('-')
+        result.items.push 
+          r : rc[0]
+          c : rc[1]
+          v : v
 
-        result = {}
-        result.items = []
-        for key,v of item.data
-          rc = key.split('-')
-          result.items.push 
-            r : rc[0]
-            c : rc[1]
-            v : v
-
-        result.processDefinitionId = item.processDefinitionId
-        result.form = sm.getFormForState(item.state)
- 
-        console.log "getTaskData"
-        console.log JSON.stringify(result)
-        console.log "getTaskData--"
-        res.json result
+      result.processDefinitionId = item.processDefinitionId
+      res.json result
 
   ###
   http://localhost:8001/api/tasks/50f9893de7d3a46cb000000b/excel
@@ -529,226 +684,4 @@ module.exports = class RoutesApi
 
           html = "#{html}"
           res.send html
-
-  ###
-  NEW CODE
-  ###
-  smData = 
-    initialState: 'qaChecks'
-    states:
-      end: 
-        hideFromlane: true
-      qaChecks: 
-        label: "QA Checks"
-        hideFromlane: false
-        allowedRoles: ['floor']
-        formToShow: null
-        transitionToNextState: "shiftManagerApproval"
-      shiftManagerApproval:
-        label: "Shift Manager Approval"
-        hideFromlane: false
-        allowedRoles: ['shiftManager']
-        formToShow: 'approveFloor'
-        transitionToNextState:
-          fn: "function(task,data,options) { return data.approvedByShiftManager ? \"productionManagerApproval\" : \"qaChecks\"};"
-      productionManagerApproval:
-        label: "Production Manager Approval"
-        hideFromlane: false
-        allowedRoles: ['productionManager']
-        formToShow: 'approveShift'
-        transitionToNextState: 
-          fn: "function(task,data,options) { return data.approvedByProductionManager ? \"end\" : \"qaChecks\"};"
-    forms:
-      approveFloor: 
-        fields:
-          formCompleted:
-            type: 'yesNoButton'
-            labels: ['Process Ok', 'Process Fail']
-            field: 'approvedByShiftManager'
-            completesTask: true
-      approveShift: 
-        fields:
-          formCompleted:
-            type: 'yesNoButton'
-            field: 'approvedByProductionManager'
-            labels: ['Process Ok', 'Process Fail']
-            completesTask: true
-
-  _stateMachineForProcessDefinitionId: (processDefinitionId, cb) =>
-    sm = stateMachinePackage.stateMachine()
-    sm.loadFromObject smData
-
-    cb null,sm
-
-  ###
-  Create a new task.
-  ###
-  createTask: (req,res,next) =>
-    return res.json 401,{} unless req.user
-    return res.json 422,{} unless req.body.processDefinitionId
-    # TODO: Check if user is authorized to create the task.
-
-    @_stateMachineForProcessDefinitionId req.body.processDefinitionId, (err, sm) =>
-      return next err if err
-
-      initialState = sm.getInitialState()
-
-      payload =
-        processDefinitionId: req.body.processDefinitionId
-        state: initialState
-        checkedOutByUserId: req.user._id
-
-      @dbStore.tasks.create payload,actorId : req.user._id, (err,item) =>
-        return next err if err
-        item.id = item._id
-        res.json item
-
-  completeTask: (req,res,next) =>
-    return res.json 401,{} unless req.user
-    console.log "GOT THIS"
-    console.log JSON.stringify(req.body)
-    console.log "GOT THIS---"
-
-    data = req.body.fields || {}
-
-    @dbStore.tasks.get req.params.taskId, {}, (err,oldTask) =>
-      return next err if err
-      return new Error('task not found') unless oldTask
-
-      @_stateMachineForProcessDefinitionId oldTask.processDefinitionId, (err, sm) =>
-        return next err if err
-
-        sm.getNextStateName oldTask.state,data, (err,nextState) =>
-          return next err if err
-          totalTimeSpent =  0
-          if oldTask.totalTimeSpent
-            try
-              totalTimeSpent = oldTask.totalTimeSpent
-            catch e
-              #nop
-          
-          if oldTask.checkedOutDate
-            totalTimeSpent += new Date() - oldTask.checkedOutDate
-
-          #if nextState is "end"
-
-          data = 
-            activeTaskUUID : null # to be deleted
-            checkedOutByUserId: null
-            checkedOutDate: null
-            #state: is left alone
-            stateCompleted: true
-            nextState: nextState
-            totalTimeSpent: totalTimeSpent
-
-          @dbStore.tasks.patch req.params.taskId, data, {}, (err,item) =>
-            return next err if err
-            res.json item
-
-  getBoard: (req,res,next) =>
-    return res.json {},401 unless req.user
-
-    processDefinitionId = "DUMMY" 
-
-    @_stateMachineForProcessDefinitionId processDefinitionId, (err, sm) =>
-      return next err if err
-
-      board = 
-        lanes: []
-
-      for state,i in sm.getSwimlanes()
-        board.lanes.push
-          label: state.label
-          name: state.name
-          order: i
-
-          activityDefinitions: [] # TBDeleted
-          id: '' # TBDeleted
-          totalTime : 0
-          totalCost: 0
-          executionTime : 0
-          waitingTime: 0
-          cards: []
-
-      @dbStore.tasks.tasksForBoard processDefinitionId,{}, (err, pagedResult) =>
-        return next err if err
-
-        laneMap = {}
-        laneMap[lane.name] = lane for lane in board.lanes
-
-        for task in pagedResult.items || []
-          lane = laneMap[task.state]
-
-          if lane
-            lane.cards.push 
-                id : task._id
-                desc : task.createdAt.toString()
-                #html : activity.description
-                ready : task.stateCompleted
-                state : lane.name
-                processInstance : "" # REMOVE
-                activityDefinitionUUID : "" # REMOVE
-                totalTime :  0
-                totalCost: 0
-                executionTime : 0
-                waitingTime: 0
-
-
-        res.json board
-
-  ###
-  Retrieves the next task, if any, for the current user.
-  Logic goes like this:
-  1. we check if the user still has an open task. If so, we return up
-  ###
-  getNextTask: (req,res,next) =>
-    return res.json {},401 unless req.user
-    console.log "Retrieving task for #{req.user._id} and roles #{req.user.roles}"
-
-    processDefinitionId = "dummy"
-
-    @dbStore.tasks.getActiveTask req.user.id || req.user._id,{}, (err,task) =>
-      return next err if err
-      if task
-        task.id = task._id
-        res.json 
-          bonitaTaskUUID: task.activeTaskUUID 
-          processInstanceUUID: task.processInstanceUUID
-          taskId : task._id
-          activeTask : task
-        console.log "Task already active - returned"
-        return
-
-      # HERE WE NEED TO TRANSFORM req.user.roles into allowed states.
-      states = ['qaChecks','shiftManagerApproval','productionManagerApproval']
-
-      @dbStore.tasks.getTaskForProcessDefinitionIdAndStates processDefinitionId,states,{}, (err,task) =>
-        return next err if err
-
-        return res.json {} unless task # No task found.
-
-        data =
-          checkedOutByUserId: req.user.id || req.user._id
-          activeTaskUUID: "" 
-          activeActivityName: ""
-          state: task.nextState
-          nextState : null
-          stateCompleted: false
-          checkedOutDate: new Date()
-
-        @dbStore.tasks.patch task._id,data, actor : {actorId : req.user._id || req.user.id},  (err,item) =>
-          return next err if err
-          console.log "UPDATED #{JSON.stringify(item)}"
-
-          # Now we need to update the data store, where processInstanceID = X
-          # and set the active user to the current userid,
-          # and set the active task to the current task id,
-          # and we need to return our own task id (which is actually the process id)
-          # we also need to register the time here.
-          item.id = item._id
-          res.json 
-            bonitaTaskUUID: "" 
-            processInstanceUUID: ""
-            taskId : item._id
-            activeTask : item
 

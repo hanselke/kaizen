@@ -10,10 +10,10 @@ class window.AppController
     @$scope.toBoards = @toBoards
     @$scope.getItem = @getItem
     @$scope.setItem = @setItem
-    @$scope.taskCompleted = @taskCompleted
 
     @$scope.isBoardStateActive = false
-    @$scope.isFormStateActive = false
+    #@$scope.isFormStateActive = false
+    #@$scope.isFormYesNo = false
 
     @$http.defaults.headers.post['Content-Type']='application/json'
 
@@ -42,7 +42,7 @@ class window.AppController
 
   ensureCorrectScreen: =>
     if @$location.path() is "/" or @isPathSegment('/task/')
-      if @$scope.isFormStateActive
+      if !!@$scope.activeTaskId
         @$location.path "/task/#{@$scope.activeTaskId}"
       else
         @$location.path "/"
@@ -59,19 +59,9 @@ class window.AppController
       @$scope.activeTaskId = null
 
     @$scope.isBoardStateActive = !@$scope.activeTaskId
-    @$scope.isFormStateActive = !!@$scope.activeTaskId
+    #@$scope.isFormStateActive = !!@$scope.activeTaskId
 
-  taskCompleted: () =>
-    if @$scope.activeTaskId
-      taskId = @$scope.activeTaskId
 
-      request = @$http.post "/api/tasks/#{taskId}/complete", {}
-      request.error (data, status, headers, config) =>
-        @$scope.flashMessage "Failed to complete task - please try again"
-      request.success (data, status, headers, config) =>
-        @updateActiveTask null
-        @$location.path "/"
-        # Flash here
 
 
 
@@ -108,9 +98,9 @@ class window.AppController
         @$scope.activeTaskId = null
 
       @$scope.isBoardStateActive = !@$scope.activeTaskId
-      @$scope.isFormStateActive = !!@$scope.activeTaskId
+      #@$scope.isFormStateActive = !!@$scope.activeTaskId
 
-      if @$scope.isFormStateActive
+      if !!@$scope.activeTaskId
         @$location.path "/task/#{@$scope.activeTaskId}"
       else
         @$scope.flashMessage "Nothing to do at the moment"

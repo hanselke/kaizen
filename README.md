@@ -1,11 +1,20 @@
+1b. root screen always show next action button
+2. select the right roles for next action in sm and check.
+3. excel field mapping
+4. Make it work with multiple process definitions.
+5. store state machine in process definition
+6. Show user in board and stuff
+7. show time in board
+8. clean user + stuff from bonita
+9. Specify a running number for the task name (+ prefix from process definition)
+10. Only show those actions that a user can create.
+12. clean out client from unnecessary code.
+13. do nice error/status messages
 
-4. execute correctly
-5. extract config into uploadable json
-6. style the form better
 
 http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita
 ssh -i ~/Documents/bitnami-hosting.pem ubuntu@ec2-54-251-65-125.ap-southeast-1.compute.amazonaws.com
-
+http://www.bonitasoft.org/docs/javadoc/rest/5.5/API
 How to install and start on the server:
 Precon: mongodb installed locally
 

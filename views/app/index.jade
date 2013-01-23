@@ -28,8 +28,6 @@ html(xmlns:ng='http://angularjs.org/', ng:app='myModule')
 
           button.btn.btn-primary.action-next-task(style="white-space:nowrap;",ng:click='nextTask()',ng-show='isBoardStateActive')
             |Next Action
-          button.btn.btn-primary.action-task-step-done(ng:click='taskCompleted()',ng-show='isFormStateActive')
-            |Step Completed
           ul.nav.pull-right
             li.dropdown(ng:show='currentUser')
               a.dropdown-toggle(href="#", data-toggle="dropdown")

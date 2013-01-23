@@ -1,4 +1,17 @@
 
-.xlsl-form-container(style="position:absolute;top:0px;left:0px;right:0px;bottom:0px;margin:0px;overflow:scroll")
+.xlsl-form-container(style="position:absolute;top:0px;left:0px;right:0px;bottom:50px;margin:0px;overflow:scroll")
   p(style='text-align:center;margin-top:100px')
     |Loading form...
+
+.row(style="position:absolute;bottom:0px;height:36px;background:#ddd;padding-top:8px;width:100%;margin:0")
+  .container-fluid
+    .span12
+      .bottom-button-row(style="vertical-align:center")
+        span(style='font-size:16px') Actions:
+
+        button.btn.btn-primary.action-task-step-done(ng:click='taskCompleted()',ng-show='isFormStateActive && !isFormYesNo')
+          |Step Completed
+        button.btn.action-task-step-done-no(ng:click='taskCompletedNo()',ng-show='isFormStateActive && isFormYesNo' )
+          |Complete (Failed)
+        button.btn.btn-primary.action-task-step-done-yes(ng:click='taskCompletedYes()',ng-show='isFormStateActive && isFormYesNo')
+          |Complete (Ok)

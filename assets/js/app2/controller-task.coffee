@@ -9,12 +9,49 @@ loadCssFile = (pathToFile) ->
 
 
 class window.TaskController
-  constructor: (@$scope,@$http,@$routeParams) ->
+  constructor: (@$scope,@$http,@$routeParams,@$location) ->
     #alert "GOT: #{@$routeParams.taskId}"
 
     @$scope.taskChanges = {}
+    @$scope.taskCompleted = @taskCompleted
+    @$scope.taskCompletedYes = @taskCompletedYes
+    @$scope.taskCompletedNo = @taskCompletedNo
+    @$scope.isFormStateActive = false
+    @$scope.isFormYesNo = false
+    @$scope.currentForm = null
 
     @loadFormData()
+
+  taskCompletedYes: () =>
+    data =
+      fields: {}
+
+    for key,val of @$scope.currentForm.fields when val.field && val.field.length > 0
+      data.fields[val.field] = true
+
+    @taskCompleted data
+
+  taskCompletedNo: () =>
+    data =
+      fields: {}
+
+    for key,val of @$scope.currentForm.fields when val.field && val.field.length > 0
+      data.fields[val.field] = false
+
+    @taskCompleted data
+
+  taskCompleted: (resultData = {}) =>
+    if @$scope.activeTaskId
+      taskId = @$scope.activeTaskId
+
+      request = @$http.post "/api/tasks/#{taskId}/complete", resultData
+      request.error (data, status, headers, config) =>
+        @$scope.flashMessage "Failed to complete task - please try again"
+      request.success (data, status, headers, config) =>
+
+        @$scope.currentForm = null
+        @$location.path "/"
+        # Flash here
 
   loadFormData: =>
     request = @$http.get "/api/tasks/#{@$routeParams.taskId}/data"
@@ -26,6 +63,10 @@ class window.TaskController
         for row in result.items
           $("input.r-#{row.r}.c-#{row.c}").val(row.v)
 
+        @$scope.isFormYesNo = !!result.form
+        @$scope.currentForm = result.form
+        @$scope.isFormStateActive = true
+        @$scope.$apply()
 
   onFocusout: (e) =>
     $target = $(e.target)
@@ -43,6 +84,6 @@ class window.TaskController
 
     #alert "focusout #{$(e.target).val()}"
 
-window.TaskController.$inject = ['$scope',"$http",'$routeParams']
+window.TaskController.$inject = ['$scope',"$http",'$routeParams','$location']
 
 

@@ -15,8 +15,8 @@ MAXCOUNTOBJECTS = 50
 Provides methods to interact with processDefinitions.
 ###
 module.exports = class ProcessDefinitionMethods
-  CREATE_FIELDS = ['_id','name','description','createdBy','bonitaProcessName']
-  UPDATE_FIELDS = ['name','description','createdBy','bonitaProcessName','sourceXlsx','sourceSize','sourceFilename','sourceType']
+  CREATE_FIELDS = ['_id','name','description','createdBy','bonitaProcessName','createableByRoles','stateMachine']
+  UPDATE_FIELDS = ['name','description','createdBy','bonitaProcessName','sourceXlsx','sourceSize','sourceFilename','sourceType','createableByRoles','stateMachine']
 
   ###
   Initializes a new instance of the @see ProcessDefinitionMethods class.
