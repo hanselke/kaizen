@@ -26,11 +26,23 @@
         thead
           tr
             th Name
+            th State
+            th Next State
+            th Checked Out
+            th task Ended
             th Actions
         tbody
           tr(style="vertical-align:center;",ng-repeat='task in tasks')
             td
-              |{{task.createdAt}}
+              |{{task.name}}
+            td
+              |{{task.state}}
+            td
+              |{{task.nextState}}
+            td
+              |{{task.checkedOutByUserId}}
+            td
+              |{{task.taskEnded}}
             td
               a.btn(href="/api/tasks/{{task._id}}/excel") Download Excel
 

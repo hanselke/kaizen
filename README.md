@@ -1,7 +1,6 @@
 3. Make it work with multiple process definitions.
 
 --
-1. Show user in board and stuff
 2. show time in board
 3. clean out client from unnecessary code.
 4. do nice error/status messages

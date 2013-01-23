@@ -158,7 +158,7 @@ module.exports = class RoutesApi
 
   getAdminTasks: (req,res,next) =>
     return res.json 401,{} unless req.user
-    @dbStore.tasks.all {actor:null, offset: 0, count: 200}, (err,result) =>
+    @dbStore.tasks.all {actor:null, offset: 0, count: 200, select : '_id processDefinitionId state createdAt checkedOutByUserId name taskEnded nextState'}, (err,result) =>
       return next err if err
       res.json result
 
