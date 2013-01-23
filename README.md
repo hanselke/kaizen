@@ -1,18 +1,16 @@
-2. select the right states for next action in sm and check.
+1. Only show those actions that a role can create.
+2. Specify a running number for the task name (+ prefix from process definition)
+3. clean user + stuff from bonita
+4 show current task name in header.
+5. Make it work with multiple process definitions.
+6. store state machine in process definition
+7. Show user in board and stuff
+8. show time in board
+9. clean out client from unnecessary code.
+10. do nice error/status messages
+11. end state hide from board, and exclude from next (special tab in admin).
+12. get next task -> all states from all state machines per user
 
-3. excel field mapping
-10. Only show those actions that a user can create.
-2a ensure next action complete.
-2b show current task name in header.
-4. Make it work with multiple process definitions.
-5. store state machine in process definition
-6. Show user in board and stuff
-7. show time in board
-8. clean user + stuff from bonita
-9. Specify a running number for the task name (+ prefix from process definition)
-12. clean out client from unnecessary code.
-13. do nice error/status messages
-14. end state hide from board, and exclude from next.
 
 http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita
 ssh -i ~/Documents/bitnami-hosting.pem ubuntu@ec2-54-251-65-125.ap-southeast-1.compute.amazonaws.com

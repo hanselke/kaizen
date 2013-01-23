@@ -86,3 +86,8 @@ module.exports = class StateMachine
 
     _.uniq(result)
 
+  getExcelFieldFromState: (stateName) =>
+    state = @getState stateName
+    return null unless state
+    state.excelField
+

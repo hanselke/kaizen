@@ -495,40 +495,34 @@ module.exports = class RoutesApi
     @dbStore.processDefinitions.get processDefinitionId,null,true, (err,item) =>
       return next err if err
 
-      @dbStore.tasks.get taskId, {}, (err,task) =>
+      @_stateMachineForProcessDefinitionId processDefinitionId, (err, sm) =>
         return next err if err
 
-        console.log "TASK NAME: #{task.activeActivityName}"
+        @dbStore.tasks.get taskId, {}, (err,task) =>
+          return next err if err
+
+          console.log "TASK NAME: #{task.activeActivityName}"
 
 
-        currentTaskState = 'undefined'
+          currentTaskState = sm.getExcelFieldFromState( task.state) || 'undefined' 
 
-        if task.activeActivityName is '_1_Enter_Floor_Data'
-          currentTaskState = "floor"
-        else if task.activeActivityName is '2_Approve1'
-          currentTaskState = "shift manager"
-        else if task.activeActivityName is '3_Approve2'
-          currentTaskState = "production manager"
+          options = 
+            isActiveInputCell : (cell) => 
+              return false unless cell.text && cell.text.length > 0
+              return false unless cell.text is 'floor' or cell.text is 'shift manager' or cell.text is 'production manager'
+              true
 
-
-
-        options = 
-          isActiveInputCell : (cell) => 
-            return false unless cell.text && cell.text.length > 0
-            return false unless cell.text is 'floor' or cell.text is 'shift manager' or cell.text is 'production manager'
-            true
-
-          isActiveInputCellCurrent : (cell) => 
-            return false unless cell.text && cell.text.length > 0
-            return false unless cell.text is currentTaskState
-            true
+            isActiveInputCellCurrent : (cell) => 
+              return false unless cell.text && cell.text.length > 0
+              return false unless cell.text is currentTaskState
+              true
 
 
-        xlsxToForm.createHtmlFromLayoutForm item.layout,options,(err,html) =>
-          return done err if err
+          xlsxToForm.createHtmlFromLayoutForm item.layout,options,(err,html) =>
+            return done err if err
 
-          html = "#{html}"
-          res.send html
+            html = "#{html}"
+            res.send html
 
   ###
   NEW CODE
@@ -544,6 +538,7 @@ module.exports = class RoutesApi
         allowedRoles: ['floor','admin']
         formToShow: null
         transitionToNextState: "shiftManagerApproval"
+        excelField: 'floor'
       shiftManagerApproval:
         label: "Shift Manager Approval"
         hideFromlane: false
@@ -551,6 +546,7 @@ module.exports = class RoutesApi
         formToShow: 'approveFloor'
         transitionToNextState:
           fn: "function(task,data,options) { return data.approvedByShiftManager ? \"productionManagerApproval\" : \"qaChecks\"};"
+        excelField: 'shift manager'
       productionManagerApproval:
         label: "Production Manager Approval"
         hideFromlane: false
@@ -558,6 +554,7 @@ module.exports = class RoutesApi
         formToShow: 'approveShift'
         transitionToNextState: 
           fn: "function(task,data,options) { return data.approvedByProductionManager ? \"end\" : \"qaChecks\"};"
+        excelField: 'production manager'
     forms:
       approveFloor: 
         fields:
