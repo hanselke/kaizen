@@ -2,7 +2,6 @@
 2. get next task -> all states from all state machines per user
 3. one bug that shows up occasionally when loading form
 4. deal with undefined process instances
-5. show current task name in header.
 6. Make it work with multiple process definitions.
 8. end state hide from board, and exclude from next (special tab in admin).
 
@@ -13,6 +12,7 @@
 4. do nice error/status messages
 5. validate process definition input
 6. edit user
+7. show current task name in header.
 
 
 http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita

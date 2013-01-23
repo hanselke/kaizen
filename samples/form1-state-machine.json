@@ -1,0 +1,58 @@
+{
+  "initialState": "qaChecks",
+  "states": {
+    "end": {
+      "hideFromlane": true
+    },
+    "qaChecks": {
+      "label": "QA Checks",
+      "hideFromlane": false,
+      "allowedRoles": ["floor", "admin"],
+      "formToShow": null,
+      "transitionToNextState": "shiftManagerApproval",
+      "excelField": "floor"
+    },
+    "shiftManagerApproval": {
+      "label": "Shift Manager Approval",
+      "hideFromlane": false,
+      "allowedRoles": ["shiftManager", "admin"],
+      "formToShow": "approveFloor",
+      "transitionToNextState": {
+        "fn": "function(task,data,options) { return data.approvedByShiftManager ? \"productionManagerApproval\" : \"qaChecks\"};"
+      },
+      "excelField": "shift manager"
+    },
+    "productionManagerApproval": {
+      "label": "Production Manager Approval",
+      "hideFromlane": false,
+      "allowedRoles": ["productionManager", "admin"],
+      "formToShow": "approveShift",
+      "transitionToNextState": {
+        "fn": "function(task,data,options) { return data.approvedByProductionManager ? \"end\" : \"qaChecks\"};"
+      },
+      "excelField": "production manager"
+    }
+  },
+  "forms": {
+    "approveFloor": {
+      "fields": {
+        "formCompleted": {
+          "type": "yesNoButton",
+          "labels": ["Process Ok", "Process Fail"],
+          "field": "approvedByShiftManager",
+          "completesTask": true
+        }
+      }
+    },
+    "approveShift": {
+      "fields": {
+        "formCompleted": {
+          "type": "yesNoButton",
+          "field": "approvedByProductionManager",
+          "labels": ["Process Ok", "Process Fail"],
+          "completesTask": true
+        }
+      }
+    }
+  }
+}
