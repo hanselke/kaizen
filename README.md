@@ -1,15 +1,7 @@
-0. Add roles admin
-1. clean out client/server from unnecessary code. (db schema, stuff)
-2. edit user (change password)
---
-1. show time in board
-2. Make it work with multiple process definitions.
-3. do nice error/status messages
-4. validate process definition input
-6. show current task name in header.
-7. Do allow a user to delete itself or deadmin himself.
-8. Screen when no process defintions
-9. screen when no users
+2. Screen when no process defintions
+3. clean out client/server from unnecessary code. (db schema, stuff)
+4. show time in board
+5. Make it work with multiple process definitions.
 
 http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita
 ssh -i ~/Documents/bitnami-hosting.pem ubuntu@ec2-54-251-65-125.ap-southeast-1.compute.amazonaws.com

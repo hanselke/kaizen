@@ -315,10 +315,7 @@ module.exports = class RoutesApi
 
         result.processDefinitionId = item.processDefinitionId
         result.form = sm.getFormForState(item.state)
- 
-        console.log "getTaskData"
-        console.log JSON.stringify(result)
-        console.log "getTaskData--"
+        result.taskName = item.name
         res.json result
 
   ###

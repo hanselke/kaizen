@@ -19,6 +19,7 @@ class window.TaskController
     @$scope.isFormStateActive = false
     @$scope.isFormYesNo = false
     @$scope.currentForm = null
+    @$scope.currentTaskName = null
 
     @loadFormData()
 
@@ -57,6 +58,8 @@ class window.TaskController
     request = @$http.get "/api/tasks/#{@$routeParams.taskId}/data"
     request.error @$scope.errorHandler
     request.success (result, status, headers, config) =>
+      @$scope.currentTaskName = result.taskName
+
       loadCssFile "/api/process-definitions/#{result.processDefinitionId}/form-css"
       $(".xlsl-form-container").load "/api/process-definitions/#{result.processDefinitionId}/#{@$routeParams.taskId}/form-html", () =>
         $(".xlsl-form-container input").focusout @onFocusout

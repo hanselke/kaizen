@@ -7,7 +7,9 @@
   .container-fluid
     .span12
       .bottom-button-row(style="vertical-align:center")
-        span(style='font-size:16px') Actions:
+        span(style='font-size:16px') Actions (
+        span(style="font-weight:bold") {{currentTaskName}}
+        span )
 
         button.btn.btn-primary.action-task-step-done(ng:click='taskCompleted()',ng-show='isFormStateActive && !isFormYesNo')
           |Step Completed
