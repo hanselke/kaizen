@@ -35,6 +35,10 @@ module.exports = class RoutesApi
     @app.post '/api/admin/users', @postAdminUsers
     @app.delete '/api/admin/users/:userId', @deleteAdminUser
 
+    @app.get '/api/admin/roles', @getAdminRoles
+    @app.post '/api/admin/roles', @postAdminRoles
+    @app.delete '/api/admin/roles/:roleId', @deleteAdminRole
+
     # This is a hack
     @app.post '/api/admin/users/:userId/roles/:role', @addRole
     @app.delete '/api/admin/users/:userId/roles/:role', @deleteRole
@@ -86,10 +90,31 @@ module.exports = class RoutesApi
         res.json user
 
 
+  getAdminRoles: (req,res,next) =>
+    return res.json {}, 401 unless req.user
+    @dbStore.roles.all {}, (err,pagedResultRoles) =>
+      return next err if err
+      res.json pagedResultRoles
+
+  postAdminRoles: (req,res,next) =>
+    return next new errors.UnprocessableEntity("name") unless req.body.name
+
+    @dbStore.roles.create req.body, {}, (err,user) =>
+      return next err if err
+      res.json user
+
+  deleteAdminRoles: (req,res,next) =>
+    roleId = req.params.roleId
+    #console.log "DELETE USER #{userId}"
+    @dbStore.roles.destroy roleId, {}, (err,item) =>
+      return next err if err
+      res.json {}
 
 
   getAdminUsers: (req,res,next) =>
     return res.json {}, 401 unless req.user
+    #@dbStore.roles.all {}, (err,roles) =>
+
     @bonitaClient.identity.getAllRoles  "admin",{}, (err,roles) =>
       return next err if err
       @identityStore.users.all 0,100, (err,result) =>

@@ -1,0 +1,37 @@
+
+.row(style="position:absolute;top:0px;bottom:50px;")
+  .container-fluid
+    .span3(style="margin-top:40px")
+      .well
+        ul.nav.nav-list
+          li.nav-header
+            |Roles
+          li
+            a(href="#/admin/roles") Overview
+          li.active
+            |Add a new one
+      .well
+        ul.nav.nav-list
+          li.nav-header
+            |More Admin
+          li
+            a(href="#/admin/users") Users
+          li
+            a(href="#/admin/tasks") Tasks
+          li
+            a(href="#/admin/process-definitions") Process Definitions
+
+    .span9
+      h2 Add a Process Definition
+      p Process definitions mimic the bonita process definitions. They link a form with the respective bonita process. You still need to create the bonita process.
+
+
+      form
+        fieldset
+          label Name
+          input( type="text",placeholder="3..30 characters",ng-model="role.name")
+          span.help-block Please enter a name here.
+
+
+          button.btn.btn-primary( type="submit",ng-click="create(role)") Create Role
+          

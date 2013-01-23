@@ -9,7 +9,7 @@ class window.AdminUsersAddController
     request.success (data, status, headers, config) =>
       #@$scope.users = data.items
       @$location.path '/admin/users'
-      @$scope.flashMessage "New User Created"
+      #@$scope.flashMessage "New User Created"
 
 
 window.AdminUsersAddController.$inject = ['$scope',"$http","$location"]

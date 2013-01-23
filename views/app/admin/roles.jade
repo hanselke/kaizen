@@ -5,9 +5,11 @@
       .well
         ul.nav.nav-list
           li.nav-header
-            |Tasks
+            |Roles
           li.active
             |Overview
+          li
+            a(href="#/admin/roles/add") Add a new one
       .well
         ul.nav.nav-list
           li.nav-header
@@ -15,37 +17,26 @@
           li
             a(href="#/admin/users") Users
           li
-            a(href="#/admin/roles") Roles
+            a(href="#/admin/tasks") Tasks
           li
             a(href="#/admin/process-definitions") Process Definitions
 
     .span9
 
       h2
-        span Tasks
+        span Roles&nbsp;
+        a(href="#/admin/roles/add",style="font-weight:normal;font-size:smaller") Add a new one
 
       table.table-striped.table-hover
         thead
           tr
             th Name
-            th State
-            th Next State
-            th Checked Out
-            th task Ended
             th Actions
         tbody
-          tr(style="vertical-align:center;",ng-repeat='task in tasks')
+          tr(style="vertical-align:center;",ng-repeat='role in roles')
             td
-              |{{task.name}}
+              |{{role.name}}
             td
-              |{{task.state}}
-            td
-              |{{task.nextState}}
-            td
-              |{{task.checkedOutByUserId}}
-            td
-              |{{task.taskEnded}}
-            td
-              a.btn(href="/api/tasks/{{task._id}}/excel") Download Excel (CSV)
+              button.btn.btn-warning(ng-click="deleteMe(role._id)") Delete
 
         
