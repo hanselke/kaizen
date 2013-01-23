@@ -37,11 +37,16 @@ html(xmlns:ng='http://angularjs.org/', ng:app='myModule')
 
               ul.dropdown-menu
                 li
-                  a(href='') Edit Profile
-                li
                   a(href='#/help') Help
+                li.divider
                 li(ng-show='isInRole(\'admin\')')
-                  a(href='#/admin/users') Admin
+                  a(href='#/admin/users') Users
+                li(ng-show='isInRole(\'admin\')')
+                  a(href='#/admin/roles') Roles
+                li(ng-show='isInRole(\'admin\')')
+                  a(href='#/admin/tasks') Tasks
+                li(ng-show='isInRole(\'admin\')')
+                  a(href='#/admin/process-definitions') Process Definitions
                 li.divider
                 li
                   a.do-not-route(href='/users/sign-out') Sign Out
