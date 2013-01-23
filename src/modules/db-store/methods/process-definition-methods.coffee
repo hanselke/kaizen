@@ -36,7 +36,7 @@ module.exports = class ProcessDefinitionMethods
       return cb err if err
 
       query = @models.ProcessDefinition.find({})
-      query.select(options.select || '_id name description')
+      query.select(options.select || '_id name description createableByRoles')
       query.setOptions { skip: options.offset, limit: options.count}
       query.exec (err, items) =>
         return cb err if err
@@ -77,6 +77,8 @@ module.exports = class ProcessDefinitionMethods
   create:(objs = {}, actor, cb = ->) =>
     data = {}
     data.createdBy = actor
+
+    obj.createableByRoles = obj.createableByRoles.split(',') if obj.createableByRoles && _.isString(obj.createableByRoles)
 
     _.extendFiltered data, CREATE_FIELDS, objs
     return cb new errors.UnprocessableEntity("createdBy") unless data.createdBy && data.createdBy.actorId
@@ -125,6 +127,7 @@ module.exports = class ProcessDefinitionMethods
       return cb err if err
       return cb new errors.NotFound("/processDefinitions/#{processDefinitionId}") unless item
 
+      obj.createableByRoles = obj.createableByRoles.split(',') if obj.createableByRoles && _.isString(obj.createableByRoles)
       _.extendFiltered item, UPDATE_FIELDS, obj
       item.save (err) =>
         return cb err if err
@@ -135,8 +138,11 @@ module.exports = class ProcessDefinitionMethods
       return cb err if err
       return cb new errors.NotFound("/processDefinitions/#{processDefinitionId}") unless item
 
+      obj.createableByRoles = obj.createableByRoles.split(',') if obj.createableByRoles && _.isString(obj.createableByRoles)
+
       item[field] = null for field in UPDATE_FIELDS
       _.extendFiltered item, UPDATE_FIELDS, obj
+
       item.save (err) =>
         return cb err if err
         cb null, item

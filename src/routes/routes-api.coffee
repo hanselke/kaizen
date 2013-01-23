@@ -71,8 +71,15 @@ module.exports = class RoutesApi
         user.activeTask = item.toRest @baseUrl
 
 
-      @dbStore.processDefinitions.all {actor:null, offset: 0, count: 200}, (err,result) =>
+      @dbStore.processDefinitions.all {actor:null, offset: 0, count: 1000}, (err,result) =>
         return next err if err
+
+        containsAny = (roleArray,checkAgainstRoles) ->
+          for x in checkAgainstRoles
+            return true if _.contains(roleArray,x)
+          false
+
+        result.items = _.filter result.items, (x) -> containsAny(x.createableByRoles,req.user.roles)
 
         user.createableTasks = _.map result.items, (x) -> {_id: x._id,name: x.name, description : x.description }
 

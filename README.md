@@ -1,10 +1,9 @@
-1. Only show those actions that a role can create.
+1. store state machine in process definition
 2. get next task -> all states from all state machines per user
 3. one bug that shows up occasionally when loading form
 4. deal with undefined process instances
 5. show current task name in header.
 6. Make it work with multiple process definitions.
-7. store state machine in process definition
 8. end state hide from board, and exclude from next (special tab in admin).
 
 --
