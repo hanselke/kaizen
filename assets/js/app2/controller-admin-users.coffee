@@ -3,8 +3,6 @@ class window.AdminUsersController
     @$scope.deleteMe = @deleteMe
     @$scope.removeRole = @removeRole
     @$scope.addRole = @addRole
-    @$scope.syncToBonita = @syncToBonita
-    @$scope.syncFromBonita = @syncFromBonita
 
     @$scope.users = []
     @$scope.roles = []
@@ -41,16 +39,5 @@ class window.AdminUsersController
     request.success (data, status, headers, config) =>
       @refresh()
 
-  syncToBonita: () =>
-    request = @$http.post "/api/admin/users/synctobonita", {}
-    request.error @$scope.errorHandler
-    request.success (data, status, headers, config) =>
-      @refresh()
-
-  syncFromBonita: () =>
-    request = @$http.post "/api/admin/users/syncfrombonita", {}
-    request.error @$scope.errorHandler
-    request.success (data, status, headers, config) =>
-      @refresh()
 
 window.AdminUsersController.$inject = ['$scope',"$http"]

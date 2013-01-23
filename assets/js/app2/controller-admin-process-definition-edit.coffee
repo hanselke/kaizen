@@ -12,13 +12,14 @@ class window.AdminProcessDefinitionEditController
 
 
   update: (processDefinition) =>
-    ###
-    request = @$http.post "/api/admin/process-definitions",processDefinition
+    request = @$http 
+      method : "PATCH"
+      url : "/api/admin/process-definitions/#{processDefinition._id}"
+      date : processDefinition
+    
     request.error @$scope.errorHandler
     request.success (data, status, headers, config) =>
-      #@$scope.processDefinitions = data.items
       @$location.path '/admin/process-definitions'
-      @$scope.flashMessage "New Process Definition Created"
-    ###
+      #@$scope.flashMessage "Process Definition Update"
 
 window.AdminProcessDefinitionEditController.$inject = ['$scope',"$http","$location","$routeParams"]
