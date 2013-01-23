@@ -7,13 +7,13 @@
 8. Make it work with multiple process definitions.
 9. store state machine in process definition
 10. edit user
+5. end state hide from board, and exclude from next (special tab in admin).
 
 --
 1. Show user in board and stuff
 2. show time in board
 3. clean out client from unnecessary code.
 4. do nice error/status messages
-5. end state hide from board, and exclude from next (special tab in admin).
 
 
 http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita

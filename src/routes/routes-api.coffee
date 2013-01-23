@@ -42,7 +42,11 @@ module.exports = class RoutesApi
     @app.get '/api/admin/process-definitions', @getAdminProcessDefinitions
     @app.post '/api/admin/process-definitions', @postAdminProcessDefinitions
     @app.delete '/api/admin/process-definitions/:processDefinitionId', @deleteAdminProcessDefinition
+    
+    #angular bug
     @app.patch '/api/admin/process-definitions/:processDefinitionId', @patchAdminProcessDefinition
+    @app.put '/api/admin/process-definitions/:processDefinitionId', @patchAdminProcessDefinition
+    
     @app.get '/api/admin/process-definitions/:processDefinitionId', @getAdminProcessDefinition
     @app.post '/api/admin/process-definitions/:processDefinitionId', @uploadAdminProcessDefinition
     @app.post '/api/admin/process-definitions/:processDefinitionId/layout', @uploadAdminProcessDefinitionLayout
@@ -169,8 +173,9 @@ module.exports = class RoutesApi
       res.json {}
 
   patchAdminProcessDefinition: (req,res,next) =>
+    console.log JSON.stringify(req.body)
     processDefinitionId = req.params.processDefinitionId
-    @dbStore.processDefinitions.patch processDefinitionId,req.body,null,true, (err,item) =>
+    @dbStore.processDefinitions.patch processDefinitionId,req.body,{}, (err,item) =>
       return next err if err
       res.json item
 
@@ -208,7 +213,7 @@ module.exports = class RoutesApi
         sourceSize: file.size
         sourceFilename: file.name
         sourceType: file.type
-      @dbStore.processDefinitions.patch processDefinitionId,data ,null,true, (err,item) =>
+      @dbStore.processDefinitions.patch processDefinitionId,data ,{}, (err,item) =>
         return next err if err
         res.json {}
 

@@ -120,8 +120,8 @@ module.exports = class ProcessDefinitionMethods
         return cb err if err
         cb null, item
 
-  patch: (processDefinitionId, obj = {}, actor, ignoreSecurity, cb = ->) =>
-    @_getItem processDefinitionId, actor, ignoreSecurity, true, (err, item) =>
+  patch: (processDefinitionId, obj = {}, options = {}, cb = ->) =>
+    @_getItem processDefinitionId, options.actor, options.ignoreSecurity, true, (err, item) =>
       return cb err if err
       return cb new errors.NotFound("/processDefinitions/#{processDefinitionId}") unless item
 
@@ -142,9 +142,11 @@ module.exports = class ProcessDefinitionMethods
         cb null, item
 
   _getItem: (processDefinitionId, actor, ignoreSecurity, forWrite, cb) =>
+    processDefinitionId = new ObjectId(processDefinitionId.toString())
     @models.ProcessDefinition.findOne _id : processDefinitionId, cb
 
   saveLayout: (processDefinitionId,layout,cb) =>
+
     @_getItem processDefinitionId, null, true, true, (err, item) =>
       return cb err if err
       return cb new errors.NotFound("/processDefinitions/#{processDefinitionId}") unless item
