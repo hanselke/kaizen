@@ -1,6 +1,4 @@
-3. clean out client/server from unnecessary code. (db schema, stuff)
 4. show time in board
-5. Make it work with multiple process definitions.
 
 http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita
 ssh -i ~/Documents/bitnami-hosting.pem ubuntu@ec2-54-251-65-125.ap-southeast-1.compute.amazonaws.com

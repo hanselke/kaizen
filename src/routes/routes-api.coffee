@@ -571,7 +571,7 @@ module.exports = class RoutesApi
             waitingTime: 0
             cards: []
 
-        @dbStore.tasks.tasksForBoard processDefinitionId,{}, (err, pagedResult) =>
+        @dbStore.tasks.tasksForBoard {}, (err, pagedResult) =>
           return next err if err
 
           laneMap = {}

@@ -29,7 +29,7 @@ module.exports = class TaskMethods
       return cb err if err
       cb null,totalCount
 
-  tasksForBoard: (processDefinitionId,options = {},cb = ->) =>
+  tasksForBoard: (options = {},cb = ->) =>
     options.offset or= 0
     options.count or= 200
 
@@ -38,7 +38,8 @@ module.exports = class TaskMethods
     @models.Task.count  {}, (err, totalCount) =>
       return cb err if err
 
-      query = @models.Task.find({processDefinitionId : processDefinitionId, taskEnded : false})
+      # processDefinitionId : processDefinitionId,
+      query = @models.Task.find( {taskEnded : false})
       query.sort('-createdAt')
       #query.select(options.select || '_id processDefinitionId processInstanceUUID state createdAt activeTaskUUID checkedOutByUserId')
       query.setOptions { skip: options.offset , limit: options.count}
