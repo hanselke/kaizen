@@ -29,12 +29,9 @@
           span.help-block Please enter a name here.
 
           label Description
-          input( type="text",placeholder="0..1000 characters",ng-model="processDefinition.description")
+          textarea( placeholder="0..1000 characters",ng-model="processDefinition.description")
           span.help-block Please enter a description here.
 
-          label Bonita Process Name
-          input( type="text",placeholder="2..100 characters",ng-model="processDefinition.bonitaProcessName")
-          span.help-block Please enter the case sensitive name of the bonita process here.
 
           label Createable By Roles
           input( type="text",placeholder="2..100 characters",ng-model="processDefinition.createableByRoles")
@@ -45,7 +42,7 @@
           span.help-block Please enter a short prefix that is used to create names for tasks by appending a running number.
 
           label State Machine
-          input( type="text",placeholder="2..100 characters",ng-model="processDefinition.stateMachine")
+          textarea( placeholder="",ng-model="processDefinition.stateMachine")
           span.help-block Please input the state machine code here.
 
           button.btn.btn-primary( type="submit",ng-click="update(processDefinition)") Update Process Definition

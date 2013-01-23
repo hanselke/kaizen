@@ -15,8 +15,8 @@ MAXCOUNTOBJECTS = 50
 Provides methods to interact with processDefinitions.
 ###
 module.exports = class ProcessDefinitionMethods
-  CREATE_FIELDS = ['_id','name','description','createdBy','bonitaProcessName','createableByRoles','stateMachine','taskNamePrefix']
-  UPDATE_FIELDS = ['name','description','createdBy','bonitaProcessName','sourceXlsx','sourceSize','sourceFilename','sourceType','createableByRoles','stateMachine','taskNamePrefix']
+  CREATE_FIELDS = ['_id','name','description','createdBy','createableByRoles','stateMachine','taskNamePrefix']
+  UPDATE_FIELDS = ['name','description','createdBy','sourceXlsx','sourceSize','sourceFilename','sourceType','createableByRoles','stateMachine','taskNamePrefix']
 
   ###
   Initializes a new instance of the @see ProcessDefinitionMethods class.
@@ -36,7 +36,7 @@ module.exports = class ProcessDefinitionMethods
       return cb err if err
 
       query = @models.ProcessDefinition.find({})
-      query.select(options.select || '_id name description bonitaProcessName')
+      query.select(options.select || '_id name description')
       query.setOptions { skip: options.offset, limit: options.count}
       query.exec (err, items) =>
         return cb err if err

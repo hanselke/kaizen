@@ -1,19 +1,19 @@
-2. Only show those actions that a role can create.
-1. validate that edit works, fix input height, and update field heights. Validate cson
-3. get next task -> all states from all state machines per user
-4. one bug that shows up occasionally when loading form
-5. deal with undefined process instances
-6. show current task name in header.
-8. Make it work with multiple process definitions.
-9. store state machine in process definition
-10. edit user
-5. end state hide from board, and exclude from next (special tab in admin).
+1. Only show those actions that a role can create.
+2. get next task -> all states from all state machines per user
+3. one bug that shows up occasionally when loading form
+4. deal with undefined process instances
+5. show current task name in header.
+6. Make it work with multiple process definitions.
+7. store state machine in process definition
+8. end state hide from board, and exclude from next (special tab in admin).
 
 --
 1. Show user in board and stuff
 2. show time in board
 3. clean out client from unnecessary code.
 4. do nice error/status messages
+5. validate process definition input
+6. edit user
 
 
 http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita

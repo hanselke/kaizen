@@ -18,11 +18,6 @@ module.exports = ProcessDefinitionSchema = new mongoose.Schema
         default : () -> ''
         trim: true
         match: /.{0,1000}/
-      bonitaProcessName: 
-        type: String
-        trim: true
-        match: /.{2,100}/
-        required: true
       sourceXlsx:
         type: String
       sourceSize:
@@ -55,7 +50,6 @@ ProcessDefinitionSchema.methods.toRest = (baseUrl, actor) ->
     id : @_id
     name: @name
     description: @description
-    bonitaProcessName: @bonitaProcessName
     createdBy : @createdBy
     createdAt : @createdAt
     updatedAt : @updatedAt
