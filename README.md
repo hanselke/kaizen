@@ -1,5 +1,7 @@
-1b. root screen always show next action button
+10. Only show those actions that a user can create.
 2. select the right roles for next action in sm and check.
+2a ensure next action complete.
+2b show current task name in header.
 3. excel field mapping
 4. Make it work with multiple process definitions.
 5. store state machine in process definition
@@ -7,7 +9,6 @@
 7. show time in board
 8. clean user + stuff from bonita
 9. Specify a running number for the task name (+ prefix from process definition)
-10. Only show those actions that a user can create.
 12. clean out client from unnecessary code.
 13. do nice error/status messages
 

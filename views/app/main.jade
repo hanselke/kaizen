@@ -90,5 +90,7 @@
     .span12
       .bottom-button-row(style="vertical-align:center")
         span(style='font-size:16px') Actions:
+        button.btn.btn-primary.action-next-task(style="white-space:nowrap;",ng:click='nextTask()')
+          |Next Action
         button.btn(ng:click='createTask(item._id)',ng:repeat='item in createableTasks') Create {{item.name}} Task
 
