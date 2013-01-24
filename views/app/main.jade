@@ -1,5 +1,5 @@
 
-.row(style="position:absolute;top:0px;bottom:50px;width:100%")
+.row.page-container 
   .container-fluid
     .span12
       table(ng:show='currentUser', style='display: none;')
@@ -53,6 +53,8 @@
 
       div(style='text-align: center; display: none;', ng:show='currentUser == null')
         p Loading...
+    .clear.clearfix
+  .clear.clearfix
 
 .row(style="position:absolute;bottom:0px;height:36px;background:#ddd;padding-top:8px;width:100%;margin:0")
   .container-fluid

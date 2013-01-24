@@ -1,4 +1,3 @@
-1. scrolling of help and everything.
 5. can't get the macro thing to work to generate layout.json…been running for 2 hours
 
 

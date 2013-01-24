@@ -195,3 +195,24 @@ input.excel-input {
 	-webkit-border-radius: 0px;
 }
 
+.page-container {
+	position:absolute;
+	top:0px;
+	bottom:50px;
+	left: 0px;
+	right:0px;
+	overflow:scroll;
+	margin:0px;
+	padding:0px;
+}
+
+.page-container .container-fluid{
+	padding-left: 0px;
+	padding-right:0px;
+}
+
+.page-container .container-fluid .span12 {
+	margin-left:0px;
+	margin-right: 0px;
+}
+
