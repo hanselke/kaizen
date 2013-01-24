@@ -21,7 +21,7 @@
                           
                           p(style="clear:both")
                             span A: {{card.totalActiveTimeAsString}}
-                            &nbsp;
+                            |&nbsp;
                             span W: {{card.totalWaitingTimeAsString}}
                           p(style="color:red;")
                             |{{card.message}}
@@ -35,10 +35,10 @@
                           .time(style='padding-left:10px;padding-right:10px')
                             span T:&nbsp;
                             span(style='font-weight:bold') {{lane.totalTimeLabel}}
-                            span &nbsp;W:&nbsp;
-                            span(style='font-weight:bold') {{lane.totalTimeLabel}}
                             span &nbsp;A:&nbsp; 
-                            span(style='font-weight:bold') {{lane.totalTimeLabel}}
+                            span(style='font-weight:bold') {{lane.totalActiveTimeLabel}}
+                            span &nbsp;W:&nbsp;
+                            span(style='font-weight:bold') {{lane.totalWaitingTimeLabel}}
 
 
                   //tr

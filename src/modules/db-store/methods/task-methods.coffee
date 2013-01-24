@@ -8,8 +8,8 @@ ObjectId = mongoose.Types.ObjectId
 
 
 module.exports = class TaskMethods
-  CREATE_FIELDS = ['_id','processDefinitionId','checkedOutByUserId','createdBy','state','checkedOutDate','totalWaitingTime','totalActiveTime','activeActivityName','stateCompleted','nextState','name','taskEnded','checkedInDate','message']
-  UPDATE_FIELDS = ['processDefinitionId','checkedOutByUserId','state','checkedOutDate','totalWaitingTime','totalActiveTime','activeActivityName','stateCompleted','nextState','name','taskEnded','checkedInDate','message']
+  CREATE_FIELDS = ['_id','processDefinitionId','checkedOutByUserId','createdBy','state','checkedOutDate','totalWaitingTime','totalActiveTime','activeActivityName','stateCompleted','nextState','name','taskEnded','checkedInDate','message','timePerState']
+  UPDATE_FIELDS = ['processDefinitionId','checkedOutByUserId','state','checkedOutDate','totalWaitingTime','totalActiveTime','activeActivityName','stateCompleted','nextState','name','taskEnded','checkedInDate','message','timePerState']
 
   constructor:(@models) ->
 
@@ -47,6 +47,40 @@ module.exports = class TaskMethods
         return cb err if err
         cb null, new PageResult(items || [], totalCount, options.offset, options.count)
 
+  aggregatedTaskTimesForBoardPerState: (options = {},cb = ->) =>
+
+    # processDefinitionId : processDefinitionId,
+    query = @models.Task.find() # ( {taskEnded : false})
+    query.select '_id timePerState'
+    query.exec (err, items) =>
+      return cb err if err
+
+      states = {}
+
+      for x in items
+        for key,val of x.timePerState
+
+          state = states[key]
+          unless state
+            state =  
+              count : 0
+              totalActiveTime : 0
+              totalWaitingTime : 0
+              totalTime : 0
+            states[key] = state
+ 
+          state.count += 1
+          state.totalActiveTime += val.totalActiveTime
+          state.totalWaitingTime += val.totalWaitingTime
+          state.totalTime += val.totalActiveTime + val.totalWaitingTime
+
+      for state, val of states
+        val.totalActiveTime /= val.count
+        val.totalWaitingTime /= val.count
+        val.totalTime /= val.count
+        delete val.count
+
+      cb null, states
 
   all: (options = {},cb = ->) =>
     # TODO: EXCLUDE DELETED
@@ -102,6 +136,9 @@ module.exports = class TaskMethods
       return cb new errors.NotFound("/tasks/#{taskId}") unless item
 
       _.extendFiltered item, UPDATE_FIELDS, obj
+
+      item.markModified('timePerState')  if obj.timePerState 
+
       item.save (err) =>
         return cb err if err
         cb null, item

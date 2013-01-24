@@ -50,6 +50,11 @@ module.exports = TaskSchema = new mongoose.Schema
       taskEnded: 
         type: Boolean
         default: false
+
+      timePerState:
+        type: mongoose.Schema.Types.Mixed
+        default: () -> {}
+
     , strict: true
 
 

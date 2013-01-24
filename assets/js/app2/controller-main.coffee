@@ -23,8 +23,8 @@ class window.MainController
     @$scope.lane_headings = {}
     @$scope.lanes = []
     @$scope.lanes2 = []
-    @$scope.colsFromLanes = []
-    @$scope.tdFromLanes = []
+    #@$scope.colsFromLanes = []
+    #@$scope.tdFromLanes = []
     
     @refresh()
 
@@ -35,6 +35,7 @@ class window.MainController
       window.lanesBoard = data.lanes
       @$scope.cards = {}
       @$scope.lane_headings = {}
+
       _.each data.lanes, (x) =>
         @$scope.lane_headings[x.name] = x.label
         @$scope.cards[x.name] = x.cards
@@ -54,12 +55,28 @@ class window.MainController
       for l in data.lanes
         l.totalTimeLabel = humanizeTime(l.totalTime / 1000)
         l.totalTimeLabel = "n/a" unless l.totalTimeLabel && l.totalTimeLabel.length > 0
-        
-      @$scope.lanes2 = _.object( _.map( data.lanes, (x) -> [x.name,x]))
 
-      @$scope.colsFromLanes = @colsFromLanes @$scope.lanes
-      @$scope.tdFromLanes = @tdFromLanes @$scope.lanes2
+        l.totalActiveTimeLabel = humanizeTime(l.totalActiveTime / 1000)
+        l.totalActiveTimeLabel = "n/a" unless l.totalActiveTimeLabel && l.totalActiveTimeLabel.length > 0
 
+        l.totalWaitingTimeLabel = humanizeTime(l.totalWaitingTime / 1000)
+        l.totalWaitingTimeLabel = "n/a" unless l.totalWaitingTimeLabel && l.totalWaitingTimeLabel.length > 0
+
+      @$scope.lanes2 = data.lanes 
+
+      ###
+      for l in data.lanes 
+        @$scope.lanes2.push 
+          _.object {}
+        _.each data.lanes, (x) =>
+
+       _.object( _.map( data.lanes, (x) -> [x.name,x]))
+      ###
+      
+      #@$scope.colsFromLanes = @colsFromLanes @$scope.lanes
+      #@$scope.tdFromLanes = @tdFromLanes @$scope.lanes2
+
+  ###
   colsFromLanes: (lanes = []) =>
     res = []
 
@@ -75,7 +92,9 @@ class window.MainController
       res.push width : "#{aWidth}%" 
       res.push width : "#{bWidth}%" 
     res
+  ###
 
+  ###
   tdFromLanes: (lanes2 = {}) =>
     res = []
 
@@ -88,7 +107,7 @@ class window.MainController
         klass : "wait" 
         label : humanizeTime(lane.waitingTime)
     res
-
+  ###
 
     ###
     that = this

@@ -533,7 +533,16 @@ module.exports = class RoutesApi
           else if oldTask.createdAt
             totalActiveTime += new Date() - oldTask.createdAt
 
-          
+          oldTask.timePerState = {} unless  oldTask.timePerState 
+          unless oldTask.timePerState[oldTask.state]
+            oldTask.timePerState[oldTask.state] = 
+              totalActiveTime : 0
+              totalWaitingTime : 0
+
+          if oldTask.checkedOutDate
+            oldTask.timePerState[oldTask.state].totalActiveTime += new Date() - oldTask.checkedOutDate
+          else if oldTask.createdAt
+            oldTask.timePerState[oldTask.state].totalActiveTime += new Date() - oldTask.createdAt
 
           data = 
             activeTaskUUID : null # to be deleted
@@ -545,6 +554,7 @@ module.exports = class RoutesApi
             nextState: nextState
             totalActiveTime: totalActiveTime
             message : message
+            timePerState : _.clone( oldTask.timePerState)
 
           data.taskEnded = true if nextState is "end"
             
@@ -581,37 +591,38 @@ module.exports = class RoutesApi
             activityDefinitions: [] # TBDeleted
             id: '' # TBDeleted
             totalTime : 0
-            totalCost: 0
-            executionTime : 0
-            waitingTime: 0
+            totalActiveTime : 0
+            totalWaitingTime : 0 
             cards: []
 
         @dbStore.tasks.tasksForBoard {}, (err, pagedResult) =>
           return next err if err
+          @dbStore.tasks.aggregatedTaskTimesForBoardPerState {}, (err,states) =>
+            return next err if err
 
-          laneMap = {}
-          laneMap[lane.name] = lane for lane in board.lanes
+            laneMap = {}
+            laneMap[lane.name] = lane for lane in board.lanes
 
-          for task in pagedResult.items || []
-            lane = laneMap[task.state]
+            for task in pagedResult.items || []
+              lane = laneMap[task.state]
 
-            if lane
-              lane.cards.push 
-                  id : task._id
-                  desc : task.name || 'UNNAMED'
-                  ready : task.stateCompleted
-                  state : lane.name
-                  totalCost: 0
-                  executionTime : 0 # remove
-                  waitingTime: 0 # remove
-                  totalActiveTime : task.totalActiveTime
-                  totalWaitingTime: task.totalWaitingTime
-                  totalTime :  task.totalActiveTime + task.totalWaitingTime
-                  message: task.message || ''
+              if lane
+                lane.cards.push 
+                    id : task._id
+                    desc : task.name || 'UNNAMED'
+                    ready : task.stateCompleted
+                    state : lane.name
+                    totalActiveTime : task.totalActiveTime
+                    totalWaitingTime: task.totalWaitingTime
+                    totalTime :  task.totalActiveTime + task.totalWaitingTime
+                    message: task.message || ''
 
+            for state,val of states
+              lane = laneMap[state]
+              if lane
+                _.extend lane, val
 
-
-          res.json board
+            res.json board
 
   ###
   Retrieves the next task, if any, for the current user.
@@ -657,6 +668,16 @@ module.exports = class RoutesApi
               totalWaitingTime += new Date() - task.checkedInDate
 
 
+            task.timePerState = {} unless  task.timePerState 
+            unless task.timePerState[task.state]
+              task.timePerState[task.state] = 
+                totalActiveTime : 0
+                totalWaitingTime : 0
+
+            if task.checkedInDate
+              task.timePerState[task.state].totalWaitingTime += new Date() - task.checkedInDate
+
+
             data =
               checkedOutByUserId: req.user.id || req.user._id
               activeTaskUUID: "" 
@@ -667,6 +688,7 @@ module.exports = class RoutesApi
               checkedOutDate: new Date()
               checkedInDate : null
               totalWaitingTime : totalWaitingTime
+              timePerState : _.clone( task.timePerState)
 
             @dbStore.tasks.patch task._id,data, actor : {actorId : req.user._id || req.user.id},  (err,item) =>
               return next err if err
