@@ -20,6 +20,7 @@ class window.TaskController
     @$scope.isFormYesNo = false
     @$scope.currentForm = null
     @$scope.currentTaskName = null
+    @$scope.taskMessage = ""
 
     @loadFormData()
 
@@ -45,6 +46,8 @@ class window.TaskController
     if @$scope.activeTaskId
       taskId = @$scope.activeTaskId
 
+      resultData.message= @$scope.taskMessage
+
       request = @$http.post "/api/tasks/#{taskId}/complete", resultData
       request.error (data, status, headers, config) =>
         @$scope.flashMessage "Failed to complete task - please try again"
@@ -59,6 +62,7 @@ class window.TaskController
     request.error @$scope.errorHandler
     request.success (result, status, headers, config) =>
       @$scope.currentTaskName = result.taskName
+      @$scope.taskMessage  = result.taskMessage
 
       loadCssFile "/api/process-definitions/#{result.processDefinitionId}/form-css"
       $(".xlsl-form-container").load "/api/process-definitions/#{result.processDefinitionId}/#{@$routeParams.taskId}/form-html", () =>

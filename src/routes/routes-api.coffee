@@ -319,6 +319,7 @@ module.exports = class RoutesApi
         result.processDefinitionId = item.processDefinitionId
         result.form = sm.getFormForState(item.state)
         result.taskName = item.name
+        result.taskMessage = item.message
         res.json result
 
   ###
@@ -468,15 +469,20 @@ module.exports = class RoutesApi
     return res.json 422,{} unless req.body.processDefinitionId
     # TODO: Check if user is authorized to create the task.
 
+    console.log "A"
     @dbStore.processDefinitions.get2 req.body.processDefinitionId,{select: '_id taskNamePrefix'}, (err,processDefinition) =>
       return next err if err
       return next new Error("process defintion not found") unless processDefinition
+      console.log "B"
 
       @_stateMachineForProcessDefinitionId req.body.processDefinitionId, (err, sm) =>
         return next err if err
+        console.log "C"
 
         @dbStore.tasks.countTasksForProcessDefinitionId req.body.processDefinitionId,{}, (err,count) =>
           return next err if err
+          console.log "D"
+
           count = count + 1
           name = "#{processDefinition.taskNamePrefix || "TASK"}#{count}"
 
@@ -489,6 +495,8 @@ module.exports = class RoutesApi
             name : name
 
           @dbStore.tasks.create payload,actorId : req.user._id, (err,item) =>
+            console.log "E"
+
             return next err if err
             item.id = item._id
             res.json item
@@ -500,6 +508,7 @@ module.exports = class RoutesApi
     console.log "GOT THIS---"
 
     data = req.body.fields || {}
+    message = req.body.message || ''
 
     @dbStore.tasks.get req.params.taskId, {}, (err,oldTask) =>
       return next err if err
@@ -535,6 +544,7 @@ module.exports = class RoutesApi
             stateCompleted: true
             nextState: nextState
             totalActiveTime: totalActiveTime
+            message : message
 
           data.taskEnded = true if nextState is "end"
             
@@ -597,6 +607,7 @@ module.exports = class RoutesApi
                   totalActiveTime : task.totalActiveTime
                   totalWaitingTime: task.totalWaitingTime
                   totalTime :  task.totalActiveTime + task.totalWaitingTime
+                  message: task.message || ''
 
 
 

@@ -1,4 +1,11 @@
-4. show time in board
+4. include the average/total cycle time and value added times as per the old application. (we can ignore cost for now)
+
+1. scrolling of help and everything.
+
+5. can't get the macro thing to work to generate layout.json…been running for 2 hours
+
+
+
 
 http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita
 ssh -i ~/Documents/bitnami-hosting.pem ubuntu@ec2-54-251-65-125.ap-southeast-1.compute.amazonaws.com

@@ -19,6 +19,10 @@ module.exports = TaskSchema = new mongoose.Schema
         type: mongoose.Schema.Types.Mixed
         default: () -> {}
 
+      message:
+        type: String
+        default: ""
+
       totalActiveTime:
         type: Number
         default: 0

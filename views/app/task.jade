@@ -17,3 +17,5 @@
           |Complete (Failed)
         button.btn.btn-primary.action-task-step-done-yes(ng:click='taskCompletedYes()',ng-show='isFormStateActive && isFormYesNo')
           |Complete (Ok)
+        span(style="font-weight:bold") Msg:
+        input.message(type="text",ng:model="taskMessage")
