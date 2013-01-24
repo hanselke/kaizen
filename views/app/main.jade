@@ -46,46 +46,6 @@
                         tr
                           td(class="{{tdLane.klass}}", ng-repeat='tdLane in tdFromLanes')
                             |{{tdLane.label}}
-                table.page.fullwidth(style='margin-top: 8px;display:none')
-                  tr
-                    //
-                       row for chat and company stream 
-                    td(width='50%')
-                      .chat
-                        .header Chat
-                        .content(style='height: 200px;')
-                          #chat_window(style='height: 175px; background: white; padding-left: 2px; overflow-y: auto;')
-                            div(ng:repeat='line in chat_lines', ng:class='getClassForMsg(line)')
-                              i(ng:show='line.name') {{line.name}}:
-                              | {{line.msg}}
-                              span.time [{{line.time | date:'HH:mm'}}]
-                          .input(style='padding-right: 5px; height: 25px;')
-                            form(ng:submit='sendMsg()')
-                              input.fullwidth(name='message')
-                    td(width='50%')
-                      .company_stream
-                        .header Company stream
-                        .content(style='height: 200px;')
-                          div(style='height: 100%; background: white; padding-left: 2px;')
-                            | You are subscribed to the Sales Order and Sales Department stream
-                            span.time [2 mins ago]
-                            i Chris
-                            | sent out RFQs.
-                            br
-                            span.time [8 mins ago]
-                            i Mon
-                            | mapped suppliers for
-                            a(href='href') RFQ#1234.
-                            br
-                            span.time [9 mins ago]
-                            i Derrick
-                            | mapped inventory for
-                            a(href='href') RFQ#1234.
-                            br
-                            span.time [15 mins ago]
-                            i Chris
-                            | processed an incoming fax.
-                            br
 
       div(style='text-align: center; display: none;', ng:show='currentUser == null')
         p Loading...
