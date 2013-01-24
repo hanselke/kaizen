@@ -25,19 +25,23 @@
                             span W: {{card.totalWaitingTimeAsString}}
                           p(style="color:red;")
                             |{{card.message}}
-                  .help.bubble.up(style='margin-left: 400px;') This is your kanban board
                   
-                  table.cycletimes.fullwidth(cellpadding='0', cellspacing='0', ng:show='false && lanes.length > 0')
+                  table.cycletimes.fullwidth(cellpadding='0', cellspacing='0', ng:show='true && lanes.length > 0')
                     colgroup
                       col(width='{{laneWidth}}', ng:repeat='lane in lanes')
                     tr
                       td( ng:repeat='lane in lanes2')
                         .cycle
-                          .time Time: {{lane.totalTimeLabel}}
-                          .cost Cost: {{lane.totalCost | currency}}
-                  tr
-                    //
-                       row for VSM 
+                          .time(style='padding-left:10px;padding-right:10px')
+                            span T:&nbsp;
+                            span(style='font-weight:bold') {{lane.totalTimeLabel}}
+                            span &nbsp;W:&nbsp;
+                            span(style='font-weight:bold') {{lane.totalTimeLabel}}
+                            span &nbsp;A:&nbsp; 
+                            span(style='font-weight:bold') {{lane.totalTimeLabel}}
+
+
+                  //tr
                     td(colspan='2')
                       table#vsm(ng:show='false && lanes.length > 0')
                         colgroup

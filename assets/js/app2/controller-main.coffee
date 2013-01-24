@@ -52,7 +52,8 @@ class window.MainController
       @$scope.lanes = _.map data.lanes, (x) -> x.name
 
       for l in data.lanes
-        l.totalTimeLabel = moment.duration(l.totalTime).humanize()
+        l.totalTimeLabel = humanizeTime(l.totalTime / 1000)
+        l.totalTimeLabel = "n/a" unless l.totalTimeLabel && l.totalTimeLabel.length > 0
         
       @$scope.lanes2 = _.object( _.map( data.lanes, (x) -> [x.name,x]))
 

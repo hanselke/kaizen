@@ -88,7 +88,7 @@ module.exports = class ProcessDefinitionMethods
     data = {}
     data.createdBy = actor
 
-    obj.createableByRoles = obj.createableByRoles.split(',') if obj.createableByRoles && _.isString(obj.createableByRoles)
+    objs.createableByRoles = objs.createableByRoles.split(',') if objs.createableByRoles && _.isString(obj.createableByRoles)
 
     _.extendFiltered data, CREATE_FIELDS, objs
     return cb new errors.UnprocessableEntity("createdBy") unless data.createdBy && data.createdBy.actorId
