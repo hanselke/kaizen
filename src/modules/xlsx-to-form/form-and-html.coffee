@@ -6,6 +6,9 @@ class FormAndHmtl
     cssPrefix = ".xlsl-form-container "
     result = ""
     for cssClass in form.cssClasses || []
+      console.log "@@@@@"
+      console.log JSON.stringify(cssClass)
+
       result += " #{cssPrefix} .#{cssClass.name} {"
       result += "font-family:\"#{cssClass.fontName}\";" if cssClass.fontName && cssClass.fontName.length > 0
       result += "font-size:#{cssClass.fontSize};" if cssClass.fontSize
@@ -84,8 +87,10 @@ class FormAndHmtl
               writer.addAttribute "rowspan", cell.mergedCell.rows
 
           width = form.colWidths[c] || 0
-          writer.addAttribute "width","#{width}"
-          writer.addAttribute "style","width:#{width}px;"
+
+          if !cell.mergedCell
+            writer.addAttribute "width","#{width}"
+            writer.addAttribute "style","width:#{width}px;"
        
           writer.addAttribute "class","#{cell.cellCssClass || ''} #{cell.fontCssClass || ''}"
           if !options.isActiveInputCellCurrent(cell) 

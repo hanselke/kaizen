@@ -58,14 +58,15 @@ class window.TaskController
         # Flash here
 
   loadFormData: =>
+    cacheBuster = "#{new Date().getTime()}"
     request = @$http.get "/api/tasks/#{@$routeParams.taskId}/data"
     request.error @$scope.errorHandler
     request.success (result, status, headers, config) =>
       @$scope.currentTaskName = result.taskName
       @$scope.taskMessage  = result.taskMessage
 
-      loadCssFile "/api/process-definitions/#{result.processDefinitionId}/form-css"
-      $(".xlsl-form-container").load "/api/process-definitions/#{result.processDefinitionId}/#{@$routeParams.taskId}/form-html", () =>
+      loadCssFile "/api/process-definitions/#{result.processDefinitionId}/form-css?cb=#{cacheBuster}"
+      $(".xlsl-form-container").load "/api/process-definitions/#{result.processDefinitionId}/#{@$routeParams.taskId}/form-html?cb=#{cacheBuster}", () =>
         $(".xlsl-form-container input").focusout @onFocusout
         for row in result.items
           $("input.r-#{row.r}.c-#{row.c}").val(row.v)

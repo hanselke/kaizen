@@ -266,22 +266,26 @@ module.exports = class RoutesApi
           res.json {}
 
   ###
-  http://localhost:8001/api/process-definitions/50d22f260b75ca1d9000000c/form-css
+  http://localhost:8001/api/process-definitions/5101f5620cb4645c7800000b/form-css
   ###
   getProcessDefinitionCss: (req,res,next) =>
     processDefinitionId = req.params.processDefinitionId
     @dbStore.processDefinitions.get processDefinitionId,null,true, (err,item) =>
       return next err if err
+      console.log "PDORC #{item.name}"
 
+      ###
       layout1Path = "#{__dirname}/../../test/fixtures/form1-layout-raw.json"
 
       xlsxToForm.loadAndConvertVba layout1Path, (err,converted) =>
         return done err if err
-        xlsxToForm.createCssFromLayoutForm converted,(err,css) =>
-          return done err if err
+      ###
 
-          res.setHeader 'Content-Type', 'text/css'
-          res.send css
+      xlsxToForm.createCssFromLayoutForm item.layout,(err,css) =>
+        return done err if err
+
+        res.setHeader 'Content-Type', 'text/css'
+        res.send css
 
 
   ###
