@@ -95,7 +95,12 @@ class FormAndHmtl
           writer.addAttribute "class","#{cell.cellCssClass || ''} #{cell.fontCssClass || ''}"
           if !options.isActiveInputCellCurrent(cell) 
             if options.isActiveInputCell(cell)
-              writer.writeText ""
+              writer.pushTag "span"
+              writer.addAttribute "data-row", r
+              writer.addAttribute "data-cell", c
+              writer.addAttribute "class", "r-#{r} c-#{c}"
+
+              writer.popTag()
             else
               writer.writeText cell.text
           else

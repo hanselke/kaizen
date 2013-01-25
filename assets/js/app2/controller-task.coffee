@@ -70,6 +70,7 @@ class window.TaskController
         $(".xlsl-form-container input").focusout @onFocusout
         for row in result.items
           $("input.r-#{row.r}.c-#{row.c}").val(row.v)
+          $("span.r-#{row.r}.c-#{row.c}").text(row.v)
 
         @$scope.isFormYesNo = !!result.form
         @$scope.currentForm = result.form
