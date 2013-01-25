@@ -164,8 +164,11 @@ font-size:18px;
 
 
 table.xslx-table{
+	margin: 40px;
+	border: solid 1px #ddd;
 	border-collapse: collapse;
 	border-spacing: 0px;
+	table-layout:fixed;
 }
 
 table.xslx-table tr {
@@ -176,6 +179,7 @@ table.xslx-table tr {
 table.xslx-table tr td{
 	border-collapse: collapse;
 	border-spacing: 0px;
+	overflow:hidden;
 }
 
 table.xslx-table td {
@@ -183,6 +187,11 @@ table.xslx-table td {
 
 }
 
+table.xslx-table tr td input {
+	background-color: blue !important;
+	color:white !important;
+
+}
 
 input.excel-input {
 	margin:0px;

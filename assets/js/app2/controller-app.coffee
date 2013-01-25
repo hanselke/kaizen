@@ -108,6 +108,7 @@ class window.AppController
 
   errorHandler: (data, status, headers, config) =>
     #@flashMessage "An error occured: #{status}"
+    
 
   getItem: (name, defaultValue) =>
     if localStorage && typeof(localStorage.getItem) is 'function' && name in localStorage

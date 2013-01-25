@@ -57,6 +57,11 @@ class FormAndHmtl
 
     writer.pushTag "tbody"
 
+    for x in form.colWidths || []
+      writer.pushTag "col"
+      writer.addAttribute "width","#{x}px"
+      writer.popTag()
+
     for row,r in form.rows
       writer.pushTag "tr"
 

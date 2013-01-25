@@ -1,7 +1,3 @@
-5. can't get the macro thing to work to generate layout.json…been running for 2 hours
-
-
-
 
 http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita
 ssh -i ~/Documents/bitnami-hosting.pem ubuntu@ec2-54-251-65-125.ap-southeast-1.compute.amazonaws.com
