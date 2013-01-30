@@ -201,6 +201,21 @@ module.exports = class RoutesApi
   patchAdminProcessDefinition: (req,res,next) =>
     console.log JSON.stringify(req.body)
     processDefinitionId = req.params.processDefinitionId
+
+    isValidStateMachine = true
+
+    if req.body.stateMachine
+      try
+        json = JSON.parse(req.body.stateMachine)
+      catch e
+        isValidStateMachine = false
+
+    if (req.body.taskNamePrefix || '').length > 8
+      return res.json 422,{message: "The task name prefix must be 8 chars or less."}
+    
+    if !isValidStateMachine
+      return res.json 422,{message: "State Machine is not valid. Please use jsonformatter.curiousconcept.com to validate"}
+
     @dbStore.processDefinitions.patch processDefinitionId,req.body,{}, (err,item) =>
       return next err if err
       res.json item

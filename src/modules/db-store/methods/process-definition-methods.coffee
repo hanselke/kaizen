@@ -64,12 +64,6 @@ module.exports = class ProcessDefinitionMethods
     query.exec cb
 
 
-  ###
-  Retrieve a single processDefinition-item through it's id and ensure that we have write access.
-  ###
-  getForWrite: (processDefinitionId, actor, cb = ->) =>
-    @models.ProcessDefinition.findOneValidateWrite processDefinitionId, actor, cb
-
 
   createOrPut :(objs = {}, actor, cb = ->) =>
     return cb new errors.UnprocessableEntity("_id") unless objs._id

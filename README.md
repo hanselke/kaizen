@@ -1,9 +1,30 @@
-background and font color
-remove 
+TODO: Board display bug when json not ok
+Board import borders
+form upload
+display version number in app
 
+1. The Format make user confuse due the to many unused column
+2. User request for the Main Menu to list of the all Forms
+4. The color of Grid should be comfortable for users
+5. The Data should be view per Day or Per month for every items or for all items
+6. should be FIND button to search data per Date
+8. Should be have monthly report or weekly report
+7. the data can be delete by row or by transaction
+9. the items can be deleted or added by user
+
+3. Data can be saved anytime and can be find the saved Data for editing
+
+
+
+====
 
 http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita
 ssh -i ~/Documents/bitnami-hosting.pem ubuntu@ec2-54-251-65-125.ap-southeast-1.compute.amazonaws.com
+
+
+ssh -i ~/Documents/bitnami-hosting.pem ubuntu@ec2-46-137-196-72.ap-southeast-1.compute.amazonaws.com
+
+
 http://www.bonitasoft.org/docs/javadoc/rest/5.5/API
 How to install and start on the server:
 Precon: mongodb installed locally

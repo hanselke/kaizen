@@ -107,7 +107,12 @@ class window.AppController
     alert "#{msg}"
 
   errorHandler: (data, status, headers, config) =>
-    #@flashMessage "An error occured: #{status}"
+    if status is 422
+      message = "An error occured: #{status}"
+      if data && data.message
+        message = data.message
+
+      @flashMessage message
     
 
   getItem: (name, defaultValue) =>

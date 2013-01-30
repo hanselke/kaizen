@@ -53,6 +53,7 @@
               |{{task.totalWaitingTimeAsString}}
 
             td
+              a.btn(href="#/task/{{task._id}}?editAllStates=true") Edit Data
               a.btn(href="/api/tasks/{{task._id}}/excel") Download Excel (CSV)
 
         
