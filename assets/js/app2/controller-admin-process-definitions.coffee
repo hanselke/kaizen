@@ -2,6 +2,7 @@ class window.AdminProcessDefinitionsController
   constructor: (@$scope,@$http,@$location) ->
     @$scope.deleteMe = @deleteMe
     @$scope.editForm = @editForm
+    @$scope.editLayout = @editLayout
     @$scope.edit = @edit
 
     @$scope.processDefinitions = []
@@ -22,6 +23,9 @@ class window.AdminProcessDefinitionsController
 
   editForm: (processDefinitionId) =>
     @$location.path "/admin/process-definitions/#{processDefinitionId}/form"
+
+  editLayout: (processDefinitionId) =>
+    @$location.path "/admin/process-definitions/#{processDefinitionId}/layout"
 
   edit: (processDefinitionId) =>
     @$location.path "/admin/process-definitions/#{processDefinitionId}/edit"

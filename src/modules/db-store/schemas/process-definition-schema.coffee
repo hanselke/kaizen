@@ -38,6 +38,14 @@ module.exports = ProcessDefinitionSchema = new mongoose.Schema
       taskNamePrefix:
         type: String
         default: 'TASK'
+        
+      hasExcel: 
+        type: Boolean
+        default:false
+      hasLayout: 
+        type: Boolean
+        default:false
+
     , strict: true
 
 ProcessDefinitionSchema.plugin pluginTimestamp.timestamps

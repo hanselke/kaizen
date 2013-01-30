@@ -1,4 +1,4 @@
-class window.AdminProcessDefinitionsFormController
+class window.AdminProcessDefinitionsLayoutController
   constructor: (@$scope,@$http,@$location,@$routeParams) ->
     @$scope.processDefinition = {}
     @$scope.create = @create
@@ -8,37 +8,36 @@ class window.AdminProcessDefinitionsFormController
 
     @load @$routeParams.processDefinitionId
 
-
-    @$scope.uploader = new plupload.Uploader
+    # Layout
+    @$scope.uploaderLayout = new plupload.Uploader
       runtimes: "html5,flash,silverlight,html4"
-      browse_button: "pickfiles"
-      container: "uploadContainer"
+      browse_button: "pickfilesLayout"
+      container: "uploadContainerLayout"
       multi_selection : false
       multipart : true
       chunk_size : '1mb'
       max_file_size: "10mb"
-      drop_element: 'dropArea'
-      url: "http://#{document.location.host}/api/admin/process-definitions/#{@$routeParams.processDefinitionId}/excel"
+      drop_element: 'dropAreaLayout'
+      url: "http://#{document.location.host}/api/admin/process-definitions/#{@$routeParams.processDefinitionId}/layout"
       flash_swf_url: "/lib/plupload/Moxie.swf"
       silverlight_xap_url: "/lib/plupload/Moxie.xap"
-      filters: [ {title: "Excel Files",extensions: "xlsx"}]
+      filters: [ {title: "Exported Layout Files",extensions: "json"}]
 
-    @$scope.uploader.bind "FilesAdded", (up, files) =>
+    @$scope.uploaderLayout.bind "FilesAdded", (up, files) =>
       @$scope.$apply()
-    @$scope.uploader.bind "QueueChanged", (up, files) =>
+    @$scope.uploaderLayout.bind "QueueChanged", (up, files) =>
       @$scope.$apply()
-
-
-    @$scope.uploader.bind "UploadProgress", (up, file) =>
-      @$scope.$apply()
-      #$(file.id).getElementsByTagName("b")[0].innerHTML = "<span>" + file.percent + "%</span>"
-
-    @$scope.uploader.bind "FileUploaded", (up, file,response) =>
+    @$scope.uploaderLayout.bind "FileUploaded", (up, file,response) =>
           alert "File uploaded"
           @$scope.$apply()
           @$location.path '/admin/process-definitions'
 
-    @$scope.uploader.init()
+
+    @$scope.uploaderLayout.bind "UploadProgress", (up, file) =>
+      @$scope.$apply()
+      #$(file.id).getElementsByTagName("b")[0].innerHTML = "<span>" + file.percent + "%</span>"
+
+    @$scope.uploaderLayout.init()
 
 
   uploadFiles: () =>
@@ -66,4 +65,4 @@ class window.AdminProcessDefinitionsFormController
       @$scope.flashMessage "New Process Definition Created"
     ###
 
-window.AdminProcessDefinitionsFormController.$inject = ['$scope',"$http","$location","$routeParams"]
+window.AdminProcessDefinitionsLayoutController.$inject = ['$scope',"$http","$location","$routeParams"]

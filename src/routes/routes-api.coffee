@@ -54,7 +54,7 @@ module.exports = class RoutesApi
     @app.put '/api/admin/process-definitions/:processDefinitionId', @patchAdminProcessDefinition
     
     @app.get '/api/admin/process-definitions/:processDefinitionId', @getAdminProcessDefinition
-    @app.post '/api/admin/process-definitions/:processDefinitionId', @uploadAdminProcessDefinition
+    @app.post '/api/admin/process-definitions/:processDefinitionId/excel', @uploadAdminProcessDefinitionExcel
     @app.post '/api/admin/process-definitions/:processDefinitionId/layout', @uploadAdminProcessDefinitionLayout
     @app.get '/api/process-definitions/:processDefinitionId/form-css', @getProcessDefinitionCss
     @app.get '/api/process-definitions/:processDefinitionId/:taskId/form-html', @getProcessDefinitionHtml
@@ -237,11 +237,12 @@ module.exports = class RoutesApi
 
       res.json item
 
-  uploadAdminProcessDefinition: (req,res,next) =>
+  uploadAdminProcessDefinitionExcel: (req,res,next) =>
     processDefinitionId = req.params.processDefinitionId
 
     file = req.files.file
     return next new Error("No file present") unless file
+    return next new Error("No processDefinitionId") unless processDefinitionId
 
 
     fs.readFile file.path, 'utf8', (err, content) =>
@@ -249,12 +250,7 @@ module.exports = class RoutesApi
 
       base64Content = new Buffer(content).toString('base64')
 
-      data = 
-        sourceXlsx: base64Content
-        sourceSize: file.size
-        sourceFilename: file.name
-        sourceType: file.type
-      @dbStore.processDefinitions.patch processDefinitionId,data ,{}, (err,item) =>
+      @dbStore.processDefinitions.saveExcel processDefinitionId,base64Content,file.size,file.name,file.type, (err,item) =>
         return next err if err
         res.json {}
 
@@ -263,6 +259,7 @@ module.exports = class RoutesApi
 
     file = req.files.file
     return next new Error("No file present") unless file
+    return next new Error("No processDefinitionId") unless processDefinitionId
 
     fs.readFile file.path, 'utf8', (err, content) =>
       return next err if err
@@ -601,7 +598,7 @@ module.exports = class RoutesApi
       @_stateMachineForProcessDefinitionId processDefinitionId, (err, sm) =>
         return next err if err
 
-        for state,i in sm.getSwimlanes()
+        for state,i in sm.getSwimlanes() || []
           board.lanes.push
             label: state.label
             name: state.name

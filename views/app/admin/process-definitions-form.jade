@@ -21,7 +21,7 @@
 
     .span9
       h2 
-        |Form for&nbsp;
+        |Upload EXCEL (xlsx) for&nbsp;
         span {{processDefinition.name}}
 
       p.alert.alert-block.alert-success(ng:show="processDefinition.hasSource")
@@ -43,22 +43,3 @@
             a.btn.btn-small#pickfiles( href="javascript:;")  Select Files
             button.btn.btn-small#uploadfiles( ng-click="uploadFiles()") Upload Files
 
-
-      p.alert.alert-block.alert-success(ng:show="processDefinition.hasLayout")
-        | Layout file has been uploaded.
-
-      p.alert.alert-block(ng:show="!processDefinition.hasLayout")
-        |No Layout form has been uploaded yet. Each process definition is associated with an Excel form (in xslx format) that acts as the blue print.
-
-      p Either drop a file into the area below, or press the Select Files button. Then press Upload Files.
-      form
-        fieldset
-          #uploadContainerLayout
-            #dropAreaLayout(style="border: 1px black dashed;padding-top:30px;padding-bottom:30px;text-align:center")
-              |Drag a (*.json) file to here
-            p File to upload
-            .filelist(ng-repeat="currFile in uploaderLayout.files")
-              |{{currFile.name}} ({{currFile.size}})
-
-            a.btn.btn-small#pickfilesLayout( href="javascript:;")  Select Files
-            button.btn.btn-small#uploadfilesLayout( ng-click="uploadFilesLayout()") Upload Files

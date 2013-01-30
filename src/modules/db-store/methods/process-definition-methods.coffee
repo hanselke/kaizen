@@ -15,8 +15,8 @@ MAXCOUNTOBJECTS = 50
 Provides methods to interact with processDefinitions.
 ###
 module.exports = class ProcessDefinitionMethods
-  CREATE_FIELDS = ['_id','name','description','createdBy','createableByRoles','stateMachine','taskNamePrefix']
-  UPDATE_FIELDS = ['name','description','createdBy','sourceXlsx','sourceSize','sourceFilename','sourceType','createableByRoles','stateMachine','taskNamePrefix']
+  CREATE_FIELDS = ['_id','name','description','createdBy','createableByRoles','stateMachine','taskNamePrefix','hasExcel','hasLayout','hasStateMachine']
+  UPDATE_FIELDS = ['name','description','createdBy','sourceXlsx','sourceSize','sourceFilename','sourceType','createableByRoles','stateMachine','taskNamePrefix','hasExcel','hasLayout','hasStateMachine']
 
   ###
   Initializes a new instance of the @see ProcessDefinitionMethods class.
@@ -163,7 +163,24 @@ module.exports = class ProcessDefinitionMethods
 
       item.layout = layout
       item.markModified 'layout'
+      item.hasLayout = true
       item.save (err) =>
         return cb err if err
         cb null, item
 
+
+  saveExcel: (processDefinitionId,base64Content,fileSize,fileName,fileType,cb) =>
+
+    @_getItem processDefinitionId, null, true, true, (err, item) =>
+      return cb err if err
+      return cb new errors.NotFound("/processDefinitions/#{processDefinitionId}") unless item
+
+      item.sourceXlsx = base64Content
+      item.sourceSize = fileSize
+      item.sourceFilename = fileName
+      item.sourceType = fileType
+      item.hasExcel = true
+
+      item.save (err) =>
+        return cb err if err
+        cb null, item
