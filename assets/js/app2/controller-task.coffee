@@ -21,7 +21,7 @@ class window.TaskController
     @$scope.currentForm = null
     @$scope.currentTaskName = null
     @$scope.taskMessage = ""
-    @$scope.editAllStates = false # TODO SET THIS RIGHT
+    @$scope.editAllStates = !!@$routeParams['editAllStates'] # TODO SET THIS RIGHT
 
     @loadFormData()
 

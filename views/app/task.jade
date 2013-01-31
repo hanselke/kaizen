@@ -11,11 +11,11 @@
         span(style="font-weight:bold") {{currentTaskName}}
         span )
 
-        button.btn.btn-primary.action-task-step-done(ng:click='taskCompleted()',ng-show='isFormStateActive && !isFormYesNo')
+        button.btn.btn-primary.action-task-step-done(ng:click='taskCompleted()',ng-show='!editAllStates && isFormStateActive && !isFormYesNo')
           |Step Completed
-        button.btn.action-task-step-done-no(ng:click='taskCompletedNo()',ng-show='isFormStateActive && isFormYesNo' )
+        button.btn.action-task-step-done-no(ng:click='taskCompletedNo()',ng-show='!editAllStates && isFormStateActive && isFormYesNo' )
           |Complete (Failed)
-        button.btn.btn-primary.action-task-step-done-yes(ng:click='taskCompletedYes()',ng-show='isFormStateActive && isFormYesNo')
+        button.btn.btn-primary.action-task-step-done-yes(ng:click='taskCompletedYes()',ng-show='!editAllStates && isFormStateActive && isFormYesNo')
           |Complete (Ok)
-        span(style="font-weight:bold") Msg:
-        input.message(type="text",ng:model="taskMessage")
+        span(style="font-weight:bold",ng-show='!editAllStates') Msg:
+        input.message(type="text",ng:model="taskMessage",ng-show='!editAllStates')

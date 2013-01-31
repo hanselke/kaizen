@@ -1,21 +1,7 @@
-allow to edit all fields when in task edit mode
-remove step completed from the edit task data thing
-2. User request for the Main Menu to list of the all Forms
-Board import borders
-6. should be FIND button to search data per Date
-5. The Data should be view per Day or Per month for every items or for all items
-
-
-
-====\
-
-[1/30/13 9:02:24 AM] Hansel Ke: #009ACD for the blue
-[1/30/13 9:02:29 AM] Martin@Sunset: ok thx
-[1/30/13 9:02:42 AM] Hansel Ke: can you do #68838B for the...entered fields?
-
-
-
-====
+User request for the Main Menu to list of the all Forms
+--
+Board import borders + text color
+==
 
 http://ec2-54-251-77-171.ap-southeast-1.compute.amazonaws.com:8080/bonita
 ssh -i ~/Documents/bitnami-hosting.pem ubuntu@ec2-54-251-65-125.ap-southeast-1.compute.amazonaws.com
@@ -23,8 +9,6 @@ ssh -i ~/Documents/bitnami-hosting.pem ubuntu@ec2-54-251-65-125.ap-southeast-1.c
 
 ssh -i ~/Documents/bitnami-hosting.pem ubuntu@ec2-46-137-196-72.ap-southeast-1.compute.amazonaws.com
 
-
-http://www.bonitasoft.org/docs/javadoc/rest/5.5/API
 How to install and start on the server:
 Precon: mongodb installed locally
 

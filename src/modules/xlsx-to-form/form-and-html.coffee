@@ -94,35 +94,35 @@ class FormAndHmtl
        
           writer.addAttribute "class","#{cell.cellCssClass || ''} #{cell.fontCssClass || ''}"
 
-          if options.isActiveInputCell(cell) && options.ignoreCurrentCell
+          console.log "OPTIONS ARE #{JSON.stringify(options)}"
+
+          isActiveCurrent  = !!options.isActiveInputCellCurrent(cell) 
+          isActive = !!options.isActiveInputCell(cell)
+          editAllStates = options.editAllStates
+
+          hasAnInput = isActiveCurrent or (isActive and editAllStates)
+          console.log "RES: #{isActive} #{isActiveCurrent} #{editAllStates} ==> #{hasAnInput}"
+
+          if hasAnInput is true || hasAnInput is "true" # DONT EVEN ASK, THIS IS NOT A JOKE
+            console.log "HERE 1 #{hasAnInput}"
             writer.pushTag "input" 
             writer.addAttribute "type","text"
             writer.addAttribute "style","width:100%;height:100%;border:none;"
             writer.addAttribute "data-row", r
             writer.addAttribute "data-cell", c
             writer.addAttribute "class", "r-#{r} c-#{c} excel-input"
-            writer.popTag()
-
-          else if options.isActiveInputCellCurrent(cell) 
-            # Note: This is a hack right now. We need to make sure people lock forms and stuff
-            writer.pushTag "input" 
-            writer.addAttribute "type","text"
-            writer.addAttribute "style","width:100%;height:100%;border:none;"
-            writer.addAttribute "data-row", r
-            writer.addAttribute "data-cell", c
-            writer.addAttribute "class", "r-#{r} c-#{c} excel-input"
 
             writer.popTag()
-          else
-            if options.isActiveInputCell(cell)
-              writer.pushTag "span"
-              writer.addAttribute "data-row", r
-              writer.addAttribute "data-cell", c
-              writer.addAttribute "class", "r-#{r} c-#{c}"
-
-              writer.popTag()
+          else 
+            if isActive
+                writer.pushTag "span"
+                writer.addAttribute "data-row", r
+                writer.addAttribute "data-cell", c
+                writer.addAttribute "class", "r-#{r} c-#{c}"
+                writer.popTag()
             else
               writer.writeText cell.text
+
 
           writer.popTag() #td
 

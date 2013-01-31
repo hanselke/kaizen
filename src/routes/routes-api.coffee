@@ -405,7 +405,8 @@ module.exports = class RoutesApi
   http://localhost:8001/api/process-definitions/50d22f260b75ca1d9000000c/taskIdhere/form-html
   ###
   getProcessDefinitionHtml: (req,res,next) =>
-    editAllStates = req.params.editAllStates
+    editAllStates = req.query.editAllStates
+
 
     processDefinitionId = req.params.processDefinitionId
     taskId = req.params.taskId
@@ -419,9 +420,9 @@ module.exports = class RoutesApi
           return next err if err
 
           currentTaskState = sm.getExcelFieldFromState( task.state) || 'undefined' 
-
+          console.log "CURRENT TASK STATE: #{currentTaskState}"
           options =
-            ignoreCurrentCell: editAllStates
+            editAllStates: editAllStates
             isActiveInputCell : (cell) => 
               return false unless cell.text && cell.text.length > 0
               return false unless sm.existsAsExcelField( cell.text)
