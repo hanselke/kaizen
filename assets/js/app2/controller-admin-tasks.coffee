@@ -23,19 +23,36 @@ class window.AdminTasksController
     #@$scope.deleteMe = @deleteMe
     #@$scope.editForm = @editForm
 
+    @$scope.day = (new Date()).getDate()
+    @$scope.year = (new Date()).getFullYear()
+    @$scope.month = (new Date()).getMonth() + 1
     @$scope.tasks = []
+    $scope.$watch 'year + month + day',  =>
+      @refresh()
     @refresh()
 
-  refresh: () =>
-    @$scope.processes = []
-    request = @$http.get "/api/admin/tasks"
-    request.error @$scope.errorHandler
-    request.success (data, status, headers, config) =>
-      for item in data.items || []
-        item.totalWaitingTimeAsString = humanizeTime(item.totalWaitingTime / 1000)
-        item.totalActiveTimeAsString = humanizeTime(item.totalActiveTime / 1000)
+  getFilterDate: () =>
+    "#{@$scope.month}/#{@$scope.day}/#{@$scope.year}"
 
-      @$scope.tasks = data.items
+  getValidDate: () =>
+    try
+      return new Date(@$scope.year,@$scope.month,@$scope.day)
+    catch e
+      return null
+    
+  refresh: () =>
+    @$scope.tasks = []
+
+    if @getValidDate()
+
+      request = @$http.get "/api/admin/tasks?year=#{@$scope.year}&month=#{@$scope.month}&day=#{@$scope.day}"
+      request.error @$scope.errorHandler
+      request.success (data, status, headers, config) =>
+        for item in data.items || []
+          item.totalWaitingTimeAsString = humanizeTime(item.totalWaitingTime / 1000)
+          item.totalActiveTimeAsString = humanizeTime(item.totalActiveTime / 1000)
+
+        @$scope.tasks = data.items
 
   ###
   deleteMe: (processDefinitionId) =>

@@ -1,24 +1,11 @@
-
-
-
-TODO: Board display bug when json not ok
-Board import borders
-form upload
-display version number in app
-
-1. The Format make user confuse due the to many unused column
-4. The color of Grid should be comfortable for users
-5. The Data should be view per Day or Per month for every items or for all items
-6. should be FIND button to search data per Date
-8. Should be have monthly report or weekly report
-7. the data can be delete by row or by transaction
-9. the items can be deleted or added by user
-
-
-3. Data can be saved anytime and can be find the saved Data for editing
-2. User request for the Main Menu to list of the all Forms
-
+allow to edit all fields when in task edit mode
 remove step completed from the edit task data thing
+2. User request for the Main Menu to list of the all Forms
+Board import borders
+6. should be FIND button to search data per Date
+5. The Data should be view per Day or Per month for every items or for all items
+
+
 
 ====\
 

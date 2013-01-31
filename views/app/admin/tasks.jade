@@ -24,6 +24,13 @@
       h2
         span Tasks
 
+      form(name="form",novalidate="novalidate")
+        fieldset
+          label Filter by Year/Month/Day:
+          input(style="width:60px", type="number",ng-model="year",name="year",min="2010",max="2020",integer='integer')
+          input(style="width:60px", type="number",ng-model="month",name="month",min="1",max="12",integer='integer')
+          input(style="width:60px", type="number",ng-model="day",name="day",min="1",max="31",integer='integer')
+
       table.table-striped.table-hover
         thead
           tr

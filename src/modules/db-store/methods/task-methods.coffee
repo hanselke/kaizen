@@ -96,6 +96,30 @@ module.exports = class TaskMethods
         return cb err if err
         cb null, new PageResult(items || [], totalCount, options.offset, options.count)
 
+  allforDay: (dayDate,options = {},cb = ->) =>
+    @models.Task.count  {}, (err, totalCount) =>
+      return cb err if err
+
+      query = @models.Task.find({})
+      #query.sort('-createdAt')
+
+      start = dayDate
+      end = new Date()
+      end.setDate(start.getDate()+1)
+      end.setHours(0)
+      end.setMinutes(0)
+      end.setSeconds(0)
+      end.setMilliseconds(0)
+
+      console.log "Working against: #{start} and #{end}"
+
+      query.where('createdAt').gte(start).lt(end)
+      query.select(options.select || '_id processDefinitionId state createdAt checkedOutByUserId')
+      query.setOptions { skip: options.offset, limit: options.count}
+      query.exec (err, items) =>
+        return cb err if err
+        cb null, new PageResult(items || [], totalCount, options.offset, options.count)
+
 
   ###
   Create a new processDefinition

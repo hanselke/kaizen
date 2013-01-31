@@ -177,9 +177,25 @@ module.exports = class RoutesApi
 
   getAdminTasks: (req,res,next) =>
     return res.json 401,{} unless req.user
-    @dbStore.tasks.all {actor:null, offset: 0, count: 200, select : '_id processDefinitionId state createdAt checkedOutByUserId name taskEnded nextState totalActiveTime totalWaitingTime'}, (err,result) =>
-      return next err if err
-      res.json result
+
+    filter = null
+    if req.query.year && req.query.month && req.query.day
+      try
+        filter = new Date(parseInt(req.query.year),parseInt(req.query.month - 1),parseInt(req.query.day))
+      catch e
+        #
+
+    console.log filter
+
+    if filter
+      @dbStore.tasks.allforDay filter,{actor:null, offset: 0, count: 200, select : '_id processDefinitionId state createdAt checkedOutByUserId name taskEnded nextState totalActiveTime totalWaitingTime'}, (err,result) =>
+        return next err if err
+        res.json result
+
+    else
+      @dbStore.tasks.all {actor:null, offset: 0, count: 200, select : '_id processDefinitionId state createdAt checkedOutByUserId name taskEnded nextState totalActiveTime totalWaitingTime'}, (err,result) =>
+        return next err if err
+        res.json result
 
   getAdminProcessDefinitions: (req,res,next) =>
     return res.json 401,{} unless req.user
