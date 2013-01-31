@@ -198,6 +198,14 @@ table.xslx-table tr td input.with-data {
 
 }
 
+table.xslx-table tr td span.text-element {
+	padding:2px;
+}
+
+table.xslx-table tr td span.data-element {
+	padding:2px;
+}
+
 input.excel-input {
 	margin:0px;
 	padding:2px;

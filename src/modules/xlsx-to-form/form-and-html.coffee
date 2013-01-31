@@ -16,15 +16,19 @@ class FormAndHmtl
       result += "font-style:#{cssClass.fontStyle};" if cssClass.fontStyle && cssClass.fontStyle.length > 0
       #result += "text-decoration:#{cssClass.textDecoration};" if cssClass.textDecoration && cssClass.textDecoration.length > 0
 
-      result += "color:#{cssClass.fontColor};" if cssClass.fontColor && cssClass.fontColor.length > 0
+      result += "color:#{cssClass.color};" if cssClass.color && cssClass.color.length > 0
       result += "text-align:#{cssClass.horizontalAlignment};" if cssClass.horizontalAlignment && cssClass.horizontalAlignment.length > 0
       result += "background:#{cssClass.backgroundColor};" if cssClass.backgroundColor && cssClass.backgroundColor.length > 0
 
-
+      result += "border:solid 1px #ddd;" if cssClass.backgroundColor && cssClass.backgroundColor.length > 0
+      ###
       result += "border-top:#{cssClass.borderTop};" if cssClass.borderTop 
       result += "border-bottom:#{cssClass.borderBottom};" if cssClass.borderBottom
       result += "border-left:#{cssClass.borderLeft};" if cssClass.borderLeft
       result += "border-right:#{cssClass.borderRight};" if cssClass.borderRight
+      ###
+
+
 
       ###
 
@@ -118,10 +122,13 @@ class FormAndHmtl
                 writer.pushTag "span"
                 writer.addAttribute "data-row", r
                 writer.addAttribute "data-cell", c
-                writer.addAttribute "class", "r-#{r} c-#{c}"
+                writer.addAttribute "class", "r-#{r} c-#{c} data-element"
                 writer.popTag()
             else
+              writer.pushTag "span"
+              writer.addAttribute "class", "text-element" if cell.text && cell.text.length > 0
               writer.writeText cell.text
+              writer.popTag()
 
 
           writer.popTag() #td
