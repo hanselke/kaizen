@@ -188,7 +188,12 @@ table.xslx-table td {
 }
 
 table.xslx-table tr td input {
-	background-color: blue !important;
+	background-color: #009ACD !important;
+	color:white !important;
+}
+
+table.xslx-table tr td input.with-data {
+	background-color: #68838B !important;
 	color:white !important;
 
 }

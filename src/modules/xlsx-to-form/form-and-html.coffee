@@ -93,7 +93,27 @@ class FormAndHmtl
             writer.addAttribute "style","width:#{width}px;"
        
           writer.addAttribute "class","#{cell.cellCssClass || ''} #{cell.fontCssClass || ''}"
-          if !options.isActiveInputCellCurrent(cell) 
+
+          if options.isActiveInputCell(cell) && options.ignoreCurrentCell
+            writer.pushTag "input" 
+            writer.addAttribute "type","text"
+            writer.addAttribute "style","width:100%;height:100%;border:none;"
+            writer.addAttribute "data-row", r
+            writer.addAttribute "data-cell", c
+            writer.addAttribute "class", "r-#{r} c-#{c} excel-input"
+            writer.popTag()
+
+          else if options.isActiveInputCellCurrent(cell) 
+            # Note: This is a hack right now. We need to make sure people lock forms and stuff
+            writer.pushTag "input" 
+            writer.addAttribute "type","text"
+            writer.addAttribute "style","width:100%;height:100%;border:none;"
+            writer.addAttribute "data-row", r
+            writer.addAttribute "data-cell", c
+            writer.addAttribute "class", "r-#{r} c-#{c} excel-input"
+
+            writer.popTag()
+          else
             if options.isActiveInputCell(cell)
               writer.pushTag "span"
               writer.addAttribute "data-row", r
@@ -103,16 +123,6 @@ class FormAndHmtl
               writer.popTag()
             else
               writer.writeText cell.text
-          else
-            # Note: This is a hack right now. We need to make sure people lock forms and stuff
-            writer.pushTag "input" 
-            writer.addAttribute "type","text"
-            writer.addAttribute "style","width:100%;height:100%;border:none;background-color:#f4f4f4"
-            writer.addAttribute "data-row", r
-            writer.addAttribute "data-cell", c
-            writer.addAttribute "class", "r-#{r} c-#{c} excel-input"
-
-            writer.popTag()
 
           writer.popTag() #td
 

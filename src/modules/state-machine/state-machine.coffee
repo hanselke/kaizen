@@ -91,3 +91,10 @@ module.exports = class StateMachine
     return null unless state
     state.excelField
 
+  existsAsExcelField: (excelFieldName) =>
+    for key,val of @stateMachineData.states
+      return true if val.excelField is excelFieldName
+
+
+    false
+

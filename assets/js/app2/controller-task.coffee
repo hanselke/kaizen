@@ -21,6 +21,7 @@ class window.TaskController
     @$scope.currentForm = null
     @$scope.currentTaskName = null
     @$scope.taskMessage = ""
+    @$scope.editAllStates = false # TODO SET THIS RIGHT
 
     @loadFormData()
 
@@ -66,7 +67,7 @@ class window.TaskController
       @$scope.taskMessage  = result.taskMessage
 
       loadCssFile "/api/process-definitions/#{result.processDefinitionId}/form-css?cb=#{cacheBuster}"
-      $(".xlsl-form-container").load "/api/process-definitions/#{result.processDefinitionId}/#{@$routeParams.taskId}/form-html?cb=#{cacheBuster}", () =>
+      $(".xlsl-form-container").load "/api/process-definitions/#{result.processDefinitionId}/#{@$routeParams.taskId}/form-html?cb=#{cacheBuster}&editAllStates=#{@$scope.editAllStates}", () =>
         $(".xlsl-form-container input").focusout @onFocusout
         for row in result.items
           $("input.r-#{row.r}.c-#{row.c}").val(row.v)

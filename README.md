@@ -1,10 +1,12 @@
+
+
+
 TODO: Board display bug when json not ok
 Board import borders
 form upload
 display version number in app
 
 1. The Format make user confuse due the to many unused column
-2. User request for the Main Menu to list of the all Forms
 4. The color of Grid should be comfortable for users
 5. The Data should be view per Day or Per month for every items or for all items
 6. should be FIND button to search data per Date
@@ -12,7 +14,17 @@ display version number in app
 7. the data can be delete by row or by transaction
 9. the items can be deleted or added by user
 
+
 3. Data can be saved anytime and can be find the saved Data for editing
+2. User request for the Main Menu to list of the all Forms
+
+remove step completed from the edit task data thing
+
+====\
+
+[1/30/13 9:02:24 AM] Hansel Ke: #009ACD for the blue
+[1/30/13 9:02:29 AM] Martin@Sunset: ok thx
+[1/30/13 9:02:42 AM] Hansel Ke: can you do #68838B for the...entered fields?
 
 
 
