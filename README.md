@@ -1,3 +1,6 @@
+color conversion wrong
+
+
 User request for the Main Menu to list of the all Forms
 --
 Board import borders + text color
