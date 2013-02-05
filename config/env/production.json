@@ -21,7 +21,7 @@
   "services": {
     "db": "mongodb://localhost/openbusiness-bpm",
     "intercom": null,
-    "airbrake": null,
+    "airbrake": "d57d2f57d725cddd2c3dd960759c55ef",
     "google-analytics": null,
     "typekit": null,
     "mailchimp": null,
