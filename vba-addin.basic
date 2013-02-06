@@ -14,8 +14,10 @@ Sub test()
     
     minRow = ActiveSheet.UsedRange.Row
     minCol = ActiveSheet.UsedRange.Column
-    maxRow = minRow + ActiveSheet.UsedRange.Rows.Count
+    maxRow = minRow + ActiveSheet.UsedRange.Rows.Count - 1
     maxCol = minCol + ActiveSheet.UsedRange.Columns.Count
+    Rem we add one more right col to get the right border. Make sure it is small
+    
     
     Rem MyFile1 = Application.GetSaveAsFilename("converted-form.json", "JSON Files (*.json), *.json", 0)
     
@@ -74,10 +76,10 @@ Sub test()
                 
                 Rem escape the following
                 Print #fnum1, ",""text"": "
-                Print #fnum1, """" & cell.Text & """"
+                Print #fnum1, """" & ToUni(cell.Text) & """"
                 
                 Print #fnum1, ",""value"": "
-                Print #fnum1, """" & cell.Value & """"
+                Print #fnum1, """" & ToUni(cell.Value) & """"
                 Rem end escape the following
                 
                 If Not IsNull(cell.Font) Then
@@ -221,4 +223,22 @@ Function BoolToString(ws As Boolean) As String
         End If
 End Function
 
+Function ToUni(s As String) As String
+    Dim res As String
+    Dim c As String
     
+    
+    For i = 1 To Len(s)
+        c = Mid(s, i, 1)
+        res = res + "&#"
+        res = res + Trim(Str(AscW(c)))
+        res = res + ";"
+    Next
+    
+    
+    Rem AscW
+    
+    ToUni = res
+End Function
+
+
