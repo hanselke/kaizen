@@ -23,6 +23,9 @@ module.exports =  class HtmlWriter
   writeText: (txt) =>
     @_handleNeedClosing()
     @htmlBuffer += _.escape(txt)
+  writeTextPlain: (txt) =>
+    @_handleNeedClosing()
+    @htmlBuffer += txt
 
 
   popTag: =>

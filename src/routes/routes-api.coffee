@@ -505,19 +505,17 @@ module.exports = class RoutesApi
     return res.json 422,{} unless req.body.processDefinitionId
     # TODO: Check if user is authorized to create the task.
 
-    console.log "A"
+    processDefinitionId = req.body.processDefinitionId
+
     @dbStore.processDefinitions.get2 req.body.processDefinitionId,{select: '_id taskNamePrefix'}, (err,processDefinition) =>
       return next err if err
-      return next new Error("process defintion not found") unless processDefinition
-      console.log "B"
+      return next new Error("createTask - Process definition #{processDefinitionId} not found") unless processDefinition
 
       @_stateMachineForProcessDefinitionId req.body.processDefinitionId, (err, sm) =>
         return next err if err
-        console.log "C"
 
         @dbStore.tasks.countTasksForProcessDefinitionId req.body.processDefinitionId,{}, (err,count) =>
           return next err if err
-          console.log "D"
 
           count = count + 1
           name = "#{processDefinition.taskNamePrefix || "TASK"}#{count}"

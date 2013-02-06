@@ -127,7 +127,7 @@ class FormAndHmtl
             else
               writer.pushTag "span"
               writer.addAttribute "class", "text-element" if cell.text && cell.text.length > 0
-              writer.writeText cell.text
+              writer.writeTextPlain cell.text
               writer.popTag()
 
 
