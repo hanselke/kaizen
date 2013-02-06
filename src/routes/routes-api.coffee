@@ -612,7 +612,7 @@ module.exports = class RoutesApi
       lanes: []
 
     @_getActiveProcessDefinitionId (err,processDefinitionId) =>
-      res.json board if err || !processDefinitionId
+      return res.json board if err || !processDefinitionId
       #return next err if err
 
       @_stateMachineForProcessDefinitionId processDefinitionId, (err, sm) =>
