@@ -60,6 +60,7 @@ errors = require 'some-errors'
 RoutesRoot = require './routes/routes-root'
 RoutesAdminUsers = require './routes/routes-admin-users'
 RoutesUsers = require './routes/routes-users'
+RoutesSetup = require './routes/routes-setup'
 RoutesApi = require './routes/routes-api'
 RoutesApp = require './routes/routes-app'
 RoutesProxy = require './routes/routes-proxy'
@@ -257,6 +258,7 @@ module.exports = class App
       root : new RoutesRoot settings
       adminUsers: new RoutesAdminUsers settings
       routesUsers: new RoutesUsers settings
+      routesSetup: new RoutesSetup settings
       routesApi: new RoutesApi settings,config.get('services:bonita')
       routesApp: new RoutesApp settings
       routesProxy: new RoutesProxy settings,config.get('services:bonita')
