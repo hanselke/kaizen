@@ -15,7 +15,7 @@ class window.AdminProcessDefinitionsLayoutController
       container: "uploadContainerLayout"
       multi_selection : false
       multipart : true
-      chunk_size : '1mb'
+      chunk_size : '10mb'
       max_file_size: "10mb"
       drop_element: 'dropAreaLayout'
       url: "http://#{document.location.host}/api/admin/process-definitions/#{@$routeParams.processDefinitionId}/layout"
