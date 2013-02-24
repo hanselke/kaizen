@@ -55,12 +55,25 @@ module.exports = class ProcessDefinitionMethods
   get2: (processDefinitionId, options = {}, cb = ->) =>
     processDefinitionId = new ObjectId(processDefinitionId.toString())
     query = @models.ProcessDefinition.findOne _id : processDefinitionId
-    query.select(options.select) if options.select && options.select.length > 0
+    query = query.select(options.select) if options.select && options.select.length > 0
     query.exec cb
+
+    
+  getValidProcessDefinition: (options = {}, cb = ->) =>
+    console.log "HERE"
+    query = @models.ProcessDefinition.find() #.where("this.stateMachine && this.stateMachine.length > 10")
+    query = query.select(options.select) if options.select && options.select.length > 0
+    query.exec (err,result) =>
+      return cb err if err
+      for x in result
+        if x.stateMachine && x.stateMachine.length > 10
+          return cb null, x
+      return cb new Error('Not suitable process definition found')
+
 
   firstProcessDefinition: ( options = {}, cb = ->) =>
     query = @models.ProcessDefinition.findOne()
-    query.select(options.select) if options.select && options.select.length > 0
+    query = query.select(options.select) if options.select && options.select.length > 0
     query.exec cb
 
 

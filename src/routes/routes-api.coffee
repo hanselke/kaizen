@@ -53,7 +53,7 @@ module.exports = class RoutesApi
   Retrieve the current session (e.g. the user that is currently logged in). 
   Returns a 404 if no session exists - e.g. no user is logged in.
   ###
-  getSession: (req,res) =>
+  getSession: (req,res,next) =>
     return res.json {}, 404 unless req.user
 
     #console.log "CURRENT USER #{JSON.stringify(req.user.toRest(@baseUrl))}"
@@ -194,14 +194,11 @@ module.exports = class RoutesApi
     processDefinitionId = req.params.processDefinitionId
     @dbStore.processDefinitions.get processDefinitionId,null,true, (err,item) =>
       return next err if err
-      console.log "PDORC #{item.name}"
 
-      ###
-      layout1Path = "#{__dirname}/../../test/fixtures/form1-layout-raw.json"
+      unless item && xlsxToForm.isValidLayout(item.layout)
+        res.send "p.warning-box {margin-top:50px;background-color:red;color:white;}"
+        return 
 
-      xlsxToForm.loadAndConvertVba layout1Path, (err,converted) =>
-        return done err if err
-      ###
 
       xlsxToForm.createCssFromLayoutForm item.layout,(err,css) =>
         return done err if err
@@ -307,6 +304,11 @@ module.exports = class RoutesApi
     @dbStore.processDefinitions.get processDefinitionId,null,true, (err,item) =>
       return next err if err
 
+      unless item && xlsxToForm.isValidLayout(item.layout)
+        res.send "<p class=\"warning\">Could not read Layout Definition for process #{item.name}</p>"
+        return 
+
+
       @_stateMachineForProcessDefinitionId processDefinitionId, (err, sm) =>
         return next err if err
 
@@ -382,15 +384,48 @@ module.exports = class RoutesApi
             completesTask: true
 
   _stateMachineForProcessDefinitionId: (processDefinitionId, cb) =>
-    @dbStore.processDefinitions.get2 processDefinitionId,{select: '_id stateMachine'}, (err,processDefinition) =>
-      return next cb if err
-      
+    @_stateMachineForAny cb
+
+    ###
+    @dbStore.processDefinitions.get2 processDefinitionId,{select: '_id stateMachine name'}, (err,processDefinition) =>
+      return cb err if err
+      return cb new Error("Process Definition #{processDefinitionId} not found.") unless processDefinition
+
+      if !processDefinition.stateMachine || processDefinition.stateMachine.trim().length is 0
+        return cb new Error("Missing state machine for process definition #{processDefinitionId}")
+
+      smData = null
+      try
+        smData = JSON.parse(processDefinition.stateMachine)
+      catch e
+        console.log "Could not parse statemachine for #{processDefinition.name}"
+        console.log processDefinition.stateMachine
+        return cb new Error("Could not parse JSON State Machine for Process Defintion #{processDefinition.name}")
+
       sm = stateMachinePackage.stateMachine()
-      smData = JSON.parse(processDefinition.stateMachine)
       sm.loadFromObject smData
 
       cb null,sm
+    ###
 
+  _stateMachineForAny: (cb) =>
+    @dbStore.processDefinitions.getValidProcessDefinition {select: '_id stateMachine name'}, (err,processDefinition) =>
+      return cb err if err
+      return cb new Error("No valid process defintions found.") unless processDefinition
+
+      smData = null
+      try
+        smData = JSON.parse(processDefinition.stateMachine)
+      catch e
+        console.log "Could not parse statemachine for #{processDefinition.name}"
+        console.log processDefinition.stateMachine
+        return cb new Error("Could not parse JSON State Machine for Process Defintion #{processDefinition.name}")
+
+      sm = stateMachinePackage.stateMachine()
+      sm.loadFromObject smData
+
+      cb null,sm
+ 
   ###
   Create a new task.
   ###
@@ -507,7 +542,7 @@ module.exports = class RoutesApi
       return res.json board if err || !processDefinitionId
       #return next err if err
 
-      @_stateMachineForProcessDefinitionId processDefinitionId, (err, sm) =>
+      @_stateMachineForAny (err, sm) =>
         return next err if err
 
         for state,i in sm.getSwimlanes() || []
@@ -574,9 +609,13 @@ module.exports = class RoutesApi
 
       @_getActiveProcessDefinitionId (err,processDefinitionId) =>
         return next err if err
+
+        ###
+        If this task does not have a state machine we sideline it
+        ###
+        console.log "XX"
         @_stateMachineForProcessDefinitionId processDefinitionId, (err, sm) =>
           return next err if err
-
           # HERE WE NEED TO TRANSFORM req.user.roles into allowed states.
           #states = ['qaChecks','shiftManagerApproval','productionManagerApproval']
           states = sm.getStatesForRoles(req.user.roles)

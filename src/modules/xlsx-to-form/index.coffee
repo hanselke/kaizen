@@ -35,3 +35,10 @@ module.exports =
     form.mergeDataIntoForm sourceXlsx,formdata, (err,merged) =>
       cb null,merged
 
+  ###
+  Just does a simple null check for now.
+  ###
+  isValidLayout: (form) =>
+    return false unless form
+
+    true
