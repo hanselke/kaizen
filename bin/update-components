@@ -19,7 +19,7 @@ cp ./components/bootstrap/js/bootstrap-*.js ./js/external/global
 cp ./components/modernizr/modernizr.js ./js/external/head/modernizr.js
 cp ./components/underscore/underscore.js ./js/external/global/underscore.js
 cp ./components/jquery/jquery.js ./js/external/jquery/jquery.js
-cp ./components/jquery-ui/ui/jquery-ui.js ./js/external/jquery-ui/jquery-ui.js
+cp ./components/jquery-ui/ui/jquery-ui.custom.js ./js/external/jquery-ui/jquery-ui.js
 cp ./components/json2/json2.js ./js/external/global/json2.js
 cp ./components/moment/moment.js ./js/external/global/moment.js
 cp ./components-legacy/autoresize.jquery.js ./js/external/global-angular/autoresize.jquery.js
@@ -64,10 +64,10 @@ BOOTSTRAP_LESS=./components/bootstrap/less/bootstrap.less
 BOOTSTRAP_RESPONSIVE_OUTPUT=../public/css/bootstrap-responsive.css
 BOOTSTRAP_RESPONSIVE_LESS=./components/bootstrap/less/responsive.less
 #
-##LESS_COMPRESSOR ?= `which lessc`
+#LESS_COMPRESSOR = '/usr/local/n/versions/0.8.15/bin/lessc'
 #
-lessc $BOOTSTRAP_LESS > $BOOTSTRAP_OUTPUT
-lessc $BOOTSTRAP_RESPONSIVE_LESS > $BOOTSTRAP_RESPONSIVE_OUTPUT
+/usr/local/n/versions/0.8.15/bin/lessc $BOOTSTRAP_LESS > $BOOTSTRAP_OUTPUT
+/usr/local/n/versions/0.8.15/bin/lessc $BOOTSTRAP_RESPONSIVE_LESS > $BOOTSTRAP_RESPONSIVE_OUTPUT
 
 
 
