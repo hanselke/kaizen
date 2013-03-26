@@ -19,3 +19,7 @@
           |Complete (Ok)
         span(style="font-weight:bold",ng-show='!editAllStates') Msg:
         input.message(type="text",ng:model="taskMessage",ng-show='!editAllStates')
+        button.btn.action-task-cancel(ng:click='cancel()')
+          |Cancel
+        button.btn.action-task-onhold(ng:click='onHold()')
+          |On Hold

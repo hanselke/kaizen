@@ -16,6 +16,8 @@ class window.TaskController
     @$scope.taskCompleted = @taskCompleted
     @$scope.taskCompletedYes = @taskCompletedYes
     @$scope.taskCompletedNo = @taskCompletedNo
+    @$scope.onHold = @onHold
+    @$scope.cancel = @cancel
     @$scope.isFormStateActive = false
     @$scope.isFormYesNo = false
     @$scope.currentForm = null
@@ -52,6 +54,32 @@ class window.TaskController
       request = @$http.post "/api/tasks/#{taskId}/complete", resultData
       request.error (data, status, headers, config) =>
         @$scope.flashMessage "Failed to complete task - please try again"
+      request.success (data, status, headers, config) =>
+
+        @$scope.currentForm = null
+        @$location.path "/"
+        # Flash here
+
+  cancel: (resultData = {}) =>
+    if @$scope.activeTaskId
+      taskId = @$scope.activeTaskId
+
+      request = @$http.post "/api/tasks/#{taskId}/cancel", {}
+      request.error (data, status, headers, config) =>
+        @$scope.flashMessage "Failed to cancel task - please try again"
+      request.success (data, status, headers, config) =>
+
+        @$scope.currentForm = null
+        @$location.path "/"
+        # Flash here
+
+  onHold: (resultData = {}) =>
+    if @$scope.activeTaskId
+      taskId = @$scope.activeTaskId
+
+      request = @$http.post "/api/tasks/#{taskId}/onhold", {}
+      request.error (data, status, headers, config) =>
+        @$scope.flashMessage "Failed to put the task on hold - please try again"
       request.success (data, status, headers, config) =>
 
         @$scope.currentForm = null

@@ -18,6 +18,7 @@ module.exports = class RoutesOther
     @app.get '/app/main',@getMain
     @app.get '/app/task',@getTask
     @app.get '/app/admin/users',@getAdminUsers
+    @app.get '/app/admin/change-password',@getChangePassword
     @app.get '/app/admin/users/add',@getAdminUsersAdd
     @app.get '/app/admin/roles',@getAdminRoles
     @app.get '/app/admin/roles/add',@getAdminRolesAdd
@@ -41,6 +42,10 @@ module.exports = class RoutesOther
     res.render 'app/help/terms', #.ejs
           pretty: true
 
+
+  getChangePassword: (req,res,next) =>
+    res.render 'app/admin/users-changepassword',
+          pretty: true
 
   getApp: (req,res,next) =>
     res.render 'app/index', #.ejs

@@ -42,12 +42,19 @@ module.exports = TaskSchema = new mongoose.Schema
       stateCompleted: 
         type: Boolean
         default: false
+      previousState:
+        type: String
+        default: null
+
       nextState:
         type: String
         default: null
       name:
         type: String
       taskEnded: 
+        type: Boolean
+        default: false
+      onHold:
         type: Boolean
         default: false
 

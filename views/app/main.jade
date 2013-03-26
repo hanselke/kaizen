@@ -19,10 +19,14 @@
                           span.desc(style='font-weight:bold;') {{card.desc}}
                           span(ng:show='card.ready', style="color:green") ✓
                           
-                          p(style="clear:both")
+                          p(style="clear:both",ng:show='!card.isOnHold')
                             span A: {{card.totalActiveTimeAsString}}
                             |&nbsp;
                             span W: {{card.totalWaitingTimeAsString}}
+                          
+                          button.btn.btn-small.action-unonhold(style="white-space:nowrap;",ng:click='onunhold(card.id)',ng:show='card.isOnHold')
+                            |Reactivate
+
                           p(style="color:red;")
                             |{{card.message}}
                   
@@ -31,7 +35,7 @@
                       col(width='{{laneWidth}}', ng:repeat='lane in lanes')
                     tr
                       td( ng:repeat='lane in lanes2')
-                        .cycle
+                        .cycle(ng:show='lane.name!="onhold"')
                           .time(style='padding-left:10px;padding-right:10px')
                             span T:&nbsp;
                             span(style='font-weight:bold') {{lane.totalTimeLabel}}

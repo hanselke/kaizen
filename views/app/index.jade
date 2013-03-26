@@ -49,6 +49,9 @@ html(xmlns:ng='http://angularjs.org/', ng:app='myModule')
                   a(href='#/admin/process-definitions') Process Definitions
                 li.divider
                 li
+                  a.do-not-route(href='#admin/change-password') Change Password
+                li.divider
+                li
                   a.do-not-route(href='/users/sign-out') Sign Out
             li(ng:show='!currentUser')
               a.do-not-route(href="/users/sign-in") Sign In

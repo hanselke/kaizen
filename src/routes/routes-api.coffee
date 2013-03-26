@@ -17,6 +17,7 @@ module.exports = class RoutesApi
     throw new Error("bonitaTransformer parameter is required") unless @bonitaTransformer
     throw new Error("servicesBonita parameter is required") unless @servicesBonita
     throw new Error("servicesBonita.processName parameter is required") unless @servicesBonita.processName
+    throw new Error("identityStore parameter is required") unless @identityStore
 
   setupLocals: () =>
 
@@ -31,6 +32,10 @@ module.exports = class RoutesApi
     @app.post '/api/tasks/:taskId/data', @saveTaskData
     @app.get '/api/tasks/:taskId/data', @getTaskData
     @app.get '/api/tasks/:taskId/excel', @getExcel
+    @app.post '/api/tasks/:taskId/cancel', @cancelTask
+    @app.post '/api/tasks/:taskId/onhold', @onHoldTask
+    @app.post '/api/tasks/:taskId/onunhold', @onUnholdTask
+    
 
     @app.get '/api/admin/tasks', @getAdminTasks
     @app.get '/api/admin/users', @getAdminUsers
@@ -48,6 +53,7 @@ module.exports = class RoutesApi
     @app.get '/api/process-definitions/:processDefinitionId/form-css', @getProcessDefinitionCss
     @app.get '/api/process-definitions/:processDefinitionId/:taskId/form-html', @getProcessDefinitionHtml
 
+    @app.put '/api/me/password', @putMePassword
 
   ###
   Retrieve the current session (e.g. the user that is currently logged in). 
@@ -336,52 +342,6 @@ module.exports = class RoutesApi
             html = "#{html}"
             res.send html
 
-  ###
-  NEW CODE
-  ###
-  smData = 
-    initialState: 'qaChecks'
-    states:
-      end: 
-        hideFromlane: true
-      qaChecks: 
-        label: "QA Checks"
-        hideFromlane: false
-        allowedRoles: ['floor','admin']
-        formToShow: null
-        transitionToNextState: "shiftManagerApproval"
-        excelField: 'floor'
-      shiftManagerApproval:
-        label: "Shift Manager Approval"
-        hideFromlane: false
-        allowedRoles: ['shiftManager','admin']
-        formToShow: 'approveFloor'
-        transitionToNextState:
-          fn: "function(task,data,options) { return data.approvedByShiftManager ? \"productionManagerApproval\" : \"qaChecks\"};"
-        excelField: 'shift manager'
-      productionManagerApproval:
-        label: "Production Manager Approval"
-        hideFromlane: false
-        allowedRoles: ['productionManager','admin']
-        formToShow: 'approveShift'
-        transitionToNextState: 
-          fn: "function(task,data,options) { return data.approvedByProductionManager ? \"end\" : \"qaChecks\"};"
-        excelField: 'production manager'
-    forms:
-      approveFloor: 
-        fields:
-          formCompleted:
-            type: 'yesNoButton'
-            labels: ['Process Ok', 'Process Fail']
-            field: 'approvedByShiftManager'
-            completesTask: true
-      approveShift: 
-        fields:
-          formCompleted:
-            type: 'yesNoButton'
-            field: 'approvedByProductionManager'
-            labels: ['Process Ok', 'Process Fail']
-            completesTask: true
 
   _stateMachineForProcessDefinitionId: (processDefinitionId, cb) =>
     @_stateMachineForAny cb
@@ -458,17 +418,12 @@ module.exports = class RoutesApi
             name : name
 
           @dbStore.tasks.create payload,actorId : req.user._id, (err,item) =>
-            console.log "E"
-
             return next err if err
             item.id = item._id
             res.json item
 
   completeTask: (req,res,next) =>
     return res.json 401,{} unless req.user
-    console.log "GOT THIS"
-    console.log JSON.stringify(req.body)
-    console.log "GOT THIS---"
 
     data = req.body.fields || {}
     message = req.body.message || ''
@@ -545,11 +500,24 @@ module.exports = class RoutesApi
       @_stateMachineForAny (err, sm) =>
         return next err if err
 
+        board.lanes.push
+          label: "On Hold"
+          name: "onhold"
+          order: 0
+
+          activityDefinitions: [] # TBDeleted
+          id: '' # TBDeleted
+          totalTime : 0
+          totalActiveTime : 0
+          totalWaitingTime : 0 
+          cards: []
+
+
         for state,i in sm.getSwimlanes() || []
           board.lanes.push
             label: state.label
             name: state.name
-            order: i
+            order: i + 1
 
             activityDefinitions: [] # TBDeleted
             id: '' # TBDeleted
@@ -567,7 +535,11 @@ module.exports = class RoutesApi
             laneMap[lane.name] = lane for lane in board.lanes
 
             for task in pagedResult.items || []
+
               lane = laneMap[task.state]
+
+              if task.onHold
+                lane = laneMap["onhold"]
 
               if lane
                 lane.cards.push 
@@ -613,7 +585,6 @@ module.exports = class RoutesApi
         ###
         If this task does not have a state machine we sideline it
         ###
-        console.log "XX"
         @_stateMachineForProcessDefinitionId processDefinitionId, (err, sm) =>
           return next err if err
           # HERE WE NEED TO TRANSFORM req.user.roles into allowed states.
@@ -649,6 +620,7 @@ module.exports = class RoutesApi
               checkedOutByUserId: req.user.id || req.user._id
               activeTaskUUID: "" 
               activeActivityName: ""
+              previousState: task.state
               state: task.nextState
               nextState : null
               stateCompleted: false
@@ -671,3 +643,75 @@ module.exports = class RoutesApi
                 taskId : item._id
                 activeTask : item
 
+  ###
+  Receives a new password:
+  {
+    "password":"test"
+    "retypePassword":"t4wt"
+  }
+  ###
+  putMePassword: (req,res,next) =>
+    return res.json {},401 unless req.user
+
+    if req.body.password != req.body.retypePassword
+      return res.json 422, {message: "Passwords must match"}
+
+    userId = req.user.id || req.user._id;
+
+    @identityStore.users.setPassword userId, req.body.password, actorId : userId, (err, result) =>
+      return next err if err
+      res.json 200, {}
+
+  cancelTask: (req,res,next) =>
+    return res.json 401,{} unless req.user
+
+    @dbStore.tasks.get req.params.taskId, {}, (err,oldTask) =>
+      return next err if err
+      return new Error('task not found') unless oldTask
+
+      if !oldTask.previousState 
+        @dbStore.tasks.delete req.params.taskId, {}, (err) =>
+          return next err if err
+          return res.json {}
+      else
+        data = 
+          activeTaskUUID : null # to be deleted
+          checkedOutByUserId: null
+          checkedOutDate: null
+          checkedInDate : new Date()
+          nextState : oldTask.state
+          state : oldTask.previousState
+          stateCompleted: true
+          taskEnded : false
+
+        @dbStore.tasks.patch req.params.taskId, data, {}, (err,item) =>
+          return next err if err
+          res.json item
+
+  onHoldTask: (req,res,next) =>
+    return res.json 401,{} unless req.user
+
+    @dbStore.tasks.get req.params.taskId, {}, (err,oldTask) =>
+      return next err if err
+      return new Error('task not found') unless oldTask
+
+      data = 
+        onHold : true 
+
+      @dbStore.tasks.patch req.params.taskId, data, {}, (err,item) =>
+        return next err if err
+        res.json item
+
+  onUnholdTask: (req,res,next) =>
+    return res.json 401,{} unless req.user
+
+    @dbStore.tasks.get req.params.taskId, {}, (err,oldTask) =>
+      return next err if err
+      return new Error('task not found') unless oldTask
+
+      data = 
+        onHold : false 
+
+      @dbStore.tasks.patch req.params.taskId, data, {}, (err,item) =>
+        return next err if err
+        res.json item

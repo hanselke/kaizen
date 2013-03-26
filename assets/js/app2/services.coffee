@@ -18,6 +18,7 @@ rpFn = ($routeProvider) ->
                 .when("/admin/tasks", {templateUrl: "admin/tasks",controller: AdminTasksController})
                 .when("/admin/roles", {templateUrl: "admin/roles",controller: AdminRolesController})
                 .when("/admin/roles/add", {templateUrl: "admin/roles/add",controller: AdminRolesAddController})
+                .when("/admin/change-password", {templateUrl: "admin/change-password",controller: AdminChangePasswordController})
                 .when("/help", {templateUrl: "help",controller: HelpController})
                 .when("/help/setup", {templateUrl: "help/setup",controller: HelpController})
                 .when("/help/terms", {templateUrl: "help/terms",controller: HelpController})

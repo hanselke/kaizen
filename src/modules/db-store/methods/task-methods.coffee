@@ -8,8 +8,8 @@ ObjectId = mongoose.Types.ObjectId
 
 
 module.exports = class TaskMethods
-  CREATE_FIELDS = ['_id','processDefinitionId','checkedOutByUserId','createdBy','state','checkedOutDate','totalWaitingTime','totalActiveTime','activeActivityName','stateCompleted','nextState','name','taskEnded','checkedInDate','message','timePerState']
-  UPDATE_FIELDS = ['processDefinitionId','checkedOutByUserId','state','checkedOutDate','totalWaitingTime','totalActiveTime','activeActivityName','stateCompleted','nextState','name','taskEnded','checkedInDate','message','timePerState']
+  CREATE_FIELDS = ['_id','processDefinitionId','checkedOutByUserId','createdBy','state','checkedOutDate','totalWaitingTime','totalActiveTime','activeActivityName','stateCompleted','nextState','name','taskEnded','checkedInDate','message','timePerState','previousState','onHold']
+  UPDATE_FIELDS = ['processDefinitionId','checkedOutByUserId','state','checkedOutDate','totalWaitingTime','totalActiveTime','activeActivityName','stateCompleted','nextState','name','taskEnded','checkedInDate','message','timePerState','previousState','onHold']
 
   constructor:(@models) ->
 
@@ -142,7 +142,7 @@ module.exports = class TaskMethods
   getActiveTask: (userId,options = {}, cb) =>
     userId = userId.toString()
     # ,state: 'active'
-    @models.Task.findOne {checkedOutByUserId : userId}, (err,item) =>
+    @models.Task.findOne {checkedOutByUserId : userId, onHold : false}, (err,item) =>
       return cb err if err
       cb null, item
 
@@ -153,6 +153,14 @@ module.exports = class TaskMethods
     @models.Task.findOne _id : taskId, (err,item) =>
       return cb err if err
       cb null, item
+
+  ###
+  Retrieve a single processDefinition-item through it's id
+  ###
+  delete: (taskId,options = {}, cb = ->) =>
+    @models.Task.remove _id : taskId, (err) =>
+      return cb err if err
+      cb null
 
   patch: (taskId, obj = {}, options={}, cb = ->) =>
     @models.Task.findOne _id : taskId, (err,item) =>

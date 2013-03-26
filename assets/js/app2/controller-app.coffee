@@ -21,6 +21,7 @@ class window.AppController
     @chat_socket = io.connect '/'
     @loadSession()
 
+
   ###
   On startup loads the current session, and if available the active task for the logged in user.
   ###

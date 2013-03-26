@@ -19,14 +19,29 @@ humanizeTime = (time) ->
   return ""
 
 class window.MainController
-  constructor: (@$scope,@$http) ->
+  constructor: (@$scope,@$http,@$location) ->
     @$scope.lane_headings = {}
     @$scope.lanes = []
     @$scope.lanes2 = []
     #@$scope.colsFromLanes = []
     #@$scope.tdFromLanes = []
-    
+    @$scope.onunhold = @onUnhold
+
     @refresh()
+
+
+  onUnhold: (taskId) =>
+    request = @$http.post "/api/tasks/#{taskId}/onunhold", {}
+    request.error (data, status, headers, config) =>
+      @$scope.flashMessage "Failed to activate the task - please try again"
+    request.success (data, status, headers, config) =>
+
+      @$scope.currentForm = null
+      @$scope.activeTaskId = taskId
+
+      @$scope.isBoardStateActive = !@$scope.activeTaskId
+
+      @$location.path "/task/#{@$scope.activeTaskId}"
 
   refresh: () =>
     request = @$http.get "/api/board"
@@ -41,6 +56,7 @@ class window.MainController
         @$scope.cards[x.name] = x.cards
         
         for card in x.cards || []
+          card.isOnHold = x.name is "onhold"
           card.totalActiveTimeAsString = humanizeTime(card.totalActiveTime / 1000)
           card.totalWaitingTimeAsString = humanizeTime(card.totalWaitingTime / 1000)
 
@@ -186,4 +202,4 @@ window.MainController:: =
   getClassForMsg: (line) ->
     "my-message"  if line.name is @currentUser.name
 ###
-window.MainController.$inject = ['$scope',"$http"]
+window.MainController.$inject = ['$scope',"$http","$location"]
