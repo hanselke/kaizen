@@ -2,14 +2,11 @@
 
 ===
 
-2 - when you use a tablet, you can't click on the menu so you can't sign out. the popup appears but you just can't click it
+simple (+ - * /) mathematical operations in excel - allow system to process excel formulas, maybe via symbols like ##B1 + B2
 
 ===
 
-simple (+ - * /) mathematical operations in excel - allow system to process excel formulas, maybe via symbols like ##B1 + B2
-
 maybe
-
 
 4. Can we display  Created by Who, Created Date, Approved by Who, Approval Date data under the 'task' list?
 
