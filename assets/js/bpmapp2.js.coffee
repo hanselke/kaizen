@@ -1,3 +1,4 @@
+#= require app2/client-parser
 #= require app2/directives
 #= require app2/filters
 #= require app2/controller-app

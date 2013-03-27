@@ -1,9 +1,4 @@
-3 - data download/storage bug
-
-===
-
-simple (+ - * /) mathematical operations in excel - allow system to process excel formulas, maybe via symbols like ##B1 + B2
-
+3. add creator info to tasks (cache creator)
 ===
 
 maybe

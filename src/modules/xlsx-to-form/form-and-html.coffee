@@ -1,4 +1,6 @@
 HtmlWriter=  require './html-writer'
+Encoder = require('node-html-encoder').Encoder
+numericalEncoder = new Encoder('numerical')
 
 class FormAndHmtl
 
@@ -126,8 +128,21 @@ class FormAndHmtl
                 writer.popTag()
             else
               writer.pushTag "span"
-              writer.addAttribute "class", "text-element" if cell.text && cell.text.length > 0
-              writer.writeTextPlain cell.text
+
+              ###
+              At this point the text is html encode with stuff like &#35;&#35; in it.
+              We need to decode that
+              ###
+              if cell.text && cell.text.length > 0 && numericalEncoder.htmlDecode(cell.text).indexOf("##") is 0
+                writer.addAttribute "data-row", r
+                writer.addAttribute "data-cell", c
+                writer.addAttribute "data-formula", numericalEncoder.htmlDecode(cell.text).substring(2)
+                writer.addAttribute "class", "text-element formula-element"
+                writer.writeTextPlain ""
+              else
+                writer.addAttribute "class", "text-element" if cell.text && cell.text.length > 0
+                writer.writeTextPlain cell.text
+
               writer.popTag()
 
 

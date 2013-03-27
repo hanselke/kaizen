@@ -27,6 +27,8 @@ class window.TaskController
 
     @loadFormData()
 
+    @$scope.formulas = []
+
   taskCompletedYes: () =>
     data =
       fields: {}
@@ -98,29 +100,79 @@ class window.TaskController
       $(".xlsl-form-container").load "/api/process-definitions/#{result.processDefinitionId}/#{@$routeParams.taskId}/form-html?cb=#{cacheBuster}&editAllStates=#{@$scope.editAllStates}", () =>
         $(".xlsl-form-container input").focusout @onFocusout
         for row in result.items
+
           $("input.r-#{row.r}.c-#{row.c}").val(row.v)
           $("span.r-#{row.r}.c-#{row.c}").text(row.v)
+
+        @$scope.formulas = []
+
+        $(".xlsl-form-container .formula-element").each (i,v) =>
+          @$scope.formulas.push
+            el : $(v)
+            formula: $(v).data('formula')
 
         @$scope.isFormYesNo = !!result.form
         @$scope.currentForm = result.form
         @$scope.isFormStateActive = true
+
+        @calculateSheet()
+
         @$scope.$apply()
 
   onFocusout: (e) =>
     $target = $(e.target)
 
-    payload = [
+    payload = @calculateSheet()
+
+    payload.push
       r: $target.data('row')
       c: $target.data('cell')
       v: $target.val()
-    ]
 
     request = @$http.post "/api/tasks/#{@$routeParams.taskId}/data", payload
-    #request.error @$scope.errorHandler
-    #request.success (data, status, headers, config) =>
 
 
-    #alert "focusout #{$(e.target).val()}"
+  getCellValue: (rowFromZero,colFromZero) =>
+    $inputV = $(".xlsl-form-container input.r-#{rowFromZero}.c-#{colFromZero}")
+    $spanV =  $(".xlsl-form-container span.r-#{rowFromZero}.c-#{colFromZero}")
+
+    if $inputV.length == 1
+      return parseFloat($inputV.val())
+    if $spanV.length == 1
+      return parseFloat($spanV.text())
+
+    return 0
+
+  ###
+  Calculates all formulas and returns an array of calculated values
+  ###
+  calculateSheet: () =>
+    results = []
+
+    window.resolveCell = (row,col) =>
+      rowInt = parseInt(row) - 1
+      col = col.toLowerCase()
+      colInt = 0
+      for i in [0..col.length - 1]
+        c = col.charCodeAt(i) - 'a'.charCodeAt(i)
+        colInt += (col.length - i) * c
+
+      return @getCellValue(rowInt,colInt)
+
+    for formula in @$scope.formulas
+      try 
+        f = formula.formula.replace(/\s+/g, ' ') # We need to remove whitespace for peg
+        res = window.parser.parse(f)
+        formula.el.text res
+        results.push
+          r: formula.el.data('row')
+          c: formula.el.data('cell')
+          v: res
+
+      catch e
+        formula.el.text "#error"
+
+    return results
 
 window.TaskController.$inject = ['$scope',"$http",'$routeParams','$location']
 
