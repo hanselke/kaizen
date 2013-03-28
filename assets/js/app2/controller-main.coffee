@@ -18,6 +18,13 @@ humanizeTime = (time) ->
 
   return ""
 
+containsAnyOf = (list = [],anyOf = []) ->
+  for x in anyOf
+    return true if _.contains(list, x) 
+
+  return false
+
+
 class window.MainController
   constructor: (@$scope,@$http,@$location,@$compile) ->
     @$scope.lane_headings = {}
@@ -61,6 +68,8 @@ class window.MainController
           card.totalActiveTimeAsString = humanizeTime(card.totalActiveTime / 1000)
           card.totalWaitingTimeAsString = humanizeTime(card.totalWaitingTime / 1000)
           card.updatedAtAsString = card.updatedAt # humanizeTime(card.updatedAt / 1000)
+          console.log "CARD:ROLES: #{card.roles}"
+          card.canBeActivated = !!card.roles and containsAnyOf(card.roles,@$scope.currentUser.roles || [])
 
       aWidth = 0
       if data.lanes.length > 0

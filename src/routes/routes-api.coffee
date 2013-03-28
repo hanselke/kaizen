@@ -493,6 +493,7 @@ module.exports = class RoutesApi
 
   _addUsernameToTasks: (lanes, cb) =>
     @usernameMap = {} unless @usernameMap 
+    @rolesMap = {} unless @rolesMap 
 
     unresolvedUserIds = {}
 
@@ -500,6 +501,7 @@ module.exports = class RoutesApi
       for card in lane.cards
         if card.userId
           card.username = @usernameMap[card.userId]
+          card.roles = @rolesMap[card.userId] || []
           unresolvedUserIds[card.userId] = true unless @usernameMap[card.userId]
 
     if _.keys(unresolvedUserIds).length == 0 
@@ -507,15 +509,18 @@ module.exports = class RoutesApi
     else
 
       idList = _.map _.keys(unresolvedUserIds), (x) -> new ObjectId x.toString()
-      @identityStore.models.User.find({}).where('_id').in(idList).select('_id username').exec (err, items) =>
+      @identityStore.models.User.find({}).where('_id').in(idList).select('_id username roles').exec (err, items) =>
         return cb err if err
         items ||= []
 
-        @usernameMap[item._id.toString()] = item.username for item in items
+        for item in items
+          @usernameMap[item._id.toString()] = item.username 
+          @rolesMap[item._id.toString()] = item.roles || []
 
         for lane in lanes
           for card in lane.cards
             card.username = @usernameMap[card.userId] if card.userId
+            card.roles = @rolesMap[card.userId] if card.userId
         cb null
 
   getBoard: (req,res,next) =>

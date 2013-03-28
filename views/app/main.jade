@@ -28,7 +28,7 @@
                             span {{card.username}}
 
                           p(style="clear:both",ng:show='card.isOnHold')
-                            button.btn.btn-small.action-unonhold(style="white-space:nowrap;",ng:click='onunhold(card.id)',ng:show='card.isOnHold')
+                            button.btn.btn-small.action-unonhold(style="white-space:nowrap;",ng:click='onunhold(card.id)',ng:show='card.canBeActivated')
                               |Reactivate
                             span(style="font-size:10px") &nbsp;Updated: {{card.updatedAt | date:'MM-dd HH:mm'}}
 
