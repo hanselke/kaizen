@@ -555,6 +555,8 @@ module.exports = class RoutesApi
                     totalTime :  task.totalActiveTime + task.totalWaitingTime
                     message: task.message || ''
                     isOnHold: task.onHold
+                    updatedAt : task.updatedAt
+                    username : task.checkedOutByUserId
 
             for state,val of states
               lane = laneMap[state]

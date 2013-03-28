@@ -59,6 +59,7 @@ class window.MainController
           #card.isOnHold = x.name is "onhold"
           card.totalActiveTimeAsString = humanizeTime(card.totalActiveTime / 1000)
           card.totalWaitingTimeAsString = humanizeTime(card.totalWaitingTime / 1000)
+          card.updatedAtAsString = card.updatedAt # humanizeTime(card.updatedAt / 1000)
 
       aWidth = 0
       if data.lanes.length > 0

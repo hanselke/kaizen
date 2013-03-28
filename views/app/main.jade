@@ -24,8 +24,13 @@
                             |&nbsp;
                             span W: {{card.totalWaitingTimeAsString}}
                           
-                          button.btn.btn-small.action-unonhold(style="white-space:nowrap;",ng:click='onunhold(card.id)',ng:show='card.isOnHold')
-                            |Reactivate
+                          p(style="font-size:10px;color:#555;")
+                            span {{card.username}}
+
+                          p(style="clear:both",ng:show='card.isOnHold')
+                            button.btn.btn-small.action-unonhold(style="white-space:nowrap;",ng:click='onunhold(card.id)',ng:show='card.isOnHold')
+                              |Reactivate
+                            span(style="font-size:10px") &nbsp;Updated: {{card.updatedAt | date:'MM-dd HH:mm'}}
 
                           p(style="color:red;")
                             |{{card.message}}

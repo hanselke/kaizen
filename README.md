@@ -1,4 +1,7 @@
-3. add creator info to tasks (cache creator)
+Add username to task
+resume only if belonging to that role that the user is who checked it out
+add form name to task (this is implicit by the prefix???)
+
 ===
 
 maybe
