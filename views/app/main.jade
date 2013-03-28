@@ -72,7 +72,7 @@
         span(style='font-size:16px') Actions:
         button.btn.btn-primary.action-next-task(style="white-space:nowrap;",ng:click='nextTask()')
           |Next Action
-        button.btn.action-create-task-menu(ng:click='createMenu()') Create Tasks
+        button.btn.action-create-task-menu(ng:click='createMenu()') Tasks
 
         button.btn(ng:click='createTask(item._id)',ng:repeat='item in createableTasks',ng:show='false') Create {{item.name}} Task
 
