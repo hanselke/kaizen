@@ -174,6 +174,7 @@ class window.TaskController
 
     return results
 
+
 window.TaskController.$inject = ['$scope',"$http",'$routeParams','$location']
 
 

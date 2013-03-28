@@ -19,13 +19,14 @@ humanizeTime = (time) ->
   return ""
 
 class window.MainController
-  constructor: (@$scope,@$http,@$location) ->
+  constructor: (@$scope,@$http,@$location,@$compile) ->
     @$scope.lane_headings = {}
     @$scope.lanes = []
     @$scope.lanes2 = []
     #@$scope.colsFromLanes = []
     #@$scope.tdFromLanes = []
     @$scope.onunhold = @onUnhold
+    @$scope.createMenu = @createMenu
 
     @refresh()
 
@@ -81,126 +82,22 @@ class window.MainController
 
       @$scope.lanes2 = data.lanes 
 
-      ###
-      for l in data.lanes 
-        @$scope.lanes2.push 
-          _.object {}
-        _.each data.lanes, (x) =>
+  createMenu: () =>
+    buttonRow = ""
 
-       _.object( _.map( data.lanes, (x) -> [x.name,x]))
-      ###
-      
-      #@$scope.colsFromLanes = @colsFromLanes @$scope.lanes
-      #@$scope.tdFromLanes = @tdFromLanes @$scope.lanes2
-
-  ###
-  colsFromLanes: (lanes = []) =>
-    res = []
-
-    aWidth = 0
-    bWidth = 0
-
-    if lanes.length > 0
-      aWidth = 100 / lanes.length
-      bWidth = aWidth / 3 * 1
-      aWidth = aWidth - bWidth
-
-    for lane in lanes
-      res.push width : "#{aWidth}%" 
-      res.push width : "#{bWidth}%" 
-    res
-  ###
-
-  ###
-  tdFromLanes: (lanes2 = {}) =>
-    res = []
-
-    for k in _.keys(lanes2)
-      lane = lanes2[k]
-      res.push 
-        klass : "value"
-        label : humanizeTime(lane.executionTime)
-      res.push 
-        klass : "wait" 
-        label : humanizeTime(lane.waitingTime)
-    res
-  ###
-
-    ###
-    that = this
-    @chat_socket.on "msg", (data) =>
-      that.chat_lines.push data
-      that.$digest()
-
-      that.$defer =>
-        try
-          $("#chat_window")[0].scrollTop = 9999
-      
-
-    @chat_socket.on "lines", (data) ->
-      that.chat_lines = data.lines
-      that.$digest()
-      that.$defer ->
-        try
-          $("#chat_window")[0].scrollTop = 9999
-    ###
+    for ct in @$scope.createableTasks
+      buttonRow += "<button class=\"btn\" data-taskid=\"#{ct._id}\" ng:click='createTask(\"#{ct._id}\")'>#{ct.name}</button>"
+    
+    #button.btn(ng:click='createTask(item._id)',ng:repeat='item in createableTasks') Create {{item.name}} Task
 
 
-###
-window.MainController = (@$scope)->
-  @$scopelane_headings = {}
-  @$scopelanes = []
-  
-  @refresh()
-  that = this
-  @chat_socket.on "msg", (data) ->
-    that.chat_lines.push data
-    that.$digest()
-    that.$defer ->
-      try
-        $("#chat_window")[0].scrollTop = 9999
+    $('.action-create-task-menu').popover
+      html : true
+      placement : 'top'
+      title: 'Create a New Task'
+      content: @$compile(buttonRow)(@$scope)
+    $('.action-create-task-menu').popover('show')
 
 
-  @chat_socket.on "lines", (data) ->
-    that.chat_lines = data.lines
-    that.$digest()
-    that.$defer ->
-      try
-        $("#chat_window")[0].scrollTop = 9999
 
-
-  @chat_socket.emit "lines", {}
-window.MainController:: =
-  refresh: ->
-    that = this
-    request = @$http.get("/api/board")
-    request.success (data, status, headers, config) =>
-      window.lanesBoard = res.lanes
-      that.cards = {}
-      that.lane_headings = {}
-      _.each res.lanes, (x) ->
-        that.lane_headings[x.name] = x.label
-        that.cards[x.name] = x.cards
-
-      that.laneWidth = "10.00%"
-      that.lanes = _.map res.lanes, (x) -> x.name
-
-    request.error that.errorHandler
-
-  sendMsg: ->
-    data =
-      msg: @message
-      name: @currentUser.name
-      time: new Date()
-
-    @chat_lines.push data
-    @chat_socket.emit "msg", data
-    @message = ""
-    @$defer ->
-      $("#chat_window")[0].scrollTop = 9999
-
-
-  getClassForMsg: (line) ->
-    "my-message"  if line.name is @currentUser.name
-###
-window.MainController.$inject = ['$scope',"$http","$location"]
+window.MainController.$inject = ['$scope',"$http","$location","$compile"]
