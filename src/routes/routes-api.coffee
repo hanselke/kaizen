@@ -6,6 +6,9 @@ fs = require 'fs'
 xlsxToForm = require '../modules/xlsx-to-form'
 stateMachinePackage = require '../modules/state-machine'
 
+mongoose = require "mongoose"
+ObjectId = mongoose.Types.ObjectId
+
 
 
 module.exports = class RoutesApi
@@ -487,6 +490,34 @@ module.exports = class RoutesApi
       return next new Error("Process definition not found") unless processDefinition
       next null, processDefinition._id
 
+
+  _addUsernameToTasks: (lanes, cb) =>
+    @usernameMap = {} unless @usernameMap 
+
+    unresolvedUserIds = {}
+
+    for lane in lanes
+      for card in lane.cards
+        if card.userId
+          card.username = @usernameMap[card.userId]
+          unresolvedUserIds[card.userId] = true unless @usernameMap[card.userId]
+
+    if _.keys(unresolvedUserIds).length == 0 
+      cb null # All done
+    else
+
+      idList = _.map _.keys(unresolvedUserIds), (x) -> new ObjectId x.toString()
+      @identityStore.models.User.find({}).where('_id').in(idList).select('_id username').exec (err, items) =>
+        return cb err if err
+        items ||= []
+
+        @usernameMap[item._id.toString()] = item.username for item in items
+
+        for lane in lanes
+          for card in lane.cards
+            card.username = @usernameMap[card.userId] if card.userId
+        cb null
+
   getBoard: (req,res,next) =>
     return res.json {},401 unless req.user
 
@@ -556,7 +587,7 @@ module.exports = class RoutesApi
                     message: task.message || ''
                     isOnHold: task.onHold
                     updatedAt : task.updatedAt
-                    username : task.checkedOutByUserId
+                    userId : task.checkedOutByUserId
 
             for state,val of states
               lane = laneMap[state]
@@ -566,7 +597,8 @@ module.exports = class RoutesApi
             for lane in board.lanes
               lane.cards = _.sortBy lane.cards, (card) -> "#{card.isOnHold}-#{card.desc}"
 
-            res.json board
+            @_addUsernameToTasks board.lanes, (err) =>
+              res.json board
 
   ###
   Retrieves the next task, if any, for the current user.
