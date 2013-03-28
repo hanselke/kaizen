@@ -500,6 +500,7 @@ module.exports = class RoutesApi
       @_stateMachineForAny (err, sm) =>
         return next err if err
 
+        ###
         board.lanes.push
           label: "On Hold"
           name: "onhold"
@@ -511,7 +512,7 @@ module.exports = class RoutesApi
           totalActiveTime : 0
           totalWaitingTime : 0 
           cards: []
-
+        ###
 
         for state,i in sm.getSwimlanes() || []
           board.lanes.push
@@ -538,8 +539,10 @@ module.exports = class RoutesApi
 
               lane = laneMap[task.state]
 
+              ###
               if task.onHold
                 lane = laneMap["onhold"]
+              ###
 
               if lane
                 lane.cards.push 
@@ -551,11 +554,15 @@ module.exports = class RoutesApi
                     totalWaitingTime: task.totalWaitingTime
                     totalTime :  task.totalActiveTime + task.totalWaitingTime
                     message: task.message || ''
+                    isOnHold: task.onHold
 
             for state,val of states
               lane = laneMap[state]
               if lane
                 _.extend lane, val
+
+            for lane in board.lanes
+              lane.cards = _.sortBy lane.cards, (card) -> "#{card.isOnHold}-#{card.desc}"
 
             res.json board
 

@@ -56,7 +56,7 @@ class window.MainController
         @$scope.cards[x.name] = x.cards
         
         for card in x.cards || []
-          card.isOnHold = x.name is "onhold"
+          #card.isOnHold = x.name is "onhold"
           card.totalActiveTimeAsString = humanizeTime(card.totalActiveTime / 1000)
           card.totalWaitingTimeAsString = humanizeTime(card.totalWaitingTime / 1000)
 
