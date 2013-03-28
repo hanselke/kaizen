@@ -83,11 +83,11 @@ class window.MainController
       @$scope.lanes2 = data.lanes 
 
   createMenu: () =>
-    buttonRow = ""
+    buttonRow = "<div style='width:240px;height:100%;overflow-y:scroll;'>"
 
     for ct in @$scope.createableTasks
-      buttonRow += "<button class=\"btn\" data-taskid=\"#{ct._id}\" ng:click='createTask(\"#{ct._id}\")'>#{ct.name}</button>"
-    
+      buttonRow += "<button class=\"btn\" style='margin-right:10px; margin-bottom:4px;margin-top:4px;' data-taskid=\"#{ct._id}\" ng:click='createTask(\"#{ct._id}\")'>#{ct.name}</button>"
+    buttonRow += "</div>" 
     #button.btn(ng:click='createTask(item._id)',ng:repeat='item in createableTasks') Create {{item.name}} Task
 
 
