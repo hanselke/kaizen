@@ -91,12 +91,15 @@ class window.MainController
     #button.btn(ng:click='createTask(item._id)',ng:repeat='item in createableTasks') Create {{item.name}} Task
 
 
-    $('.action-create-task-menu').popover
-      html : true
-      placement : 'top'
-      title: 'Create a New Task'
-      content: @$compile(buttonRow)(@$scope)
-    $('.action-create-task-menu').popover('show')
+    if ! @popupCreateMenu
+      $('.action-create-task-menu').popover
+        html : true
+        placement : 'top'
+        title: 'Create a New Task'
+        content: @$compile(buttonRow)(@$scope)
+      @popupCreateMenu = true
+
+      $('.action-create-task-menu').popover('show')
 
 
 
