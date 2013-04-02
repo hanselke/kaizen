@@ -29,13 +29,13 @@ module.exports = class RoutesApi
     @app.get '/api/session', @getSession
 
     # TODO: Ensure that we have a user here
-    @app.get '/api/board', @getBoard
-    @app.get '/api/tasks/next-task', @getNextTask
+    @app.get  '/api/board', @getBoard
     @app.post '/api/tasks', @createTask
+    @app.get  '/api/tasks/next-task', @getNextTask
     @app.post '/api/tasks/:taskId/complete', @completeTask
     @app.post '/api/tasks/:taskId/data', @saveTaskData
-    @app.get '/api/tasks/:taskId/data', @getTaskData
-    @app.get '/api/tasks/:taskId/excel', @getExcel
+    @app.get  '/api/tasks/:taskId/data', @getTaskData
+    @app.get  '/api/tasks/:taskId/excel', @getExcel
     @app.post '/api/tasks/:taskId/cancel', @cancelTask
     @app.post '/api/tasks/:taskId/onhold', @onHoldTask
     @app.post '/api/tasks/:taskId/onunhold', @onUnholdTask
@@ -333,11 +333,11 @@ module.exports = class RoutesApi
 
     processDefinitionId = req.body.processDefinitionId
 
-    @dbStore.processDefinitions.get2 req.body.processDefinitionId,{select: '_id taskNamePrefix'}, (err,processDefinition) =>
+    @dbStore.processDefinitions.get2 req.body.processDefinitionId,{select: '_id taskNamePrefix stateMachine'}, (err,processDefinition) =>
       return next err if err
       return next new Error("createTask - Process definition #{processDefinitionId} not found") unless processDefinition
 
-      @_stateMachineForProcessDefinitionId req.body.processDefinitionId, (err, sm) =>
+      stateMachineForProcessDefinition processDefinition, (err, sm) =>
         return next err if err
 
         @dbStore.tasks.countTasksForProcessDefinitionId req.body.processDefinitionId,{}, (err,count) =>
