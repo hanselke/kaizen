@@ -1,9 +1,5 @@
-popup scrollable
-resume only if belonging to that role that the user is who checked it out
----
 style it better
 ===
-
 maybe
 
 4. Can we display  Created by Who, Created Date, Approved by Who, Approval Date data under the 'task' list?
