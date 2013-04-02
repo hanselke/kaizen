@@ -38,8 +38,9 @@
               |{{processDefinition.name}}
             td
               button.btn(ng-click="edit(processDefinition._id)") Edit
-              button.btn(ng-click="editForm(processDefinition._id)") Upload Excel
+              // button.btn(ng-click="editForm(processDefinition._id)") Upload Excel
               button.btn(ng-click="editLayout(processDefinition._id)") Upload Layout
+              button.btn(ng-click="validate(processDefinition._id)") Validate
               button.btn.btn-warning(ng-click="deleteMe(processDefinition._id)") Delete
 
         

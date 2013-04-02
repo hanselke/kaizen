@@ -53,8 +53,9 @@ module.exports = class RoutesApi
     @app.post '/api/admin/users/:userId/roles/:role', @addRole
     @app.delete '/api/admin/users/:userId/roles/:role', @deleteRole
 
-    @app.get '/api/process-definitions/:processDefinitionId/form-css', @getProcessDefinitionCss
-    @app.get '/api/process-definitions/:processDefinitionId/:taskId/form-html', @getProcessDefinitionHtml
+    #@app.get '/api/process-definitions/:processDefinitionId/validate', @validateProcessDefinition
+    #@app.get '/api/process-definitions/:processDefinitionId/form-css', @getProcessDefinitionCss
+    #@app.get '/api/process-definitions/:processDefinitionId/:taskId/form-html', @getProcessDefinitionHtml
 
     @app.put '/api/me/password', @putMePassword
 
@@ -195,6 +196,13 @@ module.exports = class RoutesApi
         return next err if err
         res.json result
 
+
+  validateProcessDefinition: (req,res,next) =>
+    processDefinitionId = req.params.processDefinitionId
+    @dbStore.processDefinitions.get processDefinitionId,null,true, (err,item) =>
+      return next err if err
+
+      res.json {}
 
   ###
   http://localhost:8001/api/process-definitions/5101f5620cb4645c7800000b/form-css

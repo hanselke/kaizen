@@ -1,3 +1,26 @@
+Creatable by roles correct (and initial state must match)
+Check if all roles do actually exist.
+detected formulas
+check if formulas can be parsed
+
+Add version to it
+
+[3/30/13 8:33:44 PM] Hansel Ke: hey...sorry i dont quite get the    "transitionToNextState": {
+        "fn": "function(task,data,options) { return data.approvedByShiftManager ? \"productionManagerApproval\" : \"qaChecks\"};"
+      },
+[3/30/13 8:35:27 PM] Hansel Ke: i -think-  return data.approvedByProductionManager ? returns a true or false depending on if the action is done
+[3/30/13 8:35:49 PM] Hansel Ke: but i dont quite get get syntax
+[3/30/13 8:35:59 PM] Hansel Ke:         "formCompleted": {
+          "type": "yesNoButton",
+          "labels": ["Process Ok", "Process Fail"],
+          "field": "approvedByShiftManager",
+          "completesTask": true
+[3/30/13 8:37:51 PM] Hansel Ke: i dont get where the field gets edited and how, since there are 2 options to the button
+
+
+
+
+
 style it better
 ===
 maybe

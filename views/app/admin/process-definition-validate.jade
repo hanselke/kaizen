@@ -1,0 +1,28 @@
+
+.row.page-container
+  .container-fluid
+    .span3(style="margin-top:40px")
+      .well
+        ul.nav.nav-list
+          li.nav-header
+            |Process Definitions
+          li
+            a(href="#/admin/process-definitions") Overview
+      .well
+        ul.nav.nav-list
+          li.nav-header
+            |More Admin
+          li
+            a(href="#/admin/users") Users
+          li
+            a(href="#/admin/tasks") Tasks
+          li
+            a(href="#/admin/roles") Roles
+
+    .span9
+      h2 
+        |Validating&nbsp;
+        span {{validationResult.processDefinition.name}}
+      .validation-result
+        p {{validationAsText}}
+        

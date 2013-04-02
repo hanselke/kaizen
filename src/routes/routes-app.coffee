@@ -27,6 +27,7 @@ module.exports = class RoutesOther
     @app.get '/app/admin/process-definitions/form',@getAdminProcessDefinitionsForm
     @app.get '/app/admin/process-definitions/layout',@getAdminProcessDefinitionsLayout
     @app.get '/app/admin/process-definitions/edit',@getAdminProcessDefinitionsEdit
+    @app.get '/app/admin/process-definitions/validate',@getAdminProcessDefinitionsValidate
     @app.get '/app/admin/tasks',@getAdminTasks
     @app.get '/app/help',@getHelp
     @app.get '/app/help/terms',@getHelpTerms
@@ -99,4 +100,8 @@ module.exports = class RoutesOther
 
   getAdminProcessDefinitionsEdit: (req,res,next) =>
     res.render 'app/admin/process-definition-edit',
+          pretty: true
+
+  getAdminProcessDefinitionsValidate: (req,res,next) =>
+    res.render 'app/admin/process-definition-validate',
           pretty: true

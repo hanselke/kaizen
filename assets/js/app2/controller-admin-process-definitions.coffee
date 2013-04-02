@@ -4,6 +4,7 @@ class window.AdminProcessDefinitionsController
     @$scope.editForm = @editForm
     @$scope.editLayout = @editLayout
     @$scope.edit = @edit
+    @$scope.validate = @validate
 
     @$scope.processDefinitions = []
     @refresh()
@@ -29,5 +30,8 @@ class window.AdminProcessDefinitionsController
 
   edit: (processDefinitionId) =>
     @$location.path "/admin/process-definitions/#{processDefinitionId}/edit"
+
+  validate: (processDefinitionId) =>
+    @$location.path "/admin/process-definitions/#{processDefinitionId}/validate"
 
 window.AdminProcessDefinitionsController.$inject = ['$scope',"$http","$location"]

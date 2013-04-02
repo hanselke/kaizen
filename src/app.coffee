@@ -62,6 +62,7 @@ RoutesAdminUsers = require './routes/routes-admin-users'
 RoutesUsers = require './routes/routes-users'
 RoutesSetup = require './routes/routes-setup'
 RoutesApi = require './routes/routes-api'
+RoutesApiProcessDefinitions = require './routes/routes-api-process-definitions'
 RoutesApp = require './routes/routes-app'
 RoutesProxy = require './routes/routes-proxy'
 RoutesApiAdminProcessDefinitions = require './routes/routes-api-admin-process-definitions'
@@ -260,6 +261,7 @@ module.exports = class App
       adminUsers: new RoutesAdminUsers settings
       routesUsers: new RoutesUsers settings
       routesSetup: new RoutesSetup settings
+      RoutesApiProcessDefinitions: new RoutesApiProcessDefinitions settings
       routesApi: new RoutesApi settings,config.get('services:bonita')
       routesApp: new RoutesApp settings
       routesProxy: new RoutesProxy settings,config.get('services:bonita')
