@@ -1,7 +1,10 @@
+
+
 Creatable by roles correct (and initial state must match)
 Check if all roles do actually exist.
 detected formulas
 check if formulas can be parsed
+
 
 Add version to it
 

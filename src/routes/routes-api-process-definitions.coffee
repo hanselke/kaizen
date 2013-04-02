@@ -10,6 +10,8 @@ mongoose = require "mongoose"
 ObjectId = mongoose.Types.ObjectId
 
 
+stateMachineForProcessDefinition = require './helpers/state-machine-for-process-definition'
+
 
 module.exports = class RoutesApi
 
@@ -31,7 +33,7 @@ module.exports = class RoutesApi
     processDefinitionId = req.params.processDefinitionId
     @dbStore.processDefinitions.get processDefinitionId,null,true, (err,item) =>
       return next err if err
-      @_stateMachineForProcessDefinition item, (err, sm) =>
+      stateMachineForProcessDefinition item, (err, sm) =>
         return next err if err
 
         result = 
@@ -78,7 +80,7 @@ module.exports = class RoutesApi
         res.send "<p class=\"warning\">Could not read Layout Definition for process #{item.name}</p>"
         return 
 
-      @_stateMachineForProcessDefinition item, (err, sm) =>
+      stateMachineForProcessDefinition item, (err, sm) =>
         return next err if err
 
         @dbStore.tasks.get taskId, {}, (err,task) =>
@@ -105,32 +107,7 @@ module.exports = class RoutesApi
             html = "#{html}"
             res.send html
 
-
-  _stateMachineForProcessDefinitionId: (processDefinitionId, cb) =>
-    @_stateMachineForAny cb
-
-    ###
-    @dbStore.processDefinitions.get2 processDefinitionId,{select: '_id stateMachine name'}, (err,processDefinition) =>
-      return cb err if err
-      return cb new Error("Process Definition #{processDefinitionId} not found.") unless processDefinition
-
-      if !processDefinition.stateMachine || processDefinition.stateMachine.trim().length is 0
-        return cb new Error("Missing state machine for process definition #{processDefinitionId}")
-
-      smData = null
-      try
-        smData = JSON.parse(processDefinition.stateMachine)
-      catch e
-        console.log "Could not parse statemachine for #{processDefinition.name}"
-        console.log processDefinition.stateMachine
-        return cb new Error("Could not parse JSON State Machine for Process Defintion #{processDefinition.name}")
-
-      sm = stateMachinePackage.stateMachine()
-      sm.loadFromObject smData
-
-      cb null,sm
-    ###
-
+  ###
   _stateMachineForProcessDefinition: (processDefinition,cb) =>
     return cb new Error("No valid process defintions found.") unless processDefinition
 
@@ -146,4 +123,5 @@ module.exports = class RoutesApi
     sm.loadFromObject smData
 
     cb null,sm
+  ###
 

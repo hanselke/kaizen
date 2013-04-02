@@ -5,6 +5,7 @@ errors = require 'some-errors'
 fs = require 'fs'
 xlsxToForm = require '../modules/xlsx-to-form'
 stateMachinePackage = require '../modules/state-machine'
+stateMachineForProcessDefinition = require './helpers/state-machine-for-process-definition'
 
 mongoose = require "mongoose"
 ObjectId = mongoose.Types.ObjectId
@@ -52,10 +53,6 @@ module.exports = class RoutesApi
     # This is a hack
     @app.post '/api/admin/users/:userId/roles/:role', @addRole
     @app.delete '/api/admin/users/:userId/roles/:role', @deleteRole
-
-    #@app.get '/api/process-definitions/:processDefinitionId/validate', @validateProcessDefinition
-    #@app.get '/api/process-definitions/:processDefinitionId/form-css', @getProcessDefinitionCss
-    #@app.get '/api/process-definitions/:processDefinitionId/:taskId/form-html', @getProcessDefinitionHtml
 
     @app.put '/api/me/password', @putMePassword
 
@@ -169,11 +166,6 @@ module.exports = class RoutesApi
       res.json {}
 
 
-
-
-
-
-
   getAdminTasks: (req,res,next) =>
     return res.json 401,{} unless req.user
 
@@ -197,31 +189,6 @@ module.exports = class RoutesApi
         res.json result
 
 
-  validateProcessDefinition: (req,res,next) =>
-    processDefinitionId = req.params.processDefinitionId
-    @dbStore.processDefinitions.get processDefinitionId,null,true, (err,item) =>
-      return next err if err
-
-      res.json {}
-
-  ###
-  http://localhost:8001/api/process-definitions/5101f5620cb4645c7800000b/form-css
-  ###
-  getProcessDefinitionCss: (req,res,next) =>
-    processDefinitionId = req.params.processDefinitionId
-    @dbStore.processDefinitions.get processDefinitionId,null,true, (err,item) =>
-      return next err if err
-
-      unless item && xlsxToForm.isValidLayout(item.layout)
-        res.send "p.warning-box {margin-top:50px;background-color:red;color:white;}"
-        return 
-
-
-      xlsxToForm.createCssFromLayoutForm item.layout,(err,css) =>
-        return done err if err
-
-        res.setHeader 'Content-Type', 'text/css'
-        res.send css
 
 
   ###
@@ -309,53 +276,12 @@ module.exports = class RoutesApi
 
 
 
-  ###
-  http://localhost:8001/api/process-definitions/50d22f260b75ca1d9000000c/taskIdhere/form-html
-  ###
-  getProcessDefinitionHtml: (req,res,next) =>
-    editAllStates = req.query.editAllStates
-
-
-    processDefinitionId = req.params.processDefinitionId
-    taskId = req.params.taskId
-    @dbStore.processDefinitions.get processDefinitionId,null,true, (err,item) =>
-      return next err if err
-
-      unless item && xlsxToForm.isValidLayout(item.layout)
-        res.send "<p class=\"warning\">Could not read Layout Definition for process #{item.name}</p>"
-        return 
-
-
-      @_stateMachineForProcessDefinitionId processDefinitionId, (err, sm) =>
-        return next err if err
-
-        @dbStore.tasks.get taskId, {}, (err,task) =>
-          return next err if err
-
-          currentTaskState = sm.getExcelFieldFromState( task.state) || 'undefined' 
-          console.log "CURRENT TASK STATE: #{currentTaskState}"
-          options =
-            editAllStates: editAllStates
-            isActiveInputCell : (cell) => 
-              return false unless cell.text && cell.text.length > 0
-              return false unless sm.existsAsExcelField( cell.text)
-              true
-
-            isActiveInputCellCurrent : (cell) => 
-              return false unless cell.text && cell.text.length > 0
-              return false unless cell.text is currentTaskState
-              true
-
-
-          xlsxToForm.createHtmlFromLayoutForm item.layout,options,(err,html) =>
-            return done err if err
-
-            html = "#{html}"
-            res.send html
-
 
   _stateMachineForProcessDefinitionId: (processDefinitionId, cb) =>
-    @_stateMachineForAny cb
+    @dbStore.processDefinitions.get processDefinitionId,null,true, (err,item) =>
+      return next err if err
+      stateMachineForProcessDefinition item, (err, sm) =>
+        cb err,sm
 
     ###
     @dbStore.processDefinitions.get2 processDefinitionId,{select: '_id stateMachine name'}, (err,processDefinition) =>
