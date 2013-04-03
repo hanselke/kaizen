@@ -12,7 +12,6 @@ module.exports = class RoutesOther
   setupLocals: () =>
     @app.locals.routesApps = @routesAppPathHelper = new RoutesAppPathHelper
     
-      
   setupRoutes: () =>
     @app.get '/app',protectResource(), @getApp
     @app.get '/app/main',@getMain
@@ -30,6 +29,7 @@ module.exports = class RoutesOther
     @app.get '/app/admin/process-definitions/validate',@getAdminProcessDefinitionsValidate
     @app.get '/app/admin/boards',@getAdminBoards
     @app.get '/app/admin/boards/add',@getAdminBoardsAdd
+    @app.get '/app/admin/boards/edit',@getAdminBoardsEdit
     @app.get '/app/admin/tasks',@getAdminTasks
     @app.get '/app/help',@getHelp
     @app.get '/app/help/terms',@getHelpTerms
@@ -114,4 +114,8 @@ module.exports = class RoutesOther
 
   getAdminBoardsAdd: (req,res,next) =>
     res.render 'app/admin/boards-add',
+          pretty: true
+
+  getAdminBoardsEdit: (req,res,next) =>
+    res.render 'app/admin/boards-edit',
           pretty: true

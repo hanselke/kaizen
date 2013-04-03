@@ -1,4 +1,8 @@
+Edit board
+load board in runtime
 
+Show all existing states when creating / editing board
+validate statemachine + layout
 
 Creatable by roles correct (and initial state must match)
 Check if all roles do actually exist.

@@ -15,6 +15,7 @@
 #= require app2/controller-admin-process-definitions
 #= require app2/controller-admin-boards
 #= require app2/controller-admin-boards-add
+#= require app2/controller-admin-boards-edit
 #= require app2/controller-admin-tasks
 #= require app2/controller-admin-roles
 #= require app2/controller-admin-roles-add
