@@ -28,6 +28,8 @@ module.exports = class RoutesOther
     @app.get '/app/admin/process-definitions/layout',@getAdminProcessDefinitionsLayout
     @app.get '/app/admin/process-definitions/edit',@getAdminProcessDefinitionsEdit
     @app.get '/app/admin/process-definitions/validate',@getAdminProcessDefinitionsValidate
+    @app.get '/app/admin/boards',@getAdminBoards
+    @app.get '/app/admin/boards/add',@getAdminBoardsAdd
     @app.get '/app/admin/tasks',@getAdminTasks
     @app.get '/app/help',@getHelp
     @app.get '/app/help/terms',@getHelpTerms
@@ -104,4 +106,12 @@ module.exports = class RoutesOther
 
   getAdminProcessDefinitionsValidate: (req,res,next) =>
     res.render 'app/admin/process-definition-validate',
+          pretty: true
+  
+  getAdminBoards: (req,res,next) =>
+    res.render 'app/admin/boards',
+          pretty: true
+
+  getAdminBoardsAdd: (req,res,next) =>
+    res.render 'app/admin/boards-add',
           pretty: true
