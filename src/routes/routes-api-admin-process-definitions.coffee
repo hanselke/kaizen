@@ -28,6 +28,7 @@ module.exports = class RoutesApiAdminProcessDefinitions
     
     @app.get '/api/admin/process-definitions/:processDefinitionId', @getAdminProcessDefinition
     @app.post '/api/admin/process-definitions/:processDefinitionId/excel', @uploadAdminProcessDefinitionExcel
+    @app.get '/api/admin/process-definitions/:processDefinitionId/layout', @getAdminProcessDefinitionLayout
     @app.post '/api/admin/process-definitions/:processDefinitionId/layout', @uploadAdminProcessDefinitionLayout
 
 
@@ -104,6 +105,18 @@ module.exports = class RoutesApiAdminProcessDefinitions
       @dbStore.processDefinitions.saveExcel processDefinitionId,base64Content,file.size,file.name,file.type, (err,item) =>
         return next err if err
         res.json {}
+
+  getAdminProcessDefinitionLayout : (req,res,next) =>
+    processDefinitionId = req.params.processDefinitionId
+    @dbStore.processDefinitions.get processDefinitionId,null,true, (err,item) =>
+      return next err if err
+      res.setHeader 'Content-Disposition','Attachment'
+      res.json item.layout
+
+    #res.setHeader 'Content-Type', 'application/json'
+    #res.send css
+
+
 
   uploadAdminProcessDefinitionLayout: (req,res,next) =>
     processDefinitionId = req.params.processDefinitionId
