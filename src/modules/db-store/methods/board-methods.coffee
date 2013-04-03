@@ -15,8 +15,8 @@ MAXCOUNTOBJECTS = 50
 Provides methods to interact with boards.
 ###
 module.exports = class BoardMethods
-  CREATE_FIELDS = ['_id','name','states']
-  UPDATE_FIELDS = ['name','states']
+  CREATE_FIELDS = ['_id','name','states','captions']
+  UPDATE_FIELDS = ['name','states','captions']
 
   ###
   Initializes a new instance of the @see BoardMethods class.
@@ -31,7 +31,7 @@ module.exports = class BoardMethods
 
   all: (options = {},cb = ->) =>
     # TODO: EXCLUDE DELETED
-    options.select or= '_id name states'
+    options.select or= '_id name states captions'
 
     @models.Board.count  {}, (err, totalCount) =>
       return cb err if err
@@ -77,6 +77,7 @@ module.exports = class BoardMethods
     #data.createdBy = actor
 
     objs.states = objs.states.split(',') if objs.states && _.isString(objs.states)
+    objs.captions = objs.captions.split(',') if objs.captions && _.isString(objs.captions)
 
     _.extendFiltered data, CREATE_FIELDS, objs
     #return cb new errors.UnprocessableEntity("createdBy") unless data.createdBy && data.createdBy.actorId
@@ -103,6 +104,8 @@ module.exports = class BoardMethods
       return cb new errors.NotFound("/boards/#{boardId}") unless item
 
       obj.states = obj.states.split(',') if obj.states && _.isString(obj.states)
+      obj.captions = obj.captions.split(',') if obj.captions && _.isString(obj.captions)
+
       _.extendFiltered item, UPDATE_FIELDS, obj
       item.save (err) =>
         return cb err if err
@@ -114,6 +117,7 @@ module.exports = class BoardMethods
       return cb new errors.NotFound("/boards/#{boardId}") unless item
 
       obj.states = obj.states.split(',') if obj.states && _.isString(obj.states)
+      obj.captions = obj.captions.split(',') if obj.captions && _.isString(obj.captions)
 
       item[field] = null for field in UPDATE_FIELDS
       _.extendFiltered item, UPDATE_FIELDS, obj

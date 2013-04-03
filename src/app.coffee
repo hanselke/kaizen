@@ -63,10 +63,12 @@ RoutesUsers = require './routes/routes-users'
 RoutesSetup = require './routes/routes-setup'
 RoutesApi = require './routes/routes-api'
 RoutesApiProcessDefinitions = require './routes/routes-api-process-definitions'
-RoutesApiAdminBoards = require './routes/routes-api-admin-boards'
+RoutesApiBoard = require './routes/routes-api-board'
+
 RoutesApp = require './routes/routes-app'
 RoutesProxy = require './routes/routes-proxy'
 RoutesApiAdminProcessDefinitions = require './routes/routes-api-admin-process-definitions'
+RoutesApiAdminBoards = require './routes/routes-api-admin-boards'
 
 PassportBearerStrategy = require('passport-http-bearer').Strategy
 PassportLocalStrategy = require('passport-local').Strategy
@@ -263,6 +265,7 @@ module.exports = class App
       routesUsers: new RoutesUsers settings
       routesSetup: new RoutesSetup settings
       routesApiProcessDefinitions: new RoutesApiProcessDefinitions settings
+      routesApiBoard: new RoutesApiBoard settings
       routesApi: new RoutesApi settings,config.get('services:bonita')
       routesApp: new RoutesApp settings
       routesProxy: new RoutesProxy settings,config.get('services:bonita')

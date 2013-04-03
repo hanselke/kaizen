@@ -1,8 +1,9 @@
-load board in runtime
-download layout file
-
 Show all existing states when creating / editing board
+
+load board in runtime
+
 validate statemachine + layout
+
 
 --
 

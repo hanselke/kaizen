@@ -35,6 +35,9 @@
           label States
           textarea( placeholder="state1,state2,state3",ng-model="board.states")
           span.help-block The states used for each lane. Comma seperates, no spaces, case sensitive.
+          label Captions
+          textarea( placeholder="State 1 Caption,State 2 Caption,State 3 Caption",ng-model="board.captions")
+          span.help-block The captions used for each lane. Comma separates
 
           button.btn.btn-primary( type="submit",ng-click="create(board)") Create Board
 

@@ -29,7 +29,7 @@ module.exports = class RoutesApi
     @app.get '/api/session', @getSession
 
     # TODO: Ensure that we have a user here
-    @app.get  '/api/board', @getBoard
+    #@app.get  '/api/board', @getBoard
     @app.post '/api/tasks', @createTask
     @app.get  '/api/tasks/next-task', @getNextTask
     @app.post '/api/tasks/:taskId/complete', @completeTask

@@ -12,6 +12,9 @@ module.exports = BoardSchema = new mongoose.Schema
       states: # The states as mapped by the role
         type: [String] 
         default: () -> []
+      captions: # The captions as mapped by the role
+        type: [String] 
+        default: () -> []
 
     , strict: true
 
