@@ -133,7 +133,7 @@ class FormAndHmtl
               At this point the text is html encode with stuff like &#35;&#35; in it.
               We need to decode that
               ###
-              if cell.text && cell.text.length > 0 && numericalEncoder.htmlDecode(cell.text).indexOf("##") is 0
+              if cell.text && cell.text.length > 0 && (numericalEncoder.htmlDecode(cell.text).indexOf("##")  is 0 or cell.text.indexOf("##") is 0 ) 
                 writer.addAttribute "data-row", r
                 writer.addAttribute "data-cell", c
                 writer.addAttribute "data-formula", numericalEncoder.htmlDecode(cell.text).substring(2)
