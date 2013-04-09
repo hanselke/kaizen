@@ -16,7 +16,7 @@ module.exports = class TaskMethods
   # Current state has been completed
   # Not checked out by any user.
   # nextState in list of states
-  getTaskForProcessDefinitionIdAndStates: (processDefinitionId,states = [],options = {},cb = ->) =>
+  getTaskForStates: (states = [],options = {},cb = ->) =>
     query = @models.Task.findOne({stateCompleted : true, checkedOutByUserId : null, taskEnded : false})
     query.sort('-createdAt')
     query.where('nextState').in(states)

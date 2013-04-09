@@ -32,6 +32,8 @@ module.exports = class ProcessDefinitionMethods
   all: (options = {},cb = ->) =>
     # TODO: EXCLUDE DELETED
     options.select or= '_id name description createableByRoles'
+    options.offset or= 0
+    options.count or=50
 
     @models.ProcessDefinition.count  {}, (err, totalCount) =>
       return cb err if err
