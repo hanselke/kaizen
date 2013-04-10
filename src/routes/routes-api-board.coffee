@@ -6,6 +6,7 @@ fs = require 'fs'
 xlsxToForm = require '../modules/xlsx-to-form'
 stateMachinePackage = require '../modules/state-machine'
 stateMachineForProcessDefinition = require './helpers/state-machine-for-process-definition'
+rolesForStateAndProcessDefinition = require './helpers/roles-for-state-and-process-definition'
 
 mongoose = require "mongoose"
 ObjectId = mongoose.Types.ObjectId
@@ -78,6 +79,29 @@ module.exports = class RoutesApi
       return next new Error("Process definition not found") unless processDefinition
       next null, processDefinition._id
 
+  ###
+  This gathers the allowed role for the current state all the tasks are in.
+  This works by first retrieving all the state machines, then querying it.
+  ###
+  _addAllowedRolesForStateTransition: (lanes, cb) =>
+
+    statesAndProcessDefinitionIds = []
+
+    for lane in lanes
+      for card in lane.cards  when card.nextState and card.nextState.length > 0
+        statesAndProcessDefinitionIds.push 
+          processDefinitionId : card.processDefinitionId
+          state: card.nextState
+
+    rolesForStateAndProcessDefinition statesAndProcessDefinitionIds,@dbStore, (err,processDefinitonToStateMap) =>
+
+      for lane in lanes
+        for card in lane.cards  when card.nextState and card.nextState.length > 0
+          states = processDefinitonToStateMap[card.processDefinitionId.toString()]
+          if states
+            card.allowedRolesForStateTransition = states[card.nextState] || []
+      cb null
+
 
   _addUsernameToTasks: (lanes, cb) =>
     @usernameMap = {} unless @usernameMap 
@@ -111,6 +135,7 @@ module.exports = class RoutesApi
             card.roles = @rolesMap[card.userId] if card.userId
         cb null
 
+  ###
   getBoard: (req,res,next) =>
     return res.json {},401 unless req.user
 
@@ -124,19 +149,6 @@ module.exports = class RoutesApi
       @_stateMachineForAny (err, sm) =>
         return next err if err
 
-        ###
-        board.lanes.push
-          label: "On Hold"
-          name: "onhold"
-          order: 0
-
-          activityDefinitions: [] # TBDeleted
-          id: '' # TBDeleted
-          totalTime : 0
-          totalActiveTime : 0
-          totalWaitingTime : 0 
-          cards: []
-        ###
 
         for state,i in sm.getSwimlanes() || []
           board.lanes.push
@@ -163,11 +175,6 @@ module.exports = class RoutesApi
 
               lane = laneMap[task.state]
 
-              ###
-              if task.onHold
-                lane = laneMap["onhold"]
-              ###
-
               if lane
                 lane.cards.push 
                     id : task._id
@@ -181,6 +188,8 @@ module.exports = class RoutesApi
                     isOnHold: task.onHold
                     updatedAt : task.updatedAt
                     userId : task.checkedOutByUserId
+                    allowedRolesForStateTransition :  []
+                    processDefinitionId : task.processDefinitionId
 
             for state,val of states
               lane = laneMap[state]
@@ -191,8 +200,9 @@ module.exports = class RoutesApi
               lane.cards = _.sortBy lane.cards, (card) -> "#{card.isOnHold}-#{card.desc}"
 
             @_addUsernameToTasks board.lanes, (err) =>
-              res.json board
-
+              @_addAllowedRolesForStateTransition board.lanes, (err) =>
+                res.json board
+  ###
 
 
   getBoard2: (req,res,next) =>
@@ -257,6 +267,9 @@ module.exports = class RoutesApi
                     isOnHold: task.onHold
                     updatedAt : task.updatedAt
                     userId : task.checkedOutByUserId
+                    allowedRolesForStateTransition :  []
+                    processDefinitionId : task.processDefinitionId
+                    nextState : task.nextState
 
             for state,val of states
               lane = laneMap[state]
@@ -267,5 +280,6 @@ module.exports = class RoutesApi
               lane.cards = _.sortBy lane.cards, (card) -> "#{card.isOnHold}-#{card.desc}"
 
             @_addUsernameToTasks board.lanes, (err) =>
-              res.json board
+              @_addAllowedRolesForStateTransition board.lanes, (err) =>
+                res.json board
 

@@ -86,6 +86,13 @@ module.exports = class StateMachine
 
     _.uniq(result)
 
+
+  getRolesForState: (state) =>
+    state = @stateMachineData.states[state]
+    return [] unless state
+    state.allowedRoles || []
+
+
   getExcelFieldFromState: (stateName) =>
     state = @getState stateName
     return null unless state

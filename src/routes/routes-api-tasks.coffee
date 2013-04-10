@@ -33,6 +33,7 @@ module.exports = class RoutesApi
     @app.post '/api/tasks/:taskId/cancel', @cancelTask
     @app.post '/api/tasks/:taskId/onhold', @onHoldTask
     @app.post '/api/tasks/:taskId/onunhold', @onUnholdTask
+    @app.post '/api/tasks/:taskId/pull', @pullTask
     
   ###
   Save the task data. Format: [ {r: 0,c:0, v: 'value' }]
@@ -377,6 +378,61 @@ module.exports = class RoutesApi
               taskId : item._id
               activeTask : item
 
+
+  pullTask: (req,res,next) =>
+    return res.json {},401 unless req.user
+
+    @dbStore.tasks.get req.params.taskId, {}, (err,task) =>
+      return next err if err
+      return new Error('task not found') unless task
+
+      totalWaitingTime =  0
+      if task.totalWaitingTime
+        try
+          totalWaitingTime = task.totalWaitingTime
+        catch e
+          #nop
+      
+      if task.checkedInDate
+        totalWaitingTime += new Date() - task.checkedInDate
+
+
+      task.timePerState = {} unless  task.timePerState 
+      unless task.timePerState[task.state]
+        task.timePerState[task.state] = 
+          totalActiveTime : 0
+          totalWaitingTime : 0
+
+      if task.checkedInDate
+        task.timePerState[task.state].totalWaitingTime += new Date() - task.checkedInDate
+
+
+      data =
+        checkedOutByUserId: req.user.id || req.user._id
+        activeTaskUUID: "" 
+        activeActivityName: ""
+        previousState: task.state
+        state: task.nextState
+        nextState : null
+        stateCompleted: false
+        checkedOutDate: new Date()
+        checkedInDate : null
+        totalWaitingTime : totalWaitingTime
+        timePerState : _.clone( task.timePerState)
+
+      @dbStore.tasks.patch task._id,data, actor : {actorId : req.user._id || req.user.id},  (err,item) =>
+        return next err if err
+        console.log "UPDATED #{JSON.stringify(item)}"
+
+        # Now we need to update the data store, where processInstanceID = X
+        # and set the active user to the current userid,
+        # and set the active task to the current task id,
+        # and we need to return our own task id (which is actually the process id)
+        # we also need to register the time here.
+        item.id = item._id
+        res.json 
+          taskId : item._id
+          activeTask : item
 
   cancelTask: (req,res,next) =>
     return res.json 401,{} unless req.user

@@ -1,6 +1,19 @@
-* Show all existing states when creating / editing board
+* after pulling, the first complete step is not working for whatever reason.
 
-validate statemachine + layout
+* Ensure that task Ids are unique
+
+===
+* cards for get next action should be sorted by date, and that date should be updated when a task gets canceled
+
+
+* Formula
+Extend formula so that we can copy text
+Compile peg to javascript???
+Run peg in secondary thread, if present
+
+
+
+
 --
 
 Creatable by roles correct (and initial state must match)

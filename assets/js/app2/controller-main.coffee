@@ -33,10 +33,22 @@ class window.MainController
     #@$scope.colsFromLanes = []
     #@$scope.tdFromLanes = []
     @$scope.onunhold = @onUnhold
+    @$scope.pull = @pull
     @$scope.createMenu = @createMenu
 
     @refresh()
 
+
+  pull: (taskId) =>
+    request = @$http.post "/api/tasks/#{taskId}/pull", {}
+    request.error (data, status, headers, config) =>
+      @$scope.flashMessage "Failed to pull the task - please try again"
+    request.success (data, status, headers, config) =>
+
+      @$scope.currentForm = null
+      @$scope.activeTaskId = taskId
+      @$scope.isBoardStateActive = !@$scope.activeTaskId
+      @$location.path "/task/#{@$scope.activeTaskId}"
 
   onUnhold: (taskId) =>
     request = @$http.post "/api/tasks/#{taskId}/onunhold", {}
@@ -70,6 +82,7 @@ class window.MainController
           card.updatedAtAsString = card.updatedAt # humanizeTime(card.updatedAt / 1000)
           console.log "CARD:ROLES: #{card.roles}"
           card.canBeActivated = !!card.roles and containsAnyOf(card.roles,@$scope.currentUser.roles || [])
+          card.canBePulled = !card.userId and card.ready and !!card.allowedRolesForStateTransition and containsAnyOf(card.allowedRolesForStateTransition,@$scope.currentUser.roles || [])
 
       aWidth = 0
       if data.lanes.length > 0
