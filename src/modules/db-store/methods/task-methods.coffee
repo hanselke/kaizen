@@ -88,7 +88,7 @@ module.exports = class TaskMethods
     @models.Task.count  {}, (err, totalCount) =>
       return cb err if err
 
-      query = @models.Task.find({})
+      query = @models.Task.find(options.query || {})
       query.sort('-createdAt')
       query.select(options.select || '_id processDefinitionId state createdAt checkedOutByUserId')
       query.setOptions { skip: options.offset, limit: options.count}
@@ -100,7 +100,7 @@ module.exports = class TaskMethods
     @models.Task.count  {}, (err, totalCount) =>
       return cb err if err
 
-      query = @models.Task.find({})
+      query = @models.Task.find(options.query || {})
       #query.sort('-createdAt')
 
       start = dayDate

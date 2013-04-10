@@ -167,12 +167,12 @@ module.exports = class RoutesApi
     console.log filter
 
     if filter
-      @dbStore.tasks.allforDay filter,{actor:null, offset: 0, count: 200, select : '_id processDefinitionId state createdAt checkedOutByUserId name taskEnded nextState totalActiveTime totalWaitingTime'}, (err,result) =>
+      @dbStore.tasks.allforDay filter,{query: {taskEnded : true}, actor:null, offset: 0, count: 200, select : '_id processDefinitionId state createdAt checkedOutByUserId name taskEnded nextState totalActiveTime totalWaitingTime'}, (err,result) =>
         return next err if err
         res.json result
 
     else
-      @dbStore.tasks.all {actor:null, offset: 0, count: 200, select : '_id processDefinitionId state createdAt checkedOutByUserId name taskEnded nextState totalActiveTime totalWaitingTime'}, (err,result) =>
+      @dbStore.tasks.all {query: {taskEnded : true},actor:null, offset: 0, count: 200, select : '_id processDefinitionId state createdAt checkedOutByUserId name taskEnded nextState totalActiveTime totalWaitingTime'}, (err,result) =>
         return next err if err
         res.json result
 
