@@ -157,7 +157,7 @@ class window.TaskController
         c = col.charCodeAt(i) - 'a'.charCodeAt(i)
         colInt += (col.length - i) * c
 
-      return @getCellValue(rowInt,colInt)
+      return @getCellValue(rowInt,colInt) || 0
 
     for formula in @$scope.formulas
       try 

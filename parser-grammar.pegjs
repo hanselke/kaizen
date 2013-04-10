@@ -8,10 +8,12 @@ start
 
 additive
   = left:multiplicative "+" right:additive { return left + right; }
+  / left:multiplicative "-" right:additive { return left - right; }
   / multiplicative
 
 multiplicative
   = left:primary "*" right:multiplicative { return left * right; }
+  / left:primary "/" right:multiplicative { return left / right; }
   / primary
 
 primary
@@ -30,5 +32,4 @@ decimal "decimal"
 
 cell
   = col: [a-zA-Z]+ row:[0-9]+ {return window.resolveCell(row.join(""),col.join(""))}
-
 

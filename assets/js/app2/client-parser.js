@@ -138,7 +138,44 @@ window.parser = (function(){
           pos = pos0;
         }
         if (result0 === null) {
+          pos0 = pos;
+          pos1 = pos;
           result0 = parse_multiplicative();
+          if (result0 !== null) {
+            if (input.charCodeAt(pos) === 45) {
+              result1 = "-";
+              pos++;
+            } else {
+              result1 = null;
+              if (reportFailures === 0) {
+                matchFailed("\"-\"");
+              }
+            }
+            if (result1 !== null) {
+              result2 = parse_additive();
+              if (result2 !== null) {
+                result0 = [result0, result1, result2];
+              } else {
+                result0 = null;
+                pos = pos1;
+              }
+            } else {
+              result0 = null;
+              pos = pos1;
+            }
+          } else {
+            result0 = null;
+            pos = pos1;
+          }
+          if (result0 !== null) {
+            result0 = (function(offset, left, right) { return left - right; })(pos0, result0[0], result0[2]);
+          }
+          if (result0 === null) {
+            pos = pos0;
+          }
+          if (result0 === null) {
+            result0 = parse_multiplicative();
+          }
         }
         return result0;
       }
@@ -183,7 +220,44 @@ window.parser = (function(){
           pos = pos0;
         }
         if (result0 === null) {
+          pos0 = pos;
+          pos1 = pos;
           result0 = parse_primary();
+          if (result0 !== null) {
+            if (input.charCodeAt(pos) === 47) {
+              result1 = "/";
+              pos++;
+            } else {
+              result1 = null;
+              if (reportFailures === 0) {
+                matchFailed("\"/\"");
+              }
+            }
+            if (result1 !== null) {
+              result2 = parse_multiplicative();
+              if (result2 !== null) {
+                result0 = [result0, result1, result2];
+              } else {
+                result0 = null;
+                pos = pos1;
+              }
+            } else {
+              result0 = null;
+              pos = pos1;
+            }
+          } else {
+            result0 = null;
+            pos = pos1;
+          }
+          if (result0 !== null) {
+            result0 = (function(offset, left, right) { return left / right; })(pos0, result0[0], result0[2]);
+          }
+          if (result0 === null) {
+            pos = pos0;
+          }
+          if (result0 === null) {
+            result0 = parse_primary();
+          }
         }
         return result0;
       }
