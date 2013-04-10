@@ -1,11 +1,5 @@
-* after pulling, the first complete step is not working for whatever reason.
-
-* Ensure that task Ids are unique
-
 ===
-* cards for get next action should be sorted by date, and that date should be updated when a task gets canceled
-
-
+* Ensure that task Ids are unique
 * Formula
 Extend formula so that we can copy text
 Compile peg to javascript???

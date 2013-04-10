@@ -18,7 +18,7 @@ module.exports = class TaskMethods
   # nextState in list of states
   getTaskForStates: (states = [],options = {},cb = ->) =>
     query = @models.Task.findOne({stateCompleted : true, checkedOutByUserId : null, taskEnded : false})
-    query.sort('-createdAt')
+    query.sort('updatedAt')
     query.where('nextState').in(states)
     query.exec (err, item) =>
       return cb err if err
