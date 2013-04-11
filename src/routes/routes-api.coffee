@@ -167,15 +167,51 @@ module.exports = class RoutesApi
     console.log filter
 
     if filter
-      @dbStore.tasks.allforDay filter,{query: {taskEnded : true}, actor:null, offset: 0, count: 200, select : '_id processDefinitionId state createdAt checkedOutByUserId name taskEnded nextState totalActiveTime totalWaitingTime'}, (err,result) =>
+      @dbStore.tasks.allforDay filter,{query: {taskEnded : true}, actor:null, offset: 0, count: 200, select : '_id processDefinitionId state createdAt checkedOutByUserId name taskEnded nextState totalActiveTime totalWaitingTime createdBy'}, (err,result) =>
         return next err if err
-        res.json result
+
+        result.items = _.map result.items, (x) -> x.toObject()
+        @_addUsernameToAdminTasks result.items, (err) =>
+          res.json result
 
     else
-      @dbStore.tasks.all {query: {taskEnded : true},actor:null, offset: 0, count: 200, select : '_id processDefinitionId state createdAt checkedOutByUserId name taskEnded nextState totalActiveTime totalWaitingTime'}, (err,result) =>
+      @dbStore.tasks.all {query: {taskEnded : true},actor:null, offset: 0, count: 200, select : '_id processDefinitionId state createdAt checkedOutByUserId name taskEnded nextState totalActiveTime totalWaitingTime createdBy'}, (err,result) =>
         return next err if err
-        res.json result
+        result.items = _.map result.items, (x) -> x.toObject()
+        @_addUsernameToAdminTasks result.items, (err) =>
+          res.json result
 
+  _addUsernameToAdminTasks: (tasks, cb) =>
+    @usernameMap = {} unless @usernameMap 
+    @rolesMap = {} unless @rolesMap 
+
+    unresolvedUserIds = {}
+
+    for task in tasks
+      if task.createdBy && task.createdBy.actorId
+
+        actorId = task.createdBy.actorId.toString()
+
+        task.username = @usernameMap[actorId]
+        unresolvedUserIds[actorId] = true unless @usernameMap[actorId]
+
+    if _.keys(unresolvedUserIds).length == 0 
+      cb null # All done
+    else
+
+      idList = _.map _.keys(unresolvedUserIds), (x) -> new ObjectId x.toString()
+      @identityStore.models.User.find({}).where('_id').in(idList).select('_id username').exec (err, items) =>
+        return cb err if err
+        items ||= []
+
+        for item in items
+          @usernameMap[item._id.toString()] = item.username 
+
+        for task in tasks
+          if task.createdBy && task.createdBy.actorId
+            actorId = task.createdBy.actorId.toString()
+            task.username = @usernameMap[actorId] || '' 
+        cb null
 
 
 

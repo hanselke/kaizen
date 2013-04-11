@@ -1,5 +1,4 @@
 ===
-* Ensure that task Ids are unique
 * Formula
 Extend formula so that we can copy text
 Compile peg to javascript???

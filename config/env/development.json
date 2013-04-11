@@ -21,7 +21,7 @@
   "services": {
     "db2": "mongodb://localhost/openbusiness-bpm",
     "db1": "mongodb://localhost/hansel-ke-orderingsystem-dev",
-    "db": "mongodb://localhost/bpm1",
+    "db": "mongodb://localhost/bpm2",
     "intercom": null,
     "airbrake": null,
     "google-analytics": null,

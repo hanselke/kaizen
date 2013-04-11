@@ -44,10 +44,11 @@
             th Task Ended
             th Active
             th Waiting
+            th User
             th Actions
         tbody
           tr(style="vertical-align:center;",ng-repeat='task in tasks')
-            td
+            td(style="white-space:nowrap;")
               |{{task.name}}
             td
               |{{task.state}}
@@ -63,6 +64,8 @@
               |{{task.totalActiveTimeAsString}}
             td
               |{{task.totalWaitingTimeAsString}}
+            td
+              |{{task.username}}
 
             td
               a.btn(href="#/task/{{task._id}}?editAllStates=true") Edit Data
