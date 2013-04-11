@@ -87,7 +87,6 @@ module.exports = class RoutesApi
           return next err if err
 
           currentTaskState = sm.getExcelFieldFromState( task.state) || 'undefined' 
-          console.log "CURRENT TASK STATE: #{currentTaskState}"
           options =
             editAllStates: editAllStates
             isActiveInputCell : (cell) => 

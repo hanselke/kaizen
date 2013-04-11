@@ -8,8 +8,6 @@ class FormAndHmtl
     cssPrefix = ".xlsl-form-container "
     result = ""
     for cssClass in form.cssClasses || []
-      console.log "@@@@@"
-      console.log JSON.stringify(cssClass)
 
       result += " #{cssPrefix} .#{cssClass.name} {"
       result += "font-family:\"#{cssClass.fontName}\";" if cssClass.fontName && cssClass.fontName.length > 0
@@ -100,17 +98,13 @@ class FormAndHmtl
        
           writer.addAttribute "class","#{cell.cellCssClass || ''} #{cell.fontCssClass || ''}"
 
-          console.log "OPTIONS ARE #{JSON.stringify(options)}"
-
           isActiveCurrent  = !!options.isActiveInputCellCurrent(cell) 
           isActive = !!options.isActiveInputCell(cell)
           editAllStates = options.editAllStates
 
           hasAnInput = isActiveCurrent or (isActive and editAllStates)
-          console.log "RES: #{isActive} #{isActiveCurrent} #{editAllStates} ==> #{hasAnInput}"
 
           if hasAnInput is true || hasAnInput is "true" # DONT EVEN ASK, THIS IS NOT A JOKE
-            console.log "HERE 1 #{hasAnInput}"
             writer.pushTag "input" 
             writer.addAttribute "type","text"
             writer.addAttribute "style","width:100%;height:100%;border:none;"

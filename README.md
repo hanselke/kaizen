@@ -1,3 +1,5 @@
+Next Action vs pull: Check that they are functionally equal
+
 ===
 * Formula
 Extend formula so that we can copy text

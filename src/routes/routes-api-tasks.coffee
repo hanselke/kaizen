@@ -184,7 +184,8 @@ module.exports = class RoutesApi
       stateMachineForProcessDefinition processDefinition, (err, sm) =>
         return next err if err
 
-        @dbStore.tasks.countTasksForProcessDefinitionId req.body.processDefinitionId,{}, (err,count) =>
+        #@dbStore.tasks.countTasksForProcessDefinitionId req.body.processDefinitionId,{}, (err,count) =>
+        @dbStore.processDefinitions.getNextTaskNumber req.body.processDefinitionId, (err,count) =>
           return next err if err
 
           count = count + 1

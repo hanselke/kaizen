@@ -45,6 +45,17 @@ module.exports = class ProcessDefinitionMethods
         return cb err if err
         cb null, new PageResult(items || [], totalCount, options.offset, options.count)
 
+  getNextTaskNumber: (processDefinitionId,cb = ->) =>
+    processDefinitionId = new ObjectId(processDefinitionId.toString())
+    @models.ProcessDefinition.findOne _id : processDefinitionId, (err,item) =>
+      return cb err if err
+      item.lastTaskNumber = (item.lastTaskNumber || 0) + 1
+      item.save (err) =>
+        console.log "XXX #{item.lastTaskNumber}"
+        return cb err if err
+        cb null, item.lastTaskNumber
+
+
   ###
   Retrieve a single processDefinition-item through it's id
   ###

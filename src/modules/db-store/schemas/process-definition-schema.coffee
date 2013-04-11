@@ -45,6 +45,9 @@ module.exports = ProcessDefinitionSchema = new mongoose.Schema
       hasLayout: 
         type: Boolean
         default:false
+      lastTaskNumber: 
+        type: Number
+        default : 0
 
     , strict: true
 
