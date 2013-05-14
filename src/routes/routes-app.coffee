@@ -31,6 +31,8 @@ module.exports = class RoutesOther
     @app.get '/app/admin/boards/add',@getAdminBoardsAdd
     @app.get '/app/admin/boards/edit',@getAdminBoardsEdit
     @app.get '/app/admin/tasks',@getAdminTasks
+    @app.get '/app/admin/tasks/reopen',@getAdminTasksReopen
+    @app.get '/app/admin/my-tasks',@getMyAdminTasks
     @app.get '/app/help',@getHelp
     @app.get '/app/help/terms',@getHelpTerms
     @app.get '/app/help/setup',@getHelpSetup
@@ -65,6 +67,14 @@ module.exports = class RoutesOther
 
   getAdminTasks: (req,res,next) =>
     res.render 'app/admin/tasks',
+          pretty: true
+
+  getAdminTasksReopen: (req,res,next) =>
+    res.render 'app/admin/tasks-reopen',
+          pretty: true
+
+  getMyAdminTasks: (req,res,next) =>
+    res.render 'app/admin/my-tasks',
           pretty: true
 
   getAdminUsers: (req,res,next) =>

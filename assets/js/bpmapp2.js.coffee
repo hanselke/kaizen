@@ -17,6 +17,8 @@
 #= require app2/controller-admin-boards-add
 #= require app2/controller-admin-boards-edit
 #= require app2/controller-admin-tasks
+#= require app2/controller-admin-tasks-reopen
+#= require app2/controller-admin-my-tasks
 #= require app2/controller-admin-roles
 #= require app2/controller-admin-roles-add
 #= require app2/controller-help

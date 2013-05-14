@@ -238,3 +238,25 @@ input.excel-input {
 	margin-right: 0px;
 }
 
+.card.card-processing {
+	background-color: #EDFDE1;
+	border-color: #D3F0B3; 
+}
+
+
+.card.card-onhold {
+	background-color: #D7EFF5;
+	border-color: #ADDFEA;
+}
+
+.card.card-rejected {
+	background-color: #FDEBEA ;
+	border-color: #ECEDED;
+}
+
+.card.card-done {
+}
+
+.card.card-normal {
+}
+

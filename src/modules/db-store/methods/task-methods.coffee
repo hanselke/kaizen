@@ -8,8 +8,8 @@ ObjectId = mongoose.Types.ObjectId
 
 
 module.exports = class TaskMethods
-  CREATE_FIELDS = ['_id','processDefinitionId','checkedOutByUserId','createdBy','state','checkedOutDate','totalWaitingTime','totalActiveTime','activeActivityName','stateCompleted','nextState','name','taskEnded','checkedInDate','message','timePerState','previousState','onHold']
-  UPDATE_FIELDS = ['processDefinitionId','checkedOutByUserId','state','checkedOutDate','totalWaitingTime','totalActiveTime','activeActivityName','stateCompleted','nextState','name','taskEnded','checkedInDate','message','timePerState','previousState','onHold']
+  CREATE_FIELDS = ['_id','processDefinitionId','checkedOutByUserId','createdBy','state','checkedOutDate','totalWaitingTime','totalActiveTime','activeActivityName','stateCompleted','nextState','name','taskEnded','checkedInDate','message','timePerState','previousState','onHold','taskRejected']
+  UPDATE_FIELDS = ['processDefinitionId','checkedOutByUserId','state','checkedOutDate','totalWaitingTime','totalActiveTime','activeActivityName','stateCompleted','nextState','name','taskEnded','checkedInDate','message','timePerState','previousState','onHold','taskRejected']
 
   constructor:(@models) ->
 
@@ -40,6 +40,24 @@ module.exports = class TaskMethods
 
       # processDefinitionId : processDefinitionId,
       query = @models.Task.find( {taskEnded : false})
+      query.sort('-createdAt')
+
+      query.setOptions { skip: options.offset , limit: options.count}
+      query.exec (err, items) =>
+        return cb err if err
+        cb null, new PageResult(items || [], totalCount, options.offset, options.count)
+
+  tasksEndedForBoard: (options = {},cb = ->) =>
+    options.offset or= 0
+    options.count or= 50
+
+    # TODO: EXCLUDE DELETED
+
+    @models.Task.count  {}, (err, totalCount) =>
+      return cb err if err
+
+      # processDefinitionId : processDefinitionId,
+      query = @models.Task.find( {taskEnded : true})
       query.sort('-createdAt')
 
       query.setOptions { skip: options.offset , limit: options.count}
@@ -116,8 +134,12 @@ module.exports = class TaskMethods
       query.where('createdAt').gte(start).lt(end)
       query.select(options.select || '_id processDefinitionId state createdAt checkedOutByUserId')
       query.setOptions { skip: options.offset, limit: options.count}
+
+      mongoose.set('debug', true)
+
       query.exec (err, items) =>
         return cb err if err
+        mongoose.set('debug', false)
         cb null, new PageResult(items || [], totalCount, options.offset, options.count)
 
 

@@ -15,7 +15,7 @@
                       th(ng:repeat='lane in lanes') {{lane_headings[lane]}}
                     tr
                       td(ng:repeat='lane in lanes')
-                        .card(ng:repeat='card in cards[lane]', ng:class='card[3]')
+                        .card(ng:repeat='card in cards[lane]', ng:class='card.css')
                           span.desc(style='font-weight:bold;') {{card.desc}}
                           span(ng:show='card.ready', style="color:green") ✓
                           

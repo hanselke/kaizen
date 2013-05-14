@@ -210,6 +210,8 @@ module.exports = class RoutesApi
     data = req.body.fields || {}
     message = req.body.message || ''
 
+    isRejected = !!req.body.isRejected
+
     @dbStore.tasks.get req.params.taskId, {}, (err,oldTask) =>
       return next err if err
       return new Error('task not found') unless oldTask
@@ -255,6 +257,7 @@ module.exports = class RoutesApi
             totalActiveTime: totalActiveTime
             message : message
             timePerState : _.clone( oldTask.timePerState)
+            taskRejected : isRejected
 
           data.taskEnded = true if nextState is "end"
             

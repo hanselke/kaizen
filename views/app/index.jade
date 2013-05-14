@@ -45,6 +45,8 @@ html(xmlns:ng='http://angularjs.org/', ng:app='myModule')
                   a(href='#/admin/roles') Roles
                 li(ng-show='isInRole(\'admin\')')
                   a(href='#/admin/tasks') Tasks
+                li
+                  a(href='#/admin/my-tasks') My Tasks
                 li(ng-show='isInRole(\'admin\')')
                   a(href='#/admin/process-definitions') Process Definitions
                 li(ng-show='isInRole(\'admin\')')

@@ -57,6 +57,9 @@ module.exports = TaskSchema = new mongoose.Schema
       onHold:
         type: Boolean
         default: false
+      taskRejected: 
+        type: Boolean
+        default: false
 
       timePerState:
         type: mongoose.Schema.Types.Mixed

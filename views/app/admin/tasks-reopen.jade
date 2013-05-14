@@ -1,0 +1,37 @@
+
+.row.page-container
+  .container-fluid
+    .span3(style="margin-top:40px")
+      .well
+        ul.nav.nav-list
+          li.nav-header
+            |Roles
+          li
+            a(href="#/admin/roles") Overview
+          li.active
+            |Add a new one
+      .well
+        ul.nav.nav-list
+          li.nav-header
+            |More Admin
+          li
+            a(href="#/admin/users") Users
+          li
+            a(href="#/admin/tasks") Tasks
+          li
+            a(href="#/admin/process-definitions") Process Definitions
+          li
+            a(href="#/admin/boards") Boards
+
+    .span9
+      h2 
+        |Reopen Task&nbsp;
+        span {{task.name}}
+      p You can reopen this task and set it to a specific state.
+
+      form
+        fieldset
+          select(name='selectedState',ng-model='task.selectedState',ng-options='state for state in task.states')
+
+          button.btn.btn-primary( type="submit",ng-click="update(task)") Reopen
+          

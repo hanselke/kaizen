@@ -29,7 +29,11 @@ module.exports = class RoutesApi
     @app.get '/api/session', @getSession
 
 
+    @app.get '/api/admin/tasks/:taskId/reopen', @getAdminTaskForReopen
+    @app.post '/api/admin/tasks/:taskId/reopen', @postAdminTaskForReopen
+
     @app.get '/api/admin/tasks', @getAdminTasks
+    @app.get '/api/admin/my-tasks', @getAdminMyTasks
     @app.get '/api/admin/users', @getAdminUsers
     @app.post '/api/admin/users', @postAdminUsers
     @app.delete '/api/admin/users/:userId', @deleteAdminUser
@@ -181,6 +185,36 @@ module.exports = class RoutesApi
         @_addUsernameToAdminTasks result.items, (err) =>
           res.json result
 
+  getAdminMyTasks: (req,res,next) =>
+    return res.json 401,{} unless req.user
+
+    filter = null
+    if req.query.year && req.query.month && req.query.day
+      try
+        filter = new Date(parseInt(req.query.year),parseInt(req.query.month - 1),parseInt(req.query.day))
+      catch e
+        #
+
+    userId = new ObjectId req.user._id.toString()
+
+    console.log userId
+
+    if filter
+      @dbStore.tasks.allforDay filter,{query: {taskEnded : true,'createdBy.actorId' : userId}, actor:null, offset: 0, count: 200, select : '_id processDefinitionId state createdAt checkedOutByUserId name taskEnded nextState totalActiveTime totalWaitingTime createdBy'}, (err,result) =>
+        return next err if err
+
+        result.items = _.map result.items, (x) -> x.toObject()
+        @_addUsernameToAdminTasks result.items, (err) =>
+          res.json result
+
+    else
+      @dbStore.tasks.all {query: {taskEnded : true,'createdBy.actorId' : userId},actor:null, offset: 0, count: 200, select : '_id processDefinitionId state createdAt checkedOutByUserId name taskEnded nextState totalActiveTime totalWaitingTime createdBy'}, (err,result) =>
+        return next err if err
+        result.items = _.map result.items, (x) -> x.toObject()
+        @_addUsernameToAdminTasks result.items, (err) =>
+          res.json result
+
+
   _addUsernameToAdminTasks: (tasks, cb) =>
     @usernameMap = {} unless @usernameMap 
     @rolesMap = {} unless @rolesMap 
@@ -323,4 +357,32 @@ module.exports = class RoutesApi
     @identityStore.users.setPassword userId, req.body.password, actorId : userId, (err, result) =>
       return next err if err
       res.json 200, {}
+
+  getAdminTaskForReopen: (req,res,next) =>
+    @dbStore.tasks.get req.params.taskId,{}, (err,task) =>
+      return next err if err
+      @_stateMachineForProcessDefinitionId task.processDefinitionId,(err,sm) =>
+        obj = task.toObject()
+        obj.states = sm.getReopenStates()
+        res.json obj
+    
+
+  postAdminTaskForReopen: (req,res,next) =>
+    newState = req.params.state
+
+    @dbStore.tasks.get req.params.taskId,{}, (err,task) =>
+      return next err if err
+      @_stateMachineForProcessDefinitionId task.processDefinitionId,(err,sm) =>
+
+        obj = 
+          checkedOutByUserId : null
+          checkedOutDate : null
+          checkedInDate : null
+          nextState : newState
+          taskRejected : false
+          hasEnded : false
+
+        @dbStore.tasks.patch task._id, obj, {}, (err) =>
+          return next err if err
+          res.json {}
 

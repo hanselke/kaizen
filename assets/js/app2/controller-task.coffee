@@ -36,6 +36,8 @@ class window.TaskController
     for key,val of @$scope.currentForm.fields when val.field && val.field.length > 0
       data.fields[val.field] = true
 
+    data.isRejected = false
+
     @taskCompleted data
 
   taskCompletedNo: () =>
@@ -44,6 +46,8 @@ class window.TaskController
 
     for key,val of @$scope.currentForm.fields when val.field && val.field.length > 0
       data.fields[val.field] = false
+
+    data.isRejected = true
 
     @taskCompleted data
 

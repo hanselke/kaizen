@@ -5,26 +5,14 @@
       .well
         ul.nav.nav-list
           li.nav-header
-            |Tasks
+            |My Tasks
           li.active
             |Overview
-      .well
-        ul.nav.nav-list
-          li.nav-header
-            |More Admin
-          li
-            a(href="#/admin/users") Users
-          li
-            a(href="#/admin/roles") Roles
-          li
-            a(href="#/admin/process-definitions") Process Definitions
-          li
-            a(href="#/admin/boards") Boards
 
     .span9
 
       h2
-        span Tasks
+        span My Tasks
 
       form(name="form",novalidate="novalidate")
         fieldset
@@ -70,7 +58,5 @@
             td
               a.btn(href="#/task/{{task._id}}?editAllStates=true") Edit Data
               a.btn(href="/api/tasks/{{task._id}}/excel") Download Excel (CSV)
-              a.btn(href="#/admin/tasks/{{task._id}}/reopen") Reopen
-
 
         

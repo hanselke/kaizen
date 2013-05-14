@@ -237,49 +237,90 @@ module.exports = class RoutesApi
               totalWaitingTime : 0 
               cards: []
 
+          board.lanes.push
+            label: "Done"
+            name:  "done"
+            order: board.lanes.length + 1
+
+            activityDefinitions: [] # TBDeleted
+            id: '' # TBDeleted
+            totalTime : 0
+            totalActiveTime : 0
+            totalWaitingTime : 0 
+            cards: []
+
         @dbStore.tasks.tasksForBoard {}, (err, pagedResult) =>
           return next err if err
-          @dbStore.tasks.aggregatedTaskTimesForBoardPerState {}, (err,states) =>
+          @dbStore.tasks.tasksEndedForBoard {}, (err, tasksEndedResult) =>
             return next err if err
 
-            laneMap = {}
-            laneMap[lane.name] = lane for lane in board.lanes
+            @dbStore.tasks.aggregatedTaskTimesForBoardPerState {}, (err,states) =>
+              return next err if err
 
-            for task in pagedResult.items || []
+              laneMap = {}
+              laneMap[lane.name] = lane for lane in board.lanes
 
-              lane = laneMap[task.state]
+              for task in pagedResult.items || []
+                lane = laneMap[task.state]
 
-              ###
-              if task.onHold
-                lane = laneMap["onhold"]
-              ###
+                ###
+                if task.onHold
+                  lane = laneMap["onhold"]
+                ###
 
-              if lane
-                lane.cards.push 
-                    id : task._id
-                    desc : task.name || 'UNNAMED'
-                    ready : task.stateCompleted
-                    state : lane.name
-                    totalActiveTime : task.totalActiveTime
-                    totalWaitingTime: task.totalWaitingTime
-                    totalTime :  task.totalActiveTime + task.totalWaitingTime
-                    message: task.message || ''
-                    isOnHold: task.onHold
-                    updatedAt : task.updatedAt
-                    userId : task.checkedOutByUserId
-                    allowedRolesForStateTransition :  []
-                    processDefinitionId : task.processDefinitionId
-                    nextState : task.nextState
+                if lane
+                  lane.cards.push 
+                      id : task._id
+                      desc : task.name || 'UNNAMED'
+                      ready : task.stateCompleted
+                      state : lane.name
+                      totalActiveTime : task.totalActiveTime
+                      totalWaitingTime: task.totalWaitingTime
+                      totalTime :  task.totalActiveTime + task.totalWaitingTime
+                      message: task.message || ''
+                      isOnHold: task.onHold
+                      updatedAt : task.updatedAt
+                      userId : task.checkedOutByUserId
+                      allowedRolesForStateTransition :  []
+                      processDefinitionId : task.processDefinitionId
+                      nextState : task.nextState
+                      taskEnded : false
+                      rejected : task.stateCompleted && task.taskRejected
 
-            for state,val of states
-              lane = laneMap[state]
-              if lane
-                _.extend lane, val
+              doneLane =  board.lanes[board.lanes.length - 1]
+              for task in tasksEndedResult.items || []
+                  doneLane.cards.push 
+                      id : task._id
+                      desc : task.name || 'UNNAMED'
+                      ready : task.stateCompleted
+                      state : lane.name
+                      totalActiveTime : task.totalActiveTime
+                      totalWaitingTime: task.totalWaitingTime
+                      totalTime :  task.totalActiveTime + task.totalWaitingTime
+                      message: task.message || ''
+                      isOnHold: task.onHold
+                      updatedAt : task.updatedAt
+                      userId : task.checkedOutByUserId
+                      allowedRolesForStateTransition :  []
+                      processDefinitionId : task.processDefinitionId
+                      nextState : task.nextState
+                      taskEnded : true
+                      rejected : false
 
-            for lane in board.lanes
-              lane.cards = _.sortBy lane.cards, (card) -> "#{card.isOnHold}-#{card.desc}"
 
-            @_addUsernameToTasks board.lanes, (err) =>
-              @_addAllowedRolesForStateTransition board.lanes, (err) =>
-                res.json board
+              for state,val of states
+                lane = laneMap[state]
+                if lane
+                  _.extend lane, val
+
+              for lane in board.lanes
+                lane.cards = _.sortBy lane.cards, (card) -> "#{card.isOnHold}-#{card.desc}"
+
+
+
+
+
+              @_addUsernameToTasks board.lanes, (err) =>
+                @_addAllowedRolesForStateTransition board.lanes, (err) =>
+                  res.json board
 

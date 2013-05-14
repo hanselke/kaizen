@@ -84,6 +84,20 @@ class window.MainController
           card.canBeActivated = !!card.roles and containsAnyOf(card.roles,@$scope.currentUser.roles || [])
           card.canBePulled = !card.userId and card.ready and !!card.allowedRolesForStateTransition and containsAnyOf(card.allowedRolesForStateTransition,@$scope.currentUser.roles || [])
 
+          if card.taskEnded
+            card.css = "card-done"
+          else if card.isOnHold
+            card.css = "card-onhold"
+          else if card.rejected
+            card.css = "card-rejected"
+          else if !card.ready
+            card.css = "card-processing"
+          else
+            card.css = "card-normal"
+
+
+
+
       aWidth = 0
       if data.lanes.length > 0
         aWidth = 100 / data.lanes.length

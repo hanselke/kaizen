@@ -86,6 +86,15 @@ module.exports = class StateMachine
 
     _.uniq(result)
 
+  getReopenStates: =>
+    result = []
+
+    # Dirty implementation - it's late
+    for key,val of @stateMachineData.states when key != 'end'
+      result.push key
+
+    _.uniq(result)
+
 
   getRolesForState: (state) =>
     state = @stateMachineData.states[state]
