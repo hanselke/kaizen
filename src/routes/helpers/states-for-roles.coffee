@@ -1,5 +1,5 @@
 _ = require 'underscore'
-stateMachinePackage = require '../../modules/state-machine'
+stateMachinePackage = require 'openb-app-state-machine'
 
 module.exports = (roles,dbStore,cb) ->
   statesResult = []

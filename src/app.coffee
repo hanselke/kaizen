@@ -20,7 +20,7 @@ mongoose = require 'mongoose'
 bonitaClientPackage = require './modules/bonita-client'
 bonitaTransformer = require './modules/bonita-transformer'
 protectResource = require './site/protect-resource'
-dbStorePackage = require './modules/db-store'
+dbStorePackage = require 'openb-app-dbstore'
 
 ###
 # Setup version

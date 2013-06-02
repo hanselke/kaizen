@@ -4,7 +4,7 @@ winston = require 'winston'
 errors = require 'some-errors'
 fs = require 'fs'
 xlsxToForm = require '../modules/xlsx-to-form'
-stateMachinePackage = require '../modules/state-machine'
+stateMachinePackage = require 'openb-app-state-machine'
 
 mongoose = require "mongoose"
 ObjectId = mongoose.Types.ObjectId

@@ -1,4 +1,4 @@
-  stateMachinePackage = require '../../modules/state-machine'
+  stateMachinePackage = require 'openb-app-state-machine'
 
 
   module.exports = (processDefinition,cb) ->

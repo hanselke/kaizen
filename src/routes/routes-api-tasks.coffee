@@ -4,7 +4,7 @@ winston = require 'winston'
 errors = require 'some-errors'
 fs = require 'fs'
 xlsxToForm = require '../modules/xlsx-to-form'
-stateMachinePackage = require '../modules/state-machine'
+stateMachinePackage = require 'openb-app-state-machine'
 stateMachineForProcessDefinition = require './helpers/state-machine-for-process-definition'
 statesForRoles = require './helpers/states-for-roles'
 

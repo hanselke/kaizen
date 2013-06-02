@@ -48,7 +48,7 @@
         "passport-local": "0.1.6",
         "unicode": "0.4.3",
         "winston": "0.6.2",
-        "mongoose": "3.4.0",
+        "mongoose": "3.6.4",
         "nodemailer": "0.3.31",
         "bcrypt": "0.7.2",
         "passgen": "1.0.1",
@@ -72,7 +72,9 @@
         "coffee-script": "1.4.0",
         "moment" : "1.7.2",
         "node-zip" : "0.0.2",
-        "node-html-encoder" : "0.0.2"
+        "node-html-encoder" : "0.0.2",
+         "openb-app-dbstore": "git+ssh://git@bitbucket.org/openb/openb-app-dbstore.git",
+       "openb-app-state-machine": "git+ssh://git@bitbucket.org/openb/openb-app-state-machine.git"
     },
     "bundledDependencies": [],
     "devDependencies": {

@@ -4,8 +4,6 @@ winston = require 'winston'
 errors = require 'some-errors'
 fs = require 'fs'
 xlsxToForm = require '../modules/xlsx-to-form'
-stateMachinePackage = require '../modules/state-machine'
-
 
 
 module.exports = class RoutesApiBoards
