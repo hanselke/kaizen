@@ -293,7 +293,7 @@ module.exports = class RoutesApi
                       id : task._id
                       desc : task.name || 'UNNAMED'
                       ready : task.stateCompleted
-                      state : lane.name
+                      state : doneLane.name
                       totalActiveTime : task.totalActiveTime
                       totalWaitingTime: task.totalWaitingTime
                       totalTime :  task.totalActiveTime + task.totalWaitingTime

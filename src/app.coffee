@@ -21,6 +21,7 @@ bonitaClientPackage = require './modules/bonita-client'
 bonitaTransformer = require './modules/bonita-transformer'
 protectResource = require './site/protect-resource'
 dbStorePackage = require 'openb-app-dbstore'
+businessLogicPackage = require 'openb-app-bl'
 
 ###
 # Setup version
@@ -175,6 +176,8 @@ module.exports = class App
     @identityStore = identityStorePackage.store(oauthProvider : config.get('provider'))
     @bonitaClient = bonitaClientPackage.client config.get('services:bonita')
     @dbStore = dbStorePackage.store()
+    @businessLogic = businessLogicPackage.businessLogic
+                        dbStore : @dbStore
 
     @baseUrl = baseUrl = config.get('site:url')
 
@@ -258,6 +261,7 @@ module.exports = class App
       bonitaClient : @bonitaClient
       bonitaTransformer : bonitaTransformer
       dbStore :@dbStore
+      businessLogic : @businessLogic
 
     # TODO: Order might be important, and we need to check that.
     @routes =

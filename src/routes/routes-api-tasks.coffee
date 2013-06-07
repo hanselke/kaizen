@@ -20,6 +20,7 @@ module.exports = class RoutesApi
     _.extend @,settings
     throw new Error("app parameter is required") unless @app
     throw new Error("identityStore parameter is required") unless @identityStore
+    throw new Error("businessLogic parameter is required") unless @businessLogic
 
   setupLocals: () =>
 
@@ -175,37 +176,19 @@ module.exports = class RoutesApi
     return res.json 422,{} unless req.body.processDefinitionId
     # TODO: Check if user is authorized to create the task.
 
-    processDefinitionId = req.body.processDefinitionId
-
-    @dbStore.processDefinitions.get2 req.body.processDefinitionId,{select: '_id taskNamePrefix stateMachine'}, (err,processDefinition) =>
+    @businessLogic.tasks.createTask req.body.processDefinitionId,req.user._id, (err,item) =>
       return next err if err
-      return next new Error("createTask - Process definition #{processDefinitionId} not found") unless processDefinition
+      res.json item
 
-      stateMachineForProcessDefinition processDefinition, (err, sm) =>
-        return next err if err
-
-        #@dbStore.tasks.countTasksForProcessDefinitionId req.body.processDefinitionId,{}, (err,count) =>
-        @dbStore.processDefinitions.getNextTaskNumber req.body.processDefinitionId, (err,count) =>
-          return next err if err
-
-          count = count + 1
-          name = "#{processDefinition.taskNamePrefix || "TASK"}#{count}"
-
-          initialState = sm.getInitialState()
-
-          payload =
-            processDefinitionId: req.body.processDefinitionId
-            state: initialState
-            checkedOutByUserId: req.user._id
-            name : name
-
-          @dbStore.tasks.create payload,actorId : req.user._id, (err,item) =>
-            return next err if err
-            item.id = item._id
-            res.json item
 
   completeTask: (req,res,next) =>
     return res.json 401,{} unless req.user
+
+    @businessLogic.tasks.completeTask req.params.taskId,req.body.fields, req.body.message,req.body.isRejected, (err,item) =>
+      return next err if err
+      res.json item
+
+    ###
 
     data = req.body.fields || {}
     message = req.body.message || ''
@@ -265,6 +248,7 @@ module.exports = class RoutesApi
           @dbStore.tasks.patch req.params.taskId, data, {}, (err,item) =>
             return next err if err
             res.json item
+    ###
 
   _getActiveProcessDefinitionId: (next) =>
     @dbStore.processDefinitions.firstProcessDefinition {select: '_id'}, (err,processDefinition) =>
@@ -314,77 +298,25 @@ module.exports = class RoutesApi
   ###
   getNextTask: (req,res,next) =>
     return res.json {},401 unless req.user
-    console.log "Retrieving task for #{req.user._id} and roles #{req.user.roles}"
+    #console.log "Retrieving task for #{req.user._id} and roles #{req.user.roles}"
+    userId = req.user.id || req.user._id
 
-
-    @dbStore.tasks.getActiveTask req.user.id || req.user._id,{}, (err,task) =>
+    @businessLogic.tasks.getNextTaskForUser userId,req.user.roles, (err,task) =>
       return next err if err
-      if task
-        task.id = task._id
-        res.json 
-          taskId : task._id
-          activeTask : task
-        console.log "Task already active - returned"
-        return
-
-
-      statesForRoles req.user.roles,@dbStore,(err,states) =>
-        return next err if err
-        @dbStore.tasks.getTaskForStates states,{}, (err,task) =>
-          return next err if err
-          return res.json {} unless task # No task found.
-
-          totalWaitingTime =  0
-          if task.totalWaitingTime
-            try
-              totalWaitingTime = task.totalWaitingTime
-            catch e
-              #nop
-          
-          if task.checkedInDate
-            totalWaitingTime += new Date() - task.checkedInDate
-
-
-          task.timePerState = {} unless  task.timePerState 
-          unless task.timePerState[task.state]
-            task.timePerState[task.state] = 
-              totalActiveTime : 0
-              totalWaitingTime : 0
-
-          if task.checkedInDate
-            task.timePerState[task.state].totalWaitingTime += new Date() - task.checkedInDate
-
-
-          data =
-            checkedOutByUserId: req.user.id || req.user._id
-            activeTaskUUID: "" 
-            activeActivityName: ""
-            previousState: task.state
-            state: task.nextState
-            nextState : null
-            stateCompleted: false
-            checkedOutDate: new Date()
-            checkedInDate : null
-            totalWaitingTime : totalWaitingTime
-            timePerState : _.clone( task.timePerState)
-
-          @dbStore.tasks.patch task._id,data, actor : {actorId : req.user._id || req.user.id},  (err,item) =>
-            return next err if err
-            console.log "UPDATED #{JSON.stringify(item)}"
-
-            # Now we need to update the data store, where processInstanceID = X
-            # and set the active user to the current userid,
-            # and set the active task to the current task id,
-            # and we need to return our own task id (which is actually the process id)
-            # we also need to register the time here.
-            item.id = item._id
-            res.json 
-              taskId : item._id
-              activeTask : item
+      res.json task
 
 
   pullTask: (req,res,next) =>
     return res.json {},401 unless req.user
+
+    userId = req.user.id || req.user._id
+    @businessLogic.tasks.pullTask req.params.taskId,userId, (err,task) =>
+      return next err if err
+      res.json task
+
+    ###
+
+
 
     @dbStore.tasks.get req.params.taskId, {}, (err,task) =>
       return next err if err
@@ -437,10 +369,16 @@ module.exports = class RoutesApi
         res.json 
           taskId : item._id
           activeTask : item
+    ###
 
   cancelTask: (req,res,next) =>
     return res.json 401,{} unless req.user
 
+    @businessLogic.tasks.cancelTask req.params.taskId, (err,task) =>
+      return next err if err
+      res.json task
+
+    ###
     @dbStore.tasks.get req.params.taskId, {}, (err,oldTask) =>
       return next err if err
       return new Error('task not found') unless oldTask
@@ -463,10 +401,16 @@ module.exports = class RoutesApi
         @dbStore.tasks.patch req.params.taskId, data, {}, (err,item) =>
           return next err if err
           res.json item
+    ###
 
   onHoldTask: (req,res,next) =>
     return res.json 401,{} unless req.user
 
+    @businessLogic.tasks.onHoldTask req.params.taskId, (err,task) =>
+      return next err if err
+      res.json task
+
+    ###
     @dbStore.tasks.get req.params.taskId, {}, (err,oldTask) =>
       return next err if err
       return new Error('task not found') unless oldTask
@@ -477,10 +421,17 @@ module.exports = class RoutesApi
       @dbStore.tasks.patch req.params.taskId, data, {}, (err,item) =>
         return next err if err
         res.json item
+    ###
 
   onUnholdTask: (req,res,next) =>
     return res.json 401,{} unless req.user
 
+    @businessLogic.tasks.onUnholdTask req.params.taskId, (err,task) =>
+      return next err if err
+      res.json task
+
+
+    ###      
     @dbStore.tasks.get req.params.taskId, {}, (err,oldTask) =>
       return next err if err
       return new Error('task not found') unless oldTask
@@ -491,3 +442,5 @@ module.exports = class RoutesApi
       @dbStore.tasks.patch req.params.taskId, data, {}, (err,item) =>
         return next err if err
         res.json item
+    ###
+
