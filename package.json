@@ -70,7 +70,7 @@
         "ejs" : "0.8.4",
         "coffee-script": "1.6.3",
         "moment": "2.18.1",
-        "node-zip" : "1.0.1",
+        "node-zip": "1.1.1",
         "node-html-encoder" : "0.0.2",
          "openb-app-dbstore": "git+ssh://git@bitbucket.org/openb/openb-app-dbstore.git",
        "openb-app-state-machine": "git+ssh://git@bitbucket.org/openb/openb-app-state-machine.git",
