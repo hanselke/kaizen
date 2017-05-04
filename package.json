@@ -52,7 +52,7 @@
         "bcrypt": "0.7.5",
         "passgen": "1.0.1",
         "gravatar": "1.0.6",
-        "date-utils": "1.2.13",
+        "date-utils": "1.2.21",
         "voila": "0.1.0",
         "some-errors": "0.2.0",
         "route-active": "0.2.0",
