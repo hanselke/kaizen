@@ -22,7 +22,7 @@
     },
     "dependencies": {
         "express": "4.15.2",
-        "express-form": "0.8.1",
+        "express-form": "0.12.6",
         "express-messages-bootstrap": "0.1.0",
         "connect": "2.7.11",
         "connect-gzip": "0.1.6",
