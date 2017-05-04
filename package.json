@@ -41,7 +41,7 @@
         "stylus": "0.54.5",
         "nib": "0.9.1",
         "passport": "0.3.2",
-        "passport-http": "0.2.2",
+        "passport-http": "0.3.0",
         "passport-oauth": "1.0.0",
         "passport-http-bearer": "0.2.1",
         "passport-local": "1.0.0",
