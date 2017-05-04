@@ -44,7 +44,7 @@
         "passport-http": "0.2.2",
         "passport-oauth": "0.1.15",
         "passport-http-bearer": "0.2.1",
-        "passport-local": "0.1.6",
+        "passport-local": "1.0.0",
         "unicode": "0.4.3",
         "winston": "0.7.1",
         "mongoose": "3.6.11",
