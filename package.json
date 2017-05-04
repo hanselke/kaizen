@@ -24,7 +24,7 @@
         "express": "4.15.2",
         "express-form": "0.12.6",
         "express-messages-bootstrap": "0.1.0",
-        "connect": "2.7.11",
+        "connect": "3.6.1",
         "connect-gzip": "0.1.6",
         "connect-flash": "0.1.1",
         "underscore": "1.8.3",
