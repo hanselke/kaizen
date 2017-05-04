@@ -21,7 +21,7 @@
         "node": "0.8.x"
     },
     "dependencies": {
-        "express": "3.2.6",
+        "express": "4.15.2",
         "express-form": "0.8.1",
         "express-messages-bootstrap": "0.1.0",
         "connect": "2.7.11",
