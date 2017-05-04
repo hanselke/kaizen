@@ -29,7 +29,7 @@
         "connect-flash": "0.1.1",
         "underscore": "1.8.3",
         "async": "2.4.0",
-        "colors": "0.6.0-1",
+        "colors": "1.1.2",
         "pkginfo": "0.4.0",
         "nconf": "0.6.7",
         "corser": "2.0.1",
