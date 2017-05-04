@@ -40,7 +40,7 @@
         "jade": "1.11.0",
         "stylus": "0.54.5",
         "nib": "0.9.1",
-        "passport": "0.1.17",
+        "passport": "0.3.2",
         "passport-http": "0.2.2",
         "passport-oauth": "0.1.15",
         "passport-http-bearer": "0.2.1",
