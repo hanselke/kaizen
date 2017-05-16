@@ -35,7 +35,7 @@
         "corser": "1.2.0",
         "mailer": "0.6.7",
         "request": "2.21.0",
-        "socket.io": "2.0.1",
+        "socket.io": "0.9.19",
         "ansi-color": "0.2.1",
         "jade": "0.31.1",
         "stylus": "0.32.1",
