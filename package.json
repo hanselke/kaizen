@@ -47,7 +47,7 @@
         "passport-local": "0.1.6",
         "unicode": "0.4.3",
         "winston": "0.7.1",
-        "mongoose": "4.10.4",
+        "mongoose": "4.10.5",
         "nodemailer": "0.4.4",
         "bcrypt": "0.7.5",
         "passgen": "1.0.1",
