@@ -67,7 +67,7 @@
         "mongoose-identity-store": "0.3.0",
         "mongodb-errors": "0.2.0",
         "libxml-to-js": "0.3.11",
-        "ejs" : "0.8.4",
+        "ejs": "2.5.7",
         "coffee-script": "1.6.3",
         "moment" : "2.0.0",
         "node-zip" : "1.0.1",
