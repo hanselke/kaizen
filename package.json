@@ -28,7 +28,7 @@
         "connect-gzip": "0.1.6",
         "connect-flash": "0.1.1",
         "underscore": "1.4.4",
-        "async": "2.5.0",
+        "async": "2.6.0",
         "colors": "0.6.0-1",
         "pkginfo": "0.3.0",
         "nconf": "0.6.7",
