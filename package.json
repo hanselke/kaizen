@@ -69,7 +69,7 @@
         "libxml-to-js": "0.3.11",
         "ejs" : "0.8.4",
         "coffee-script": "1.6.3",
-        "moment": "2.19.3",
+        "moment": "2.19.4",
         "node-zip" : "1.0.1",
         "node-html-encoder" : "0.0.2",
          "openb-app-dbstore": "git+ssh://git@bitbucket.org/openb/openb-app-dbstore.git",
