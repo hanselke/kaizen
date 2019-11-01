@@ -68,7 +68,7 @@
         "mongodb-errors": "0.2.0",
         "libxml-to-js": "0.3.11",
         "ejs" : "0.8.4",
-        "coffee-script": "1.6.3",
+        "coffee-script": "1.12.7",
         "moment" : "2.0.0",
         "node-zip" : "1.0.1",
         "node-html-encoder" : "0.0.2",
